@@ -2,7 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { useUI } from '@/lib/store';
+import { zoneById } from '@/lib/portfolio';
 import type { ProjType } from '@/lib/types';
+
+const INK = '#e6ebf4';
 
 // Color map for all 5 ProjType values
 const TYPE_COLORS: Record<ProjType, { bg: string; text: string; label: string }> = {
@@ -36,6 +39,8 @@ export default function ProjectPanel() {
   if (selected === null) return null;
 
   const typeStyle = TYPE_COLORS[selected.type] ?? TYPE_COLORS['original'];
+  // District accent for this project's zone — header/border/link-hover coherence.
+  const zoneAccent = zoneById[selected.zone]?.accent ?? typeStyle.text;
 
   const linkDefs: { key: keyof typeof selected.links; label: string }[] = [
     { key: 'repo',         label: 'Code'   },
@@ -55,6 +60,7 @@ export default function ProjectPanel() {
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderLeft: '1px solid rgba(255,255,255,0.08)',
+        borderTop: `2px solid ${zoneAccent}`,
         animation: 'panel-slide-in 0.28s cubic-bezier(0.22,1,0.36,1) both',
       }}
     >
@@ -106,7 +112,7 @@ export default function ProjectPanel() {
         {/* Project name */}
         <h2
           className="font-sans text-xl font-semibold leading-snug"
-          style={{ color: 'rgba(255,255,255,0.92)' }}
+          style={{ color: INK }}
         >
           {selected.name}
         </h2>
@@ -187,14 +193,14 @@ export default function ProjectPanel() {
                   rel="noreferrer"
                   className="font-mono text-xs px-3 py-1.5 rounded transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
                   style={{
-                    border: `1px solid ${typeStyle.text}60`,
-                    color: typeStyle.text,
+                    border: `1px solid ${zoneAccent}60`,
+                    color: zoneAccent,
                     background: 'transparent',
                     textDecoration: 'none',
-                    outlineColor: typeStyle.text,
+                    outlineColor: zoneAccent,
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = typeStyle.bg;
+                    (e.currentTarget as HTMLAnchorElement).style.background = `${zoneAccent}1f`;
                   }}
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';

@@ -18,7 +18,9 @@ export const useUI = create<UIState>((set) => ({
   intro: true,
   setIntro: (v) => set({ intro: v }),
   activeZone: null,
-  setZone: (z) => set({ activeZone: z }),
+  // Selecting a zone also clears any open project so the camera actually flies
+  // to the zone (CameraRig prioritises `selected` over `activeZone`).
+  setZone: (z) => set({ activeZone: z, selected: null }),
   selected: null,
   select: (p) => set({ selected: p, activeZone: p ? p.zone : null }),
   view: '3d',

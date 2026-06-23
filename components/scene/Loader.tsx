@@ -24,7 +24,7 @@ export default function Loader() {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        backgroundColor: '#04050d',
+        backgroundColor: '#06080f',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -32,7 +32,7 @@ export default function Loader() {
         gap: '1rem',
         pointerEvents: 'none',
         fontFamily: 'var(--font-mono), "Courier New", monospace',
-        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)',
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px)',
       }}
     >
       {/* Boot log lines */}
@@ -49,7 +49,7 @@ export default function Loader() {
           <span
             key={i}
             style={{
-              color: '#2a6a5a',
+              color: '#4a8c7e',
               fontSize: '0.6rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
@@ -75,7 +75,7 @@ export default function Loader() {
       {/* Large percentage */}
       <span
         style={{
-          color: '#e2e8f0',
+          color: '#e6ebf4',
           fontSize: '3rem',
           fontWeight: 700,
           letterSpacing: '0.05em',
@@ -92,7 +92,7 @@ export default function Loader() {
         style={{
           width: '16rem',
           height: '2px',
-          backgroundColor: '#0d1f2d',
+          backgroundColor: '#0d1622',
           borderRadius: '9999px',
           overflow: 'hidden',
         }}
@@ -112,7 +112,7 @@ export default function Loader() {
       {/* Bottom system label */}
       <span
         style={{
-          color: '#2a4a4a',
+          color: '#3a5a55',
           fontSize: '0.55rem',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',

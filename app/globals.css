@@ -5,13 +5,21 @@
   --web: #818cf8;
   --client: #f0abfc;
   --ml: #fbbf24;
-  --bg: #05060a;
+  --bg: #06080f;
   --fg: #e5e7eb;
+  /* Shared warm-white ink used by 3D text, HUD, and intro — keep DOM coherent
+     with the scene. */
+  --ink: #e6ebf4;
+  --hairline: rgba(255, 255, 255, 0.08);
+  /* Four-zone accent legend gradient (silicon → web → client → ml) for the
+     HUD hairline and any DOM legend rules. */
+  --zone-legend: linear-gradient(90deg, #5eead4, #818cf8, #f0abfc, #fbbf24);
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-fg: var(--fg);
+  --color-ink: var(--ink);
   --color-silicon: var(--silicon);
   --color-web: var(--web);
   --color-client: var(--client);

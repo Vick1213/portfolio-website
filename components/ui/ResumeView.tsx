@@ -41,13 +41,13 @@ export default function ResumeView() {
             {profile.headline}
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', fontSize: '0.875rem' }}>
-            <a href={`mailto:${profile.email}`} style={{ color: '#4f46e5', textDecoration: 'none' }}>
+            <a href={`mailto:${profile.email}`} style={{ color: '#4338ca', textDecoration: 'none', fontWeight: 600 }}>
               {profile.email}
             </a>
-            <a href={profile.github} target="_blank" rel="noreferrer" style={{ color: '#4f46e5', textDecoration: 'none' }}>
+            <a href={profile.github} target="_blank" rel="noreferrer" style={{ color: '#4338ca', textDecoration: 'none', fontWeight: 600 }}>
               GitHub (Vick1213)
             </a>
-            <a href={profile.githubAlt} target="_blank" rel="noreferrer" style={{ color: '#4f46e5', textDecoration: 'none' }}>
+            <a href={profile.githubAlt} target="_blank" rel="noreferrer" style={{ color: '#4338ca', textDecoration: 'none', fontWeight: 600 }}>
               GitHub (saatvik1213)
             </a>
           </div>
