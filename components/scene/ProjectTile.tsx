@@ -55,8 +55,10 @@ export default function ProjectTile({ project }: ProjectTileProps) {
   const height = project.featured ? 0.8 : 0.5;
   const metalness = 0.7;
   const roughness = 0.32;
-  const baseEmissive = project.featured ? 0.85 : 0.55;
-  const hoverEmissive = project.featured ? 1.4 : 1.0;
+  // Lift non-featured tiles so they don't read dead-dark next to featured ones,
+  // while keeping a clear featured > normal hierarchy.
+  const baseEmissive = project.featured ? 0.95 : 0.74;
+  const hoverEmissive = project.featured ? 1.5 : 1.15;
 
   const yTarget = useRef(0);
   const emissiveTarget = useRef(baseEmissive);
@@ -137,7 +139,7 @@ export default function ProjectTile({ project }: ProjectTileProps) {
       >
         <meshStandardMaterial
           ref={matRef}
-          color="#1a2230"
+          color="#212c3e"
           emissive={accent}
           emissiveIntensity={baseEmissive}
           metalness={metalness}

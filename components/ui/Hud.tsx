@@ -146,11 +146,12 @@ export default function Hud() {
         </div>
       </div>
 
-      {/* Bottom-left ghost helper line — real static helper, no fake telemetry */}
+      {/* Bottom-left ghost helper line — lifted clear of the ~55px footer bar */}
       <span
         aria-hidden="true"
-        className="fixed bottom-3 left-4 font-mono uppercase pointer-events-none select-none"
+        className="fixed left-4 font-mono uppercase pointer-events-none select-none"
         style={{
+          bottom: '72px',
           fontSize: '10px',
           letterSpacing: '0.18em',
           color: INK,
