@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  resume_portfolio.xml
+  ============================================================================
+  PURPOSE: A machine-readable inventory of Saatvik Choudhary's GitHub projects,
+  designed to be fed to an AI assistant when tailoring a resume to a specific
+  job posting. Each <project> carries quantified metrics, an honest "type"
+  classification, a tech stack, mapped skills, and pre-written resume bullets.
+
+  HOW TO USE WITH AN AI:
+    1. Paste this file plus a target job description.
+    2. Ask the AI to: (a) pick the 3-6 most relevant projects for that role,
+       (b) prefer type="original" projects for the headline section,
+       (c) reuse or rephrase the <resume_bullets>, and
+       (d) pull matching keywords from <skills_summary>.
+    3. The "type" attribute is deliberately honest so you never overstate
+       template/coursework work in a way an interviewer could catch.
+
+  TYPE LEGEND:
+    original        = built primarily by the author (custom code/architecture).
+    template-based  = started from a 3rd-party template/theme, then customized.
+    ai-builder      = scaffolded by an AI app builder (Base44), then edited.
+    fork            = self-hosted clone of an open-source product.
+    coursework      = university assignment / provided-code based.
+
+  All metrics pulled live from the GitHub API on the generated date below.
+  "commits" = total commits on default branch. "size_kb" = repo disk usage.
+  Dates are YYYY-MM. Verify any number before quoting it verbatim on a resume.
+============================================================================ -->
+<resume_portfolio owner="Saatvik Choudhary"
+                  github_username="Vick1213"
+                  github_url="https://github.com/Vick1213"
+                  github_username_alt="saatvik1213"
+                  github_url_alt="https://github.com/saatvik1213"
+                  email="saatvik1213@gmail.com"
+                  generated="2026-05-25"
+                  source="GitHub API (all non-empty repos across both accounts: Vick1213 + saatvik1213)">
+
+  <profile_summary>
+    <headline>
+      Full-stack engineer and hardware-architecture builder spanning custom
+      AI-accelerator ASIC design (Verilog/RTL) through production web and
+      mobile applications (Next.js, React Native, TypeScript) and Python
+      data pipelines.
+    </headline>
+    <breadth>
+      Two GitHub accounts. Primary (Vick1213): 29 repos, Nov 2024 - May 2026,
+      web/app + chip-design focus. Earlier account (saatvik1213): 2022 - 2024,
+      machine-learning, game-dev, and hackathon work. Combined active span:
+      2022 - 2026. Strongest, most original work: a from-scratch AI inference
+      chip (AiToChip), an AI productivity platform (productivityai), a
+      multi-tenant marketplace (platforms-starter-kit), a React Native
+      storytelling app (StoryBoardAI), and an award-track hackathon AI grading
+      tool (PowerGrader). Earlier ML portfolio includes NLP sentiment analysis,
+      sign-language detection, and CNN image classification.
+    </breadth>
+    <note_for_ai>
+      Projects from the earlier account are tagged account="saatvik1213" (in the
+      "SECOND ACCOUNT" section below); all other projects are on the primary
+      Vick1213 account. The earlier (saatvik1213) ML
+      projects are good for demonstrating a foundation in machine learning /
+      deep learning that predates the recent web work. A large supplementary
+      collection of ML model notebooks also lives in Google Drive — see
+      &lt;external_collections&gt; at the end of this file.
+    </note_for_ai>
+    <languages_observed>
+      Verilog, SystemVerilog, Tcl, Python, TypeScript, JavaScript, Rust, C++,
+      C#/ASP.NET, Astro, Ruby, Jupyter, PLpgSQL, MDX, Shell, Makefile.
+    </languages_observed>
+  </profile_summary>
+
+  <!-- ====================================================================
+       AGGREGATED SKILLS — pull keywords from here to match a job posting.
+  ===================================================================== -->
+  <skills_summary>
+    <category name="Hardware / Chip Design">
+      <skill level="advanced">Digital RTL design (Verilog / SystemVerilog)</skill>
+      <skill level="advanced">AI accelerator / ML inference architecture</skill>
+      <skill level="intermediate">Logic synthesis (Yosys)</skill>
+      <skill level="intermediate">Static Timing Analysis (STA)</skill>
+      <skill level="intermediate">Physical design / floorplanning (Tcl flows)</skill>
+      <skill level="intermediate">Memory hierarchy design (HBM3e, SRAM partitioning)</skill>
+      <skill level="intermediate">Quantization (INT8/INT4/FP8/MXFP4) for inference</skill>
+    </category>
+    <category name="Languages">
+      <skill level="advanced">TypeScript</skill>
+      <skill level="advanced">JavaScript</skill>
+      <skill level="advanced">Python</skill>
+      <skill level="advanced">Verilog</skill>
+      <skill level="intermediate">C++</skill>
+      <skill level="intermediate">Rust</skill>
+      <skill level="intermediate">C# / ASP.NET</skill>
+      <skill level="intermediate">SQL (PostgreSQL, PLpgSQL)</skill>
+    </category>
+    <category name="Web / Frontend">
+      <skill level="advanced">Next.js (App Router, 14/15)</skill>
+      <skill level="advanced">React (18/19)</skill>
+      <skill level="advanced">Tailwind CSS</skill>
+      <skill level="intermediate">shadcn/ui</skill>
+      <skill level="intermediate">Astro</skill>
+      <skill level="intermediate">Vite</skill>
+    </category>
+    <category name="Backend / Data">
+      <skill level="advanced">Node.js / Express</skill>
+      <skill level="advanced">Prisma ORM</skill>
+      <skill level="advanced">PostgreSQL (Neon, Supabase)</skill>
+      <skill level="intermediate">Redis (Upstash)</skill>
+      <skill level="intermediate">NextAuth.js v5 (OAuth, RBAC)</skill>
+      <skill level="intermediate">Multi-tenant / subdomain architecture</skill>
+      <skill level="intermediate">Web scraping / lead-data pipelines</skill>
+      <skill level="intermediate">Data analysis (Pandas, Jupyter)</skill>
+    </category>
+    <category name="Mobile">
+      <skill level="intermediate">React Native (Expo, cross-platform iOS/Android/Web)</skill>
+    </category>
+    <category name="AI / LLM">
+      <skill level="advanced">LLM application development (chatbots, agents)</skill>
+      <skill level="intermediate">LLM inference serving / throughput modeling</skill>
+      <skill level="intermediate">AI app builders (Base44)</skill>
+    </category>
+    <category name="Cloud / AWS">
+      <skill level="intermediate">AWS CDK (infrastructure as code, TypeScript)</skill>
+      <skill level="intermediate">Serverless (Lambda, AppSync, Step Functions)</skill>
+      <skill level="intermediate">DynamoDB + Aurora Serverless v2 / pgvector</skill>
+      <skill level="intermediate">Cognito (auth)</skill>
+      <skill level="intermediate">Amazon Bedrock (Claude) for LLM orchestration</skill>
+      <skill level="intermediate">S3 + CloudFront</skill>
+    </category>
+    <category name="DevOps / Tooling">
+      <skill level="advanced">Git / GitHub</skill>
+      <skill level="advanced">Vercel deployment</skill>
+      <skill level="intermediate">Docker</skill>
+      <skill level="intermediate">CI gates / regression test suites</skill>
+      <skill level="intermediate">Shell scripting, Makefiles</skill>
+    </category>
+  </skills_summary>
+
+  <!-- ====================================================================
+       PROJECTS — ordered roughly by resume strength (flagship first).
+  ===================================================================== -->
+  <projects>
+
+    <!-- ============================= FLAGSHIP ========================= -->
+    <project id="aitochip" name="AiToChip — Neural MAX &amp; Neural 1 AI Inference Accelerators" type="original">
+      <tagline>From-scratch design of two custom AI-inference accelerator ASICs (datacenter + edge) with full RTL, simulation, and synthesis flows.</tagline>
+      <timeline start="2026-03" last_active="2026-04" status="active" months="2"/>
+      <metrics commits="113" primary_language="Verilog" size_kb="12781" stars="1" visibility="private"/>
+      <description>
+        A two-tapeout AI-accelerator program. "Neural MAX" is an enterprise/datacenter
+        chip: heterogeneous architecture with 128 hetero-slots (attention + expert
+        tiles), ~720 mm2 planar die, 12x HBM3e stacks (14 TB/s), 600 W TDP, and a
+        runtime-configurable firmware profile (per-model SRAM partitioning, precision,
+        per-slot power gating) targeting MoE LLM inference (Qwen3-30B, Kimi K2).
+        "Neural 1" is an ultra-compact 69.7 mm2 edge accelerator (4x HBM3e, 5.79 W).
+        Includes a Python RTL generator (ChipSpec to Verilog), reference decoders,
+        and a GPT-2 numerics regression suite.
+      </description>
+      <tech_stack>
+        <tech>Verilog</tech><tech>SystemVerilog</tech><tech>Python</tech>
+        <tech>Rust</tech><tech>Tcl (synthesis/PnR)</tech><tech>Yosys</tech>
+        <tech>Static Timing Analysis</tech><tech>Makefile</tech><tech>Shell</tech>
+      </tech_stack>
+      <skills>
+        <skill>Digital RTL / ASIC design</skill>
+        <skill>AI accelerator architecture</skill>
+        <skill>Memory-hierarchy &amp; HBM design</skill>
+        <skill>Quantization (INT8/INT4/FP8/MXFP4/NVFP4)</skill>
+        <skill>Logic synthesis &amp; timing closure</skill>
+        <skill>LLM inference throughput modeling</skill>
+        <skill>Generative RTL tooling (Python codegen)</skill>
+      </skills>
+      <resume_bullets>
+        <bullet>Architected two custom AI-inference accelerator ASICs from scratch — a 720 mm2 datacenter chip (128 heterogeneous compute slots, 12x HBM3e, 600 W TDP) and a 69.7 mm2 edge chip — modeling 600 W-envelope throughput of 5,500-6,600 tok/s on a 30B-parameter MoE LLM.</bullet>
+        <bullet>Built a Python RTL generator that compiles a chip specification into 7+ configuration-dependent Verilog modules, enabling one physical die to be re-targeted per model via firmware (SRAM partitioning, precision mode, per-slot power gating).</bullet>
+        <bullet>Established a numerics CI gate with reference decoders and a GPT-2 regression suite to validate quantized kernels against floating-point baselines; passed Yosys hierarchy checks across 113 commits.</bullet>
+        <bullet>Designed a runtime-configurable mixed-precision datapath (INT8 physical MACs with INT4/FP8/MXFP4/NVFP4 codes reserved) and a chiplet bridge with a round-robin K-of-N arbiter over UCIe PHY.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/AiToChip</repo></links>
+    </project>
+
+    <!-- ===================== STRONG ORIGINAL WEB/APP ================== -->
+    <project id="productivityai" name="ProductivityAI" type="original">
+      <tagline>AI-powered productivity web application.</tagline>
+      <timeline start="2025-05" last_active="2026-01" status="maintained" months="8"/>
+      <metrics commits="93" primary_language="TypeScript" size_kb="20626" stars="0" visibility="public"/>
+      <description>
+        A substantial Next.js/TypeScript AI productivity application developed over
+        ~8 months (532 KB of TypeScript, 93 commits, ~20 MB repo). Deployed on Vercel.
+        One of the most sustained original web projects in the portfolio.
+      </description>
+      <tech_stack><tech>Next.js</tech><tech>TypeScript</tech><tech>React</tech><tech>Tailwind CSS</tech><tech>Vercel</tech></tech_stack>
+      <skills><skill>Full-stack web development</skill><skill>AI feature integration</skill><skill>Long-running project maintenance</skill></skills>
+      <resume_bullets>
+        <bullet>Built and maintained an AI productivity web app in Next.js/TypeScript over 8 months and 93 commits, deployed continuously on Vercel.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/productivityai</repo><live>https://productivityai.pro</live></links>
+    </project>
+
+    <project id="platforms-starter-kit" name="MarketPlace — Multi-Tenant E-commerce Platform" type="original">
+      <tagline>Production-ready multi-tenant marketplace with per-seller subdomains and role-based auth.</tagline>
+      <timeline start="2026-01" last_active="2026-02" status="completed" months="1"/>
+      <metrics commits="63" primary_language="TypeScript" size_kb="484" stars="0" visibility="private"/>
+      <description>
+        A multi-tenant marketplace (Alibaba/Amazon-inspired) built on Next.js 15 with
+        subdomain routing for sellers, role-based authentication (Admin/Seller/User),
+        OAuth (Google/Apple/Credentials), a SHA-256-hashed secret admin subdomain,
+        seller dashboards, and per-seller storefronts. Note: repo name references the
+        Vercel "platforms" starter but the implementation is a custom marketplace.
+      </description>
+      <tech_stack><tech>Next.js 15 (App Router, Turbopack)</tech><tech>React 19</tech><tech>NextAuth.js v5</tech><tech>Upstash Redis</tech><tech>Tailwind 4</tech><tech>shadcn/ui</tech><tech>TypeScript</tech></tech_stack>
+      <skills><skill>Multi-tenant architecture</skill><skill>Subdomain routing</skill><skill>Role-based access control</skill><skill>OAuth / authentication</skill><skill>Redis data modeling</skill></skills>
+      <resume_bullets>
+        <bullet>Built a multi-tenant e-commerce marketplace on Next.js 15 with wildcard-subdomain routing, giving each seller an isolated storefront and the platform a SHA-256-hashed secret admin subdomain.</bullet>
+        <bullet>Implemented role-based authentication (Admin/Seller/User) with NextAuth.js v5 and OAuth providers, backed by Upstash Redis for tenant data.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/platforms-starter-kit</repo><live>https://platforms-starter-kit-xi-rouge.vercel.app</live></links>
+    </project>
+
+    <!-- Added 2026-06-23 from GitHub (new repo since the 2026-05-25 generation). -->
+    <project id="market-terminal" name="Market Terminal — Local-First Market-Intelligence Dashboard" type="original">
+      <tagline>Private, free-data market-intelligence terminal: Next.js dashboard + FastAPI backend + local sentiment models, all running on the user's machine.</tagline>
+      <timeline start="2026-06" last_active="2026-06" status="active" months="1"/>
+      <metrics commits="17" primary_language="Python" size_kb="658" stars="0" visibility="private"/>
+      <description>
+        A local-first market-intelligence terminal (monorepo) wiring a Next.js 15 dashboard
+        to a FastAPI backend over REST + WebSocket, with a configurable react-grid-layout
+        panel grid and a live system panel. Backend runs an APScheduler-driven ingest layer
+        (httpx/aiolimiter/tenacity/diskcache over free data sources) into DuckDB (time-series)
+        and SQLite WAL (app state), with WebSocket fan-out to the UI. Sentiment is computed
+        locally (FinBERT for bulk + a local LLM for aspect/brief). Shared OpenAPI-generated TS
+        types tie the FastAPI schema to the frontend. Currently at "Phase 0" — a runnable
+        end-to-end skeleton (REST + WS + scheduler + storage + ingest wired through).
+      </description>
+      <tech_stack><tech>Next.js 15</tech><tech>TypeScript</tech><tech>react-grid-layout</tech><tech>TanStack Query</tech><tech>Zustand</tech><tech>FastAPI (Python)</tech><tech>WebSocket</tech><tech>APScheduler</tech><tech>DuckDB</tech><tech>SQLite (WAL)</tech><tech>FinBERT</tech><tech>local LLM</tech><tech>uv / pnpm monorepo</tech></tech_stack>
+      <skills><skill>Full-stack development (Python + TypeScript)</skill><skill>Real-time data (WebSocket fan-out)</skill><skill>Time-series storage (DuckDB)</skill><skill>Data ingestion / scheduling pipelines</skill><skill>Local NLP / sentiment models (FinBERT, local LLM)</skill><skill>OpenAPI type generation</skill></skills>
+      <resume_bullets>
+        <bullet>Built a local-first market-intelligence terminal as a Next.js 15 + FastAPI monorepo, streaming live data to a configurable dashboard grid over REST and WebSocket with end-to-end OpenAPI-generated TypeScript types.</bullet>
+        <bullet>Designed an APScheduler-driven ingestion layer (rate-limited httpx with retry/caching) persisting to DuckDB time-series + SQLite WAL, and computed market sentiment locally with FinBERT and a local LLM — no paid data feeds or cloud APIs.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/market-terminal</repo></links>
+    </project>
+
+    <project id="storyboardai" name="StoryBoard AI" type="original">
+      <tagline>Cross-platform React Native app for managing story characters, personalities, and relationships.</tagline>
+      <timeline start="2026-01" last_active="2026-01" status="completed" months="1"/>
+      <metrics commits="6" primary_language="JavaScript" size_kb="302" stars="0" visibility="private"/>
+      <description>
+        A React Native (Expo) app with a Node.js/Express + Prisma/PostgreSQL backend
+        for writers and game designers. Features include a Big-Five personality system,
+        backstory builder, relationship mapping (trust levels, outcomes), and story
+        object tracking. Cross-platform across iOS, Android, and Web.
+      </description>
+      <tech_stack><tech>React Native</tech><tech>Expo</tech><tech>React Navigation</tech><tech>Node.js</tech><tech>Express</tech><tech>Prisma ORM</tech><tech>PostgreSQL (Neon)</tech></tech_stack>
+      <skills><skill>Mobile development (cross-platform)</skill><skill>REST API design</skill><skill>Relational data modeling</skill></skills>
+      <resume_bullets>
+        <bullet>Developed a cross-platform (iOS/Android/Web) React Native app for character-driven storytelling, with a Node.js/Express + Prisma/PostgreSQL backend exposing a RESTful API for characters, relationships, and story objects.</bullet>
+        <bullet>Designed a relational schema modeling Big-Five personality traits, backstories, and inter-character relationships with trust levels and outcomes.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/StoryBoardAI</repo></links>
+    </project>
+
+    <!-- Added 2026-06-23 from GitHub (new repo since the 2026-05-25 generation). -->
+    <project id="storyboardai-aws" name="StoryboardAI — AWS-Native Rebuild" type="original">
+      <tagline>Ground-up AWS-native rebuild of StoryboardAI: a multimodal, globally-synced creative environment where a story is a "project" co-authored by AI agents — all infrastructure defined in AWS CDK.</tagline>
+      <timeline start="2026-05" last_active="2026-06" status="early" months="1"/>
+      <metrics commits="7" primary_language="TypeScript" size_kb="140" stars="0" visibility="private"/>
+      <description>
+        A from-scratch, AWS-native re-architecture of the earlier StoryBoardAI app
+        (see id="storyboardai"). The product model: a story is a project with a living
+        "story bible" as the source of truth and persistent characters, co-authored by an AI
+        that toggles between an autonomous agent and a steerable copilot across text, image,
+        and audio. The core engineering bet is a context-assembly loop — slice the
+        authoritative bible into context on every action and check generated output back
+        against it for continuity/drift. Single TypeScript monorepo (Turborepo) with Next.js
+        web + Expo mobile (later), all cloud infra in AWS CDK. HONESTY NOTE: greenfield /
+        early-stage (7 commits) — at this point it is primarily a detailed architecture spec
+        (docs/ARCHITECTURE.md) plus initial scaffolding, not a shipped app. Present it as
+        cloud-architecture / system-design work, not a finished product.
+      </description>
+      <tech_stack><tech>AWS CDK (TypeScript)</tech><tech>AWS AppSync (GraphQL + sync)</tech><tech>AWS Lambda</tech><tech>DynamoDB</tech><tech>Aurora Serverless v2 / pgvector</tech><tech>Amazon Cognito</tech><tech>Claude via Amazon Bedrock</tech><tech>AWS Step Functions</tech><tech>S3 + CloudFront</tech><tech>Next.js</tech><tech>Expo</tech><tech>Turborepo</tech></tech_stack>
+      <skills><skill>AWS cloud architecture (CDK / IaC)</skill><skill>Serverless (Lambda, AppSync, Step Functions)</skill><skill>GraphQL + offline sync</skill><skill>Vector search (pgvector / Aurora Serverless)</skill><skill>LLM orchestration (Bedrock / Claude, agent + copilot modes)</skill><skill>System design / context-assembly for continuity</skill></skills>
+      <resume_bullets>
+        <bullet>Architected an AWS-native rebuild of an AI storytelling platform — AppSync GraphQL with offline sync, Lambda + Step Functions orchestration, DynamoDB + Aurora Serverless v2/pgvector, Cognito auth, and Claude via Amazon Bedrock — with all infrastructure defined in AWS CDK (TypeScript).</bullet>
+        <bullet>Designed a context-assembly engine that treats a persistent "story bible" as the source of truth, slicing relevant state into each AI action and verifying generated output back against it to prevent narrative drift.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/storyboardAINew</repo></links>
+    </project>
+
+    <project id="all-leads-foc" name="All-Leads-from-FOC — Lead Data Pipeline" type="original">
+      <tagline>Python pipeline for aggregating and processing sales/lead data.</tagline>
+      <timeline start="2025-12" last_active="2026-01" status="completed" months="2"/>
+      <metrics commits="15" primary_language="Python" size_kb="12294" stars="0" visibility="private"/>
+      <description>
+        A Python + HTML data project (~12 MB) for collecting and organizing lead data.
+        Substantial dataset/processing footprint; private. (No README — inferred from
+        name, language mix, and size.)
+      </description>
+      <tech_stack><tech>Python</tech><tech>HTML</tech></tech_stack>
+      <skills><skill>Data processing / ETL</skill><skill>Web scraping</skill><skill>Lead generation tooling</skill></skills>
+      <resume_bullets>
+        <bullet>Built a Python data pipeline to aggregate and structure sales-lead data into reportable output.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/All-Leads-from-FOC</repo></links>
+    </project>
+
+    <project id="socialscapescraper" name="SocialScape Scraper" type="original">
+      <tagline>Social-media data scraping tool with a Next.js frontend.</tagline>
+      <timeline start="2025-03" last_active="2025-05" status="completed" months="2"/>
+      <metrics commits="21" primary_language="TypeScript" size_kb="136" stars="0" visibility="private"/>
+      <description>
+        A Next.js/TypeScript application for scraping and presenting social-media data,
+        deployed on Vercel.
+      </description>
+      <tech_stack><tech>Next.js</tech><tech>TypeScript</tech><tech>Tailwind CSS</tech></tech_stack>
+      <skills><skill>Web scraping</skill><skill>Full-stack web development</skill></skills>
+      <resume_bullets>
+        <bullet>Built a social-media scraping tool with a Next.js/TypeScript interface, deployed on Vercel.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/socialscapescraper</repo><live>https://socialscapescraper.vercel.app</live></links>
+    </project>
+
+    <project id="proposal-generator-ai" name="AI Proposal Generator" type="original">
+      <tagline>AI tool that generates business proposals.</tagline>
+      <timeline start="2025-05" last_active="2025-05" status="completed" months="1"/>
+      <metrics commits="5" primary_language="JavaScript" size_kb="280" stars="0" visibility="private"/>
+      <description>
+        AI-driven proposal generation web app (JavaScript), deployed on Vercel. A v2
+        iteration of the earlier "proposal-generator" project.
+      </description>
+      <tech_stack><tech>JavaScript</tech><tech>HTML/CSS</tech><tech>Vercel</tech></tech_stack>
+      <skills><skill>LLM application development</skill><skill>Frontend development</skill></skills>
+      <resume_bullets>
+        <bullet>Built an AI proposal-generation web app that produces formatted business proposals from prompts.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/Vick1213/proposal-generator-ai</repo><live>https://proposal-generator-ai.vercel.app</live></links>
+    </project>
+
+    <project id="proposal-generator" name="Proposal Generator (v1)" type="original">
+      <tagline>First iteration of the proposal-generation app.</tagline>
+      <timeline start="2025-05" last_active="2025-05" status="completed" months="1"/>
+      <metrics commits="7" primary_language="JavaScript" size_kb="410" stars="0" visibility="private"/>
+      <description>Original version of the proposal generator; superseded by the AI variant.</description>
+      <tech_stack><tech>JavaScript</tech><tech>HTML/CSS</tech></tech_stack>
+      <skills><skill>Frontend development</skill></skills>
+      <resume_bullets><bullet>Prototyped a proposal-generation web tool (later evolved into an AI-driven version).</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/proposal-generator</repo><live>https://proposal-generator-psi.vercel.app</live></links>
+    </project>
+
+    <project id="coffeeapp" name="CoffeeApp" type="original">
+      <tagline>React + TypeScript + Vite application.</tagline>
+      <timeline start="2026-02" last_active="2026-02" status="completed" months="1"/>
+      <metrics commits="13" primary_language="TypeScript" size_kb="190" stars="1" visibility="private"/>
+      <description>A React/TypeScript app scaffolded with Vite, deployed on Vercel. (Default README — purpose inferred from name.)</description>
+      <tech_stack><tech>React</tech><tech>TypeScript</tech><tech>Vite</tech></tech_stack>
+      <skills><skill>Frontend development</skill></skills>
+      <resume_bullets><bullet>Built a React/TypeScript single-page app with Vite, deployed on Vercel.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/CoffeeApp</repo><live>https://coffee-app-eight-olive.vercel.app</live></links>
+    </project>
+
+    <project id="personalwebsite" name="Personal Website / Portfolio" type="original">
+      <tagline>Personal portfolio site.</tagline>
+      <timeline start="2025-10" last_active="2026-01" status="maintained" months="3"/>
+      <metrics commits="7" primary_language="TypeScript" size_kb="312" stars="0" visibility="private"/>
+      <description>A personal portfolio website built with Next.js/TypeScript, deployed on Vercel.</description>
+      <tech_stack><tech>Next.js</tech><tech>TypeScript</tech><tech>Tailwind CSS</tech></tech_stack>
+      <skills><skill>Frontend development</skill><skill>Personal branding</skill></skills>
+      <resume_bullets><bullet>Designed and deployed a personal portfolio site in Next.js/TypeScript.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/personalwebsite</repo><live>https://personalwebsite-ten-eta.vercel.app</live></links>
+    </project>
+
+    <!-- =================== CLIENT / VELOCITY SILICON =================== -->
+    <project id="inference1" name="Velocity Silicon — Company Website" type="ai-builder">
+      <tagline>Marketing/product site for Velocity Silicon (the AI-chip venture behind AiToChip).</tagline>
+      <timeline start="2026-03" last_active="2026-05" status="active" months="2"/>
+      <metrics commits="58" primary_language="JavaScript" size_kb="362" stars="0" visibility="private"/>
+      <description>
+        The public web presence for Velocity Silicon (the company commercializing the
+        AiToChip accelerators). Scaffolded with the Base44 AI app builder and customized;
+        deployed on Vercel.
+      </description>
+      <tech_stack><tech>JavaScript</tech><tech>Vite</tech><tech>Base44</tech><tech>Vercel</tech></tech_stack>
+      <skills><skill>Web development</skill><skill>AI app builders</skill><skill>Product marketing site</skill></skills>
+      <resume_bullets><bullet>Built and iterated (58 commits) the marketing site for an AI-chip venture, shipping continuously to Vercel.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/Inference1</repo><live>https://inference1.vercel.app</live></links>
+    </project>
+
+    <project id="kensridge-base44-app" name="Kensridge App (Base44)" type="ai-builder">
+      <tagline>Web application for Kensridge Partners (capital-introduction advisory).</tagline>
+      <timeline start="2026-03" last_active="2026-05" status="active" months="2"/>
+      <metrics commits="94" primary_language="JavaScript" size_kb="342" stars="0" visibility="private"/>
+      <description>
+        A Base44-scaffolded application for Kensridge Partners, actively developed
+        (94 commits). Most-iterated of the Kensridge web properties.
+      </description>
+      <tech_stack><tech>JavaScript</tech><tech>TypeScript</tech><tech>Base44</tech></tech_stack>
+      <skills><skill>Web development</skill><skill>AI app builders</skill><skill>Client delivery</skill></skills>
+      <resume_bullets><bullet>Delivered a client web application (94 commits) for a capital-introduction advisory firm.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/kensridge-base44-app</repo></links>
+    </project>
+
+    <project id="kensridge-data-platform" name="Kensridge Data Platform" type="original">
+      <tagline>Data platform combining a TypeScript app with Python processing.</tagline>
+      <timeline start="2026-04" last_active="2026-04" status="early" months="1"/>
+      <metrics commits="1" primary_language="TypeScript" size_kb="14584" stars="0" visibility="private"/>
+      <description>
+        A data platform (TypeScript frontend/app + Python backend/processing, ~14 MB).
+        Single commit but large footprint — likely a bulk initial push of an established
+        codebase. Verify maturity before featuring prominently.
+      </description>
+      <tech_stack><tech>TypeScript</tech><tech>Python</tech></tech_stack>
+      <skills><skill>Data platform engineering</skill><skill>Full-stack development</skill></skills>
+      <resume_bullets><bullet>Built a data platform pairing a TypeScript application layer with Python data processing.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/KensridgeDataPlatform</repo></links>
+    </project>
+
+    <project id="kensridge-partners" name="Kensridge Partners — Advisory Website" type="original">
+      <tagline>Boutique capital-introduction advisory marketing site.</tagline>
+      <timeline start="2026-03" last_active="2026-03" status="completed" months="1"/>
+      <metrics commits="10" primary_language="TypeScript" size_kb="177" stars="0" visibility="private"/>
+      <description>Marketing website for Kensridge Partners, built with Next.js/TypeScript and MDX content.</description>
+      <tech_stack><tech>Next.js</tech><tech>TypeScript</tech><tech>MDX</tech></tech_stack>
+      <skills><skill>Frontend development</skill><skill>Content-driven sites (MDX)</skill></skills>
+      <resume_bullets><bullet>Built a boutique advisory firm's marketing website in Next.js/TypeScript with MDX-driven content.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/kensridge-partners</repo></links>
+    </project>
+
+    <project id="kensridge-app" name="Kensridge App (early)" type="original">
+      <tagline>Early JavaScript version of the Kensridge web app.</tagline>
+      <timeline start="2026-03" last_active="2026-03" status="superseded" months="1"/>
+      <metrics commits="3" primary_language="JavaScript" size_kb="187" stars="0" visibility="public"/>
+      <description>An early/public iteration of the Kensridge application, later superseded by the Base44 build.</description>
+      <tech_stack><tech>JavaScript</tech></tech_stack>
+      <skills><skill>Frontend development</skill></skills>
+      <resume_bullets><bullet>Prototyped an early version of a client web app (superseded by a later build).</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/kensridge-app</repo></links>
+    </project>
+
+    <project id="klusterai-website" name="Kluster AI Website" type="original">
+      <tagline>Marketing website (single-commit landing build).</tagline>
+      <timeline start="2025-03" last_active="2025-03" status="completed" months="1"/>
+      <metrics commits="1" primary_language="TypeScript" size_kb="27" stars="0" visibility="private"/>
+      <description>A small Next.js/TypeScript marketing site, deployed on Vercel.</description>
+      <tech_stack><tech>Next.js</tech><tech>TypeScript</tech></tech_stack>
+      <skills><skill>Frontend development</skill></skills>
+      <resume_bullets><bullet>Built and deployed a marketing landing site in Next.js.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/KlusterAiWebsite</repo><live>https://kluster-ai-website.vercel.app</live></links>
+    </project>
+
+    <!-- ============= TEMPLATE-BASED / FORK (be honest on resume) ====== -->
+    <project id="hr_chatbot" name="HR Chatbot" type="template-based">
+      <tagline>HR-domain AI chat app built on the open-source Chatbot UI.</tagline>
+      <timeline start="2025-06" last_active="2025-06" status="completed" months="1"/>
+      <metrics commits="2" primary_language="TypeScript" size_kb="672" stars="0" visibility="private"/>
+      <description>
+        An HR-focused chatbot adapted from the open-source "Chatbot UI" (mckaywrigley),
+        with a Supabase/PostgreSQL backend (PLpgSQL). Deployed on Vercel. Customization
+        was light (2 commits) — present as a deployment/integration project, not from-scratch.
+      </description>
+      <tech_stack><tech>TypeScript</tech><tech>Next.js</tech><tech>Supabase</tech><tech>PostgreSQL / PLpgSQL</tech></tech_stack>
+      <skills><skill>LLM chatbot integration</skill><skill>Supabase / Postgres</skill><skill>Deploying open-source projects</skill></skills>
+      <resume_bullets><bullet>Adapted and deployed an open-source LLM chat UI into an HR-domain assistant backed by Supabase/PostgreSQL.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/hr_chatbot</repo><live>https://hrchatbot.vercel.app</live></links>
+    </project>
+
+    <project id="quantumnreach" name="QuantumnReach — Outreach Dashboard" type="template-based">
+      <tagline>Outreach/CRM dashboard built on the TailAdmin Next.js template.</tagline>
+      <timeline start="2025-02" last_active="2025-02" status="completed" months="1"/>
+      <metrics commits="5" primary_language="TypeScript" size_kb="8306" stars="0" visibility="private"/>
+      <description>
+        A dashboard application started from the open-source TailAdmin (Next.js 14 +
+        Tailwind) template and customized for outreach use, deployed on Vercel.
+      </description>
+      <tech_stack><tech>Next.js 14</tech><tech>React 18</tech><tech>TypeScript</tech><tech>Tailwind CSS</tech></tech_stack>
+      <skills><skill>Dashboard / admin UI</skill><skill>Template customization</skill></skills>
+      <resume_bullets><bullet>Customized a Next.js admin-dashboard template into an outreach tool and deployed it on Vercel.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/QuantumnReach</repo><live>https://quantumn-reach.vercel.app</live></links>
+    </project>
+
+    <project id="odyssey" name="Odyssey — Astro Marketing Site" type="template-based">
+      <tagline>Business/startup marketing site built on the Astro Odyssey theme.</tagline>
+      <timeline start="2024-11" last_active="2025-01" status="completed" months="2"/>
+      <metrics commits="70" primary_language="Astro" size_kb="22954" stars="0" visibility="private"/>
+      <description>
+        A marketing website built on the open-source "Odyssey" Astro theme (blog,
+        landing pages, contact forms, theme switcher). 70 commits of customization;
+        achieves strong Lighthouse performance via Astro. Deployed on Vercel.
+      </description>
+      <tech_stack><tech>Astro</tech><tech>TypeScript</tech><tech>MDX</tech><tech>CSS</tech><tech>Nix</tech></tech_stack>
+      <skills><skill>Astro / static-site performance</skill><skill>SEO best practices</skill><skill>Theme customization</skill></skills>
+      <resume_bullets><bullet>Customized an Astro-based marketing theme (blog, landing pages, contact forms) for a startup site, optimizing for Lighthouse performance and SEO.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/odyssey</repo><live>https://odyssey-rust.vercel.app</live></links>
+    </project>
+
+    <project id="router" name="Router.so — Self-Hosted Form Backend" type="fork">
+      <tagline>Self-hosted deployment of the open-source router.so form/lead-routing backend.</tagline>
+      <timeline start="2025-02" last_active="2025-02" status="completed" months="1"/>
+      <metrics commits="269" primary_language="TypeScript" size_kb="6329" stars="0" visibility="private"/>
+      <description>
+        A self-hosted instance of router.so (headless form handling and lead routing).
+        The 269-commit count largely reflects upstream history — treat this as a
+        deployment/operations project, NOT 269 commits of original authorship. Useful
+        for demonstrating self-hosting of a TypeScript + Postgres + Docker stack.
+      </description>
+      <tech_stack><tech>TypeScript</tech><tech>Next.js</tech><tech>PostgreSQL</tech><tech>Docker</tech><tech>Resend</tech></tech_stack>
+      <skills><skill>Self-hosting open-source apps</skill><skill>Docker deployment</skill><skill>PostgreSQL ops</skill></skills>
+      <resume_bullets><bullet>Self-hosted an open-source form/lead-routing backend (Next.js + PostgreSQL + Docker), configuring Resend email and Vercel Postgres.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/router</repo><live>https://router.so</live></links>
+    </project>
+
+    <!-- ========================== COURSEWORK ========================== -->
+    <project id="final-project-data" name="Data Science Final Project" type="coursework">
+      <tagline>Jupyter/Python data-analysis final project.</tagline>
+      <timeline start="2025-12" last_active="2025-12" status="completed" months="1"/>
+      <metrics commits="13" primary_language="Jupyter Notebook" size_kb="3391" stars="0" visibility="public"/>
+      <description>A data-science course final project (Jupyter notebooks + Python, ~3.4 MB of analysis/dev data).</description>
+      <tech_stack><tech>Python</tech><tech>Jupyter</tech><tech>Pandas (inferred)</tech></tech_stack>
+      <skills><skill>Data analysis</skill><skill>Notebook-based exploration</skill></skills>
+      <resume_bullets><bullet>Completed a data-science final project analyzing a real dataset in Python/Jupyter.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/final_project_and_dev_data</repo></links>
+    </project>
+
+    <project id="assignment4-services" name="ASP.NET Web Services (Assignment 4)" type="coursework">
+      <tagline>C#/ASP.NET web-services coursework.</tagline>
+      <timeline start="2025-04" last_active="2025-04" status="completed" months="1"/>
+      <metrics commits="2" primary_language="JavaScript" size_kb="1111" stars="0" visibility="private"/>
+      <description>University assignment building web services in C#/ASP.NET with a JS frontend.</description>
+      <tech_stack><tech>C#</tech><tech>ASP.NET</tech><tech>JavaScript</tech></tech_stack>
+      <skills><skill>C# / ASP.NET</skill><skill>Web services</skill></skills>
+      <resume_bullets><bullet>Built C#/ASP.NET web services as part of a distributed-software-development course.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/Assignment4.services</repo></links>
+    </project>
+
+    <project id="cse445xml" name="CSE445 XML Assignment" type="coursework">
+      <tagline>XML / web-services coursework (CSE445).</tagline>
+      <timeline start="2025-04" last_active="2025-04" status="completed" months="1"/>
+      <metrics commits="4" primary_language="XML" size_kb="7" stars="0" visibility="public"/>
+      <description>A small XML-focused assignment for ASU CSE445 (Distributed Software Development) — XML schemas/documents.</description>
+      <tech_stack><tech>XML</tech><tech>XSD/XSLT (inferred)</tech></tech_stack>
+      <skills><skill>XML schema design</skill></skills>
+      <resume_bullets><bullet>Completed XML schema/validation coursework in CSE445.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/CSE445XML</repo></links>
+    </project>
+
+    <project id="provided-code" name="C++ Coursework (provided_code)" type="coursework">
+      <tagline>C++ data-structures/algorithms assignments.</tagline>
+      <timeline start="2025-02" last_active="2025-02" status="completed" months="1"/>
+      <metrics commits="10" primary_language="C++" size_kb="526" stars="0" visibility="public"/>
+      <description>C++ coursework built on instructor-provided starter code and sample tests.</description>
+      <tech_stack><tech>C++</tech><tech>Shell</tech></tech_stack>
+      <skills><skill>C++ programming</skill><skill>Data structures &amp; algorithms</skill></skills>
+      <resume_bullets><bullet>Implemented C++ data-structures/algorithms assignments against provided test suites.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/provided_code</repo></links>
+    </project>
+
+    <project id="provided-code-tests" name="C++ Coursework (provided_code_and_sample_tests)" type="coursework">
+      <tagline>Additional C++ assignment with sample tests.</tagline>
+      <timeline start="2025-03" last_active="2025-03" status="completed" months="1"/>
+      <metrics commits="1" primary_language="C++" size_kb="705" stars="0" visibility="private"/>
+      <description>A second C++ assignment repository with provided code and sample tests (Makefile-based).</description>
+      <tech_stack><tech>C++</tech><tech>Makefile</tech><tech>Shell</tech></tech_stack>
+      <skills><skill>C++ programming</skill></skills>
+      <resume_bullets><bullet>Completed a C++ assignment using a Makefile build and provided sample tests.</bullet></resume_bullets>
+      <links><repo>https://github.com/Vick1213/provided_code_and_sample_tests</repo></links>
+    </project>
+
+    <!-- =================================================================
+         SECOND ACCOUNT (saatvik1213) — earlier ML / game / hackathon work
+         (2022-2024). These show a machine-learning foundation predating the
+         recent web/chip work. All tagged account="saatvik1213".
+    ================================================================== -->
+
+    <project id="powergrader" name="PowerGrader — AI Automated Grading (SODA Hackathon)" type="original" account="saatvik1213">
+      <tagline>Hackathon web app that auto-grades written student assignments, built by a 4-person team.</tagline>
+      <timeline start="2024-10" last_active="2024-10" status="completed" months="1"/>
+      <metrics commits="65" primary_language="JavaScript" size_kb="836" stars="0" forks="1" visibility="public"/>
+      <description>
+        Built at the SODA Hackathon (track: scaling/accessibility in education) with team
+        "SSGA" (4 members). PowerGrader is a web application that provides automated grading
+        for written assignment submissions on online education platforms — filling a gap
+        left by tools that only grade multiple-choice or embedded-code questions. Next.js
+        frontend, Flask (Python) backend, and Firebase. Includes a recorded UI demo and a
+        project presentation. Repo has an external fork.
+      </description>
+      <tech_stack><tech>Next.js</tech><tech>React</tech><tech>Flask (Python)</tech><tech>Firebase</tech><tech>Tailwind CSS</tech></tech_stack>
+      <skills><skill>Full-stack development</skill><skill>NLP / automated grading</skill><skill>Rapid prototyping (hackathon)</skill><skill>Team collaboration</skill><skill>Python/Flask APIs</skill></skills>
+      <resume_bullets>
+        <bullet>Built PowerGrader at the SODA hackathon with a 4-person team: a Next.js + Flask + Firebase web app that automatically grades written (free-text) student assignments, addressing a gap in online-learning tools that only grade multiple-choice questions.</bullet>
+        <bullet>Delivered a working end-to-end demo (student UI + grading backend) within the hackathon timeframe; project earned an external fork on GitHub.</bullet>
+      </resume_bullets>
+      <links>
+        <repo>https://github.com/saatvik1213/powergradernew</repo>
+        <presentation>https://gamma.app/docs/PowerGrader-29m054unrf8q5xa</presentation>
+        <demo_video>https://youtu.be/aIbw28HNHtk</demo_video>
+      </links>
+    </project>
+
+    <project id="crypto-news-sentiment" name="Crypto News Sentiment Model (Doc2Vec + LSTM)" type="original" account="saatvik1213">
+      <tagline>NLP model that scores crypto-market sentiment from scraped news.</tagline>
+      <timeline start="2024-09" last_active="2024-09" status="completed" months="1"/>
+      <metrics commits="3" primary_language="Jupyter Notebook" size_kb="22" stars="0" visibility="public"/>
+      <description>
+        A sentiment-analysis pipeline for cryptocurrency news: scrapes articles via public
+        APIs, embeds text with Doc2Vec, and feeds the embeddings into an LSTM to produce a
+        sentiment signal. Implemented in Jupyter/Python.
+      </description>
+      <tech_stack><tech>Python</tech><tech>Jupyter</tech><tech>Doc2Vec (Gensim)</tech><tech>LSTM (Keras/TensorFlow)</tech><tech>News APIs</tech></tech_stack>
+      <skills><skill>NLP / text embeddings</skill><skill>Recurrent neural networks (LSTM)</skill><skill>Data scraping</skill><skill>Financial-data modeling</skill></skills>
+      <resume_bullets>
+        <bullet>Built a crypto-news sentiment model that scrapes articles via public APIs, embeds them with Doc2Vec, and classifies market sentiment with an LSTM.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/saatvik1213/Crypto_News_sentiment</repo></links>
+    </project>
+
+    <project id="asl-detector" name="Sign Language (ASL) Detector" type="original" account="saatvik1213">
+      <tagline>Deep-learning model that translates ASL video into text.</tagline>
+      <timeline start="2024-09" last_active="2024-09" status="prototype" months="1"/>
+      <metrics commits="4" primary_language="Jupyter Notebook" size_kb="14" stars="0" visibility="public"/>
+      <description>
+        A deep-learning project to read American Sign Language from video and translate it
+        into text, aimed at improving accessibility/communication. Implemented in
+        Jupyter/Python (early-stage prototype).
+      </description>
+      <tech_stack><tech>Python</tech><tech>Jupyter</tech><tech>Deep learning (CNN/sequence models)</tech><tech>Computer vision</tech></tech_stack>
+      <skills><skill>Computer vision</skill><skill>Video/sequence modeling</skill><skill>Accessibility-focused ML</skill></skills>
+      <resume_bullets>
+        <bullet>Prototyped a deep-learning model to translate American Sign Language video into text, targeting accessibility for the hearing-impaired.</bullet>
+      </resume_bullets>
+      <links><repo>https://github.com/saatvik1213/SignLanguage-ASL-Detector</repo></links>
+    </project>
+
+    <project id="cnn-classifier" name="Computer Vision Image Classifier (CNN)" type="original" account="saatvik1213">
+      <tagline>Convolutional neural network for image classification.</tagline>
+      <timeline start="2022-11" last_active="2022-12" status="completed" months="1"/>
+      <metrics commits="3" primary_language="Python" size_kb="6" stars="0" visibility="public"/>
+      <description>A Python CNN built to classify images — an early hands-on deep-learning / computer-vision project.</description>
+      <tech_stack><tech>Python</tech><tech>CNN (Keras/TensorFlow)</tech><tech>Computer vision</tech></tech_stack>
+      <skills><skill>Convolutional neural networks</skill><skill>Image classification</skill></skills>
+      <resume_bullets><bullet>Implemented a convolutional neural network in Python for image classification.</bullet></resume_bullets>
+      <links><repo>https://github.com/saatvik1213/Computer-vision-classifiern-using-cnn</repo></links>
+    </project>
+
+    <project id="epic-store-fps" name="Epic Store — FPS Co-Op Game (Unreal Engine)" type="original" account="saatvik1213">
+      <tagline>First-person-shooter co-op game built in Unreal Engine 5.3.</tagline>
+      <timeline start="2023-10" last_active="2023-10" status="completed" months="1"/>
+      <metrics commits="1" primary_language="C++" size_kb="27192" stars="0" visibility="public"/>
+      <description>
+        A first-person-shooter cooperative game built on Unreal Engine 5.3 (C++/C#, ~27 MB).
+        Single commit reflects a bulk push of the project. Demonstrates real-time 3D game
+        development and engine work.
+      </description>
+      <tech_stack><tech>Unreal Engine 5.3</tech><tech>C++</tech><tech>C#</tech><tech>Game development</tech></tech_stack>
+      <skills><skill>Game development</skill><skill>Unreal Engine</skill><skill>C++ / real-time systems</skill></skills>
+      <resume_bullets><bullet>Built a cooperative first-person-shooter game in Unreal Engine 5.3 using C++.</bullet></resume_bullets>
+      <links><repo>https://github.com/saatvik1213/Epic-Store--FPS-CoOp-</repo></links>
+    </project>
+
+    <project id="demoapp-flutter" name="Flutter / Dart Cross-Platform App (learning)" type="coursework" account="saatvik1213">
+      <tagline>Cross-platform mobile app built while learning Flutter/Dart.</tagline>
+      <timeline start="2022-12" last_active="2022-12" status="learning" months="1"/>
+      <metrics commits="2" primary_language="Dart" size_kb="199993" stars="0" visibility="public"/>
+      <description>
+        A cross-platform app project built while learning Dart and Flutter (large disk size
+        is mostly platform build artifacts). Use to show breadth of mobile frameworks
+        (Flutter alongside React Native), not as a flagship project.
+      </description>
+      <tech_stack><tech>Flutter</tech><tech>Dart</tech><tech>Android (Kotlin/Java)</tech><tech>iOS (Swift/Obj-C)</tech></tech_stack>
+      <skills><skill>Flutter / Dart</skill><skill>Cross-platform mobile</skill></skills>
+      <resume_bullets><bullet>Learned and built a cross-platform mobile app with Flutter/Dart.</bullet></resume_bullets>
+      <links><repo>https://github.com/saatvik1213/DemoAPP</repo></links>
+    </project>
+
+  </projects>
+
+  <!-- ====================================================================
+       EXTERNAL COLLECTIONS — work that lives outside GitHub.
+  ===================================================================== -->
+  <external_collections>
+    <collection id="ml-notebooks-drive" name="Machine-Learning Model Notebooks (Google Drive)" type="ml-portfolio">
+      <tagline>A large personal collection of Python notebooks covering many different machine-learning models.</tagline>
+      <url>https://drive.google.com/drive/u/1/folders/1b2i9qt2KYFspeNr6T9EJcP03GwqwGVwE</url>
+      <description>
+        A Google Drive folder containing many Python/Jupyter notebooks implementing a wide
+        range of machine-learning models and experiments. Breadth is the point here — it is
+        intentionally not catalogued item-by-item (the collection is large). Treat it as
+        supporting evidence of sustained, broad ML experimentation rather than a single
+        project. Access may require permission.
+      </description>
+      <skills><skill>Machine learning (broad)</skill><skill>Python / Jupyter</skill><skill>Model experimentation</skill></skills>
+      <resume_bullets>
+        <bullet>Maintain a personal library of machine-learning notebooks spanning a wide range of model architectures and experiments (available on request).</bullet>
+      </resume_bullets>
+    </collection>
+  </external_collections>
+
+  <!-- ====================================================================
+       EXCLUDED — empty or zero-content repos (listed for completeness only;
+       do not put on a resume).
+  ===================================================================== -->
+  <excluded_repos reason="empty-or-zero-content">
+    <repo name="Testing-New-architecture-For-AI" created="2026-03" note="empty"/>
+    <repo name="FlaskAppSS" created="2025-04" note="empty"/>
+    <repo name="saatvikchoudhary" created="2025-02" note="empty (likely profile placeholder)"/>
+    <repo name="Shooter-fps-for-Epic-store-5.3" account="saatvik1213" created="2023-10" note="empty (superseded by Epic-Store--FPS-CoOp-)"/>
+    <repo name="Crypto-Profitable-Strategies" account="saatvik1213" created="2023-09" note="empty (idea repo, no code)"/>
+    <repo name="ARIMA-and-Stats-to-model-data" account="saatvik1213" created="2023-03" note="empty git repo; described intent: ARIMA + Holt-Winters models for crypto-market statistical analysis"/>
+  </excluded_repos>
+
+</resume_portfolio>
