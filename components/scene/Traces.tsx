@@ -26,7 +26,7 @@ function ZoneTraces({ zone, reduced }: ZoneTracesProps) {
 
   useFrame((_state, delta) => {
     if (reduced) return;
-    dashOffsetRef.current -= delta * 0.5;
+    dashOffsetRef.current -= delta * 0.28;
     // Update each line's dash offset via material
     lineRefs.current.forEach((ref) => {
       if (ref && ref.setDashOffset) {
@@ -56,10 +56,10 @@ function ZoneTraces({ zone, reduced }: ZoneTracesProps) {
             key={proj.id}
             points={points}
             color={zone.accent}
-            lineWidth={0.8}
+            lineWidth={0.4}
             dashed={!reduced}
-            dashSize={0.3}
-            gapSize={0.2}
+            dashSize={0.4}
+            gapSize={0.25}
             dashOffset={dashOffsetRef.current}
           />
         );

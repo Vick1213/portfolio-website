@@ -16,6 +16,8 @@ export default function ZoneLabel({ zone }: ZoneLabelProps) {
         anchorX="center"
         anchorY="middle"
         position={[0, 0, 0]}
+        outlineWidth={0.02}
+        outlineColor="#000000"
       >
         {zone.label}
       </Text>
@@ -25,7 +27,9 @@ export default function ZoneLabel({ zone }: ZoneLabelProps) {
         anchorX="center"
         anchorY="middle"
         position={[0, -0.75, 0]}
-        fillOpacity={0.6}
+        fillOpacity={0.55}
+        outlineWidth={0.02}
+        outlineColor="#000000"
       >
         {zone.blurb}
       </Text>

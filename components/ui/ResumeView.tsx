@@ -2,6 +2,9 @@
 
 import { profile, zones, resumeProjects, skillCategories } from '@/lib/portfolio';
 import type { ProjType } from '@/lib/types';
+import About from './About';
+import Contact from './Contact';
+import Footer from './Footer';
 
 const TYPE_META: Record<ProjType, { label: string; bg: string; text: string }> = {
   original:       { label: 'Original',       bg: '#dcfce7', text: '#166534' },
@@ -26,6 +29,9 @@ export default function ResumeView() {
           color: '#0f172a',
         }}
       >
+        {/* ── About ── */}
+        <About />
+
         {/* ── Header ── */}
         <header style={{ marginBottom: '2rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '1.5rem' }}>
           <h1 style={{ fontSize: '2.25rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '0.35rem' }}>
@@ -171,6 +177,14 @@ export default function ResumeView() {
           ))}
         </section>
       </div>
+
+      {/* ── Contact ── */}
+      <div style={{ borderTop: '2px solid #e2e8f0' }}>
+        <Contact />
+      </div>
+
+      {/* ── Footer ── */}
+      <Footer />
     </div>
   );
 }

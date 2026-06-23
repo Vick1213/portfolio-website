@@ -13,9 +13,11 @@ export default function ChipDie() {
       <mesh position={DIE_CENTER}>
         <boxGeometry args={DIE_SIZE} />
         <meshStandardMaterial
-          color="#0a0e16"
-          metalness={0.9}
-          roughness={0.4}
+          color="#080c14"
+          metalness={0.95}
+          roughness={0.25}
+          emissive="#0a1a2a"
+          emissiveIntensity={0.15}
         />
       </mesh>
 
@@ -25,11 +27,11 @@ export default function ChipDie() {
         args={[DIE_SIZE[0], DIE_SIZE[2]]}
         cellSize={1}
         cellThickness={0.4}
-        cellColor="#1a2a3a"
+        cellColor="#1e3040"
         sectionSize={5}
         sectionThickness={0.8}
-        sectionColor="#2a4a5a"
-        fadeDistance={40}
+        sectionColor="#2e5060"
+        fadeDistance={35}
         fadeStrength={1.5}
         infiniteGrid={false}
         side={2}

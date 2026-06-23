@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { useUI } from '@/lib/store';
 import type { ProjType } from '@/lib/types';
 
@@ -15,6 +16,22 @@ const TYPE_COLORS: Record<ProjType, { bg: string; text: string; label: string }>
 export default function ProjectPanel() {
   const selected = useUI((s) => s.selected);
   const select   = useUI((s) => s.select);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  // Escape closes the panel; focus the close button when panel opens
+  useEffect(() => {
+    if (selected === null) return;
+    // Move focus to close button when panel opens
+    closeRef.current?.focus();
+
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        select(null);
+      }
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [selected, select]);
 
   if (selected === null) return null;
 
@@ -28,7 +45,9 @@ export default function ProjectPanel() {
   ];
 
   return (
-    <div
+    <aside
+      role="complementary"
+      aria-label={`Project details: ${selected.name}`}
       className="fixed top-0 right-0 bottom-0 z-40 pointer-events-auto overflow-y-auto"
       style={{
         width: 'min(480px, 100vw)',
@@ -64,13 +83,15 @@ export default function ProjectPanel() {
 
           {/* Close button */}
           <button
+            ref={closeRef}
+            type="button"
             onClick={() => select(null)}
-            className="font-mono text-base leading-none rounded p-1 flex-shrink-0 transition-colors duration-150"
+            aria-label="Close project panel"
+            className="font-mono text-base leading-none rounded p-1 flex-shrink-0 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-white"
             style={{
               color: 'rgba(255,255,255,0.4)',
               background: 'transparent',
             }}
-            aria-label="Close panel"
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.85)';
             }}
@@ -100,6 +121,7 @@ export default function ProjectPanel() {
 
         {/* Divider */}
         <div
+          aria-hidden="true"
           className="h-px w-full"
           style={{ background: 'rgba(255,255,255,0.07)' }}
         />
@@ -114,9 +136,9 @@ export default function ProjectPanel() {
 
         {/* Tech chips */}
         {selected.tech.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <ul aria-label="Technologies" className="flex flex-wrap gap-1.5 list-none p-0 m-0">
             {selected.tech.map((t) => (
-              <span
+              <li
                 key={t}
                 className="font-mono text-xs px-2 py-0.5 rounded"
                 style={{
@@ -126,14 +148,14 @@ export default function ProjectPanel() {
                 }}
               >
                 {t}
-              </span>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         {/* Bullets */}
         {selected.bullets.length > 0 && (
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2 list-none p-0 m-0" aria-label="Highlights">
             {selected.bullets.map((b, i) => (
               <li
                 key={i}
@@ -141,6 +163,7 @@ export default function ProjectPanel() {
                 style={{ color: 'rgba(255,255,255,0.65)' }}
               >
                 <span
+                  aria-hidden="true"
                   className="flex-shrink-0 mt-1.5 w-1 h-1 rounded-full"
                   style={{ background: typeStyle.text }}
                 />
@@ -152,7 +175,7 @@ export default function ProjectPanel() {
 
         {/* Link buttons */}
         {linkDefs.some(({ key }) => !!selected.links[key]) && (
-          <div className="flex flex-wrap gap-2 pt-1">
+          <nav aria-label="Project links" className="flex flex-wrap gap-2 pt-1">
             {linkDefs.map(({ key, label }) => {
               const href = selected.links[key];
               if (!href) return null;
@@ -162,12 +185,13 @@ export default function ProjectPanel() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-mono text-xs px-3 py-1.5 rounded transition-colors duration-150"
+                  className="font-mono text-xs px-3 py-1.5 rounded transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
                   style={{
                     border: `1px solid ${typeStyle.text}60`,
                     color: typeStyle.text,
                     background: 'transparent',
                     textDecoration: 'none',
+                    outlineColor: typeStyle.text,
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLAnchorElement).style.background = typeStyle.bg;
@@ -180,9 +204,9 @@ export default function ProjectPanel() {
                 </a>
               );
             })}
-          </div>
+          </nav>
         )}
       </div>
-    </div>
+    </aside>
   );
 }
