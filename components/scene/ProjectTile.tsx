@@ -21,6 +21,12 @@ const INK_OUTLINE = '#05080f';
 // per-frame allocation.
 const SCRATCH = new THREE.Vector3();
 const CULL_DISTANCE = 26;
+// Labels are billboarded at a fixed world size, so they balloon when the camera
+// flies in close. Scale the label group ∝ distance to keep a ~constant on-screen
+// size (clamped) so names never overlap up close.
+const LABEL_REF_DIST = 16;
+const LABEL_MIN_SCALE = 0.5;
+const LABEL_MAX_SCALE = 1.5;
 
 // Derive a SHORT display name: split on em-dash / middot, take first segment.
 function shortName(name: string): string {
@@ -38,6 +44,9 @@ export default function ProjectTile({ project }: ProjectTileProps) {
 
   const [hovered, setHovered] = useState(false);
   const reduced = useUI((s) => s.reduced);
+  // When a project panel is open, the DOM panel is the detail surface — hide the
+  // in-3D tile labels so the zoomed-in scene isn't a wall of overlapping names.
+  const selected = useUI((s) => s.selected);
 
   const position = tilePosition(project);
   const accent = zoneById[project.zone].accent;
@@ -60,11 +69,15 @@ export default function ProjectTile({ project }: ProjectTileProps) {
   const nameSize = project.featured ? 0.4 : 0.32;
 
   useFrame((state, delta) => {
-    // Distance cull — set the label group visible only when zoomed close.
+    // Label visibility + constant-on-screen sizing.
     SCRATCH.set(position[0], position[1], position[2]);
     const dist = state.camera.position.distanceTo(SCRATCH);
     if (labelRef.current) {
-      labelRef.current.visible = dist <= CULL_DISTANCE;
+      // Visible only in the readable band AND when no project panel is open.
+      labelRef.current.visible = dist <= CULL_DISTANCE && selected === null;
+      // Keep ~constant screen size so names don't balloon/overlap up close.
+      const s = Math.min(LABEL_MAX_SCALE, Math.max(LABEL_MIN_SCALE, dist / LABEL_REF_DIST));
+      labelRef.current.scale.setScalar(s);
     }
 
     if (reduced) {
