@@ -2,6 +2,9 @@
 
 import { profile } from '@/lib/portfolio';
 import ResumeView from './ResumeView';
+import About from './About';
+import Contact from './Contact';
+import Footer from './Footer';
 
 /* Inline SVG chip-trace motif — lightweight, no canvas/three.js */
 function ChipMotif() {
@@ -176,9 +179,24 @@ export default function MobileFallback() {
         </div>
       </div>
 
+      {/* ── About ── */}
+      <div style={{ background: '#ffffff' }}>
+        <About />
+      </div>
+
       {/* ── Resume content ── */}
       <div style={{ background: '#ffffff' }}>
         <ResumeView />
+      </div>
+
+      {/* ── Contact ── */}
+      <div style={{ background: '#ffffff', borderTop: '2px solid #e2e8f0' }}>
+        <Contact />
+      </div>
+
+      {/* ── Footer ── */}
+      <div style={{ background: '#ffffff' }}>
+        <Footer />
       </div>
     </div>
   );

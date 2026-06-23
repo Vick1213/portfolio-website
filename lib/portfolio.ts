@@ -905,6 +905,27 @@ export const allProjects: Project[] = [
 export const projects: Project[] = allProjects.filter((p) => p.tile);
 export const resumeProjects: Project[] = allProjects;
 
+export interface ExternalCollection {
+  id: string;
+  name: string;
+  tagline: string;
+  url: string;
+  description: string;
+  skills: string[];
+}
+
+export const externalCollections: ExternalCollection[] = [
+  {
+    id: 'ml-notebooks-drive',
+    name: 'Machine-Learning Model Notebooks',
+    tagline: 'A large personal collection of Python notebooks covering many different machine-learning models.',
+    url: 'https://drive.google.com/drive/u/1/folders/1b2i9qt2KYFspeNr6T9EJcP03GwqwGVwE',
+    description:
+      'A Google Drive folder containing many Python/Jupyter notebooks implementing a wide range of machine-learning models and experiments. Breadth is the point here — the collection is large and intentionally not catalogued item-by-item. Treat it as supporting evidence of sustained, broad ML experimentation.',
+    skills: ['Machine learning (broad)', 'Python / Jupyter', 'Model experimentation'],
+  },
+];
+
 export const skillCategories: SkillCategory[] = [
   {
     name: 'Hardware / Chip Design',

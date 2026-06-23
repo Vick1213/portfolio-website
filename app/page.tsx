@@ -11,6 +11,7 @@ import Hud from '@/components/ui/Hud';
 import ProjectPanel from '@/components/ui/ProjectPanel';
 import ResumeView from '@/components/ui/ResumeView';
 import MobileFallback from '@/components/ui/MobileFallback';
+import Footer from '@/components/ui/Footer';
 
 // The 3D experience is client-only (WebGL / window access) — never SSR it.
 const Experience = dynamic(() => import('@/components/Experience'), {
@@ -44,6 +45,20 @@ export default function Page() {
       <Intro />
       <Hud />
       <ProjectPanel />
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 20,
+          background: 'rgba(4, 5, 13, 0.55)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+        }}
+      >
+        <Footer />
+      </div>
     </main>
   );
 }

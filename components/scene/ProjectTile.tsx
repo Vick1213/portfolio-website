@@ -17,32 +17,50 @@ interface ProjectTileProps {
 export default function ProjectTile({ project }: ProjectTileProps) {
   const groupRef = useRef<THREE.Group>(null!);
   const matRef = useRef<THREE.MeshStandardMaterial>(null!);
+  const pulseRef = useRef(0);
 
   const [hovered, setHovered] = useState(false);
+  const reduced = useUI((s) => s.reduced);
 
-  // Animation targets (as refs to avoid re-renders)
   const yTarget = useRef(0);
-  const emissiveTarget = useRef(0.4);
+  const emissiveTarget = useRef(project.featured ? 0.5 : 0.25);
   const yCurrent = useRef(0);
-  const emissiveCurrent = useRef(0.4);
+  const emissiveCurrent = useRef(project.featured ? 0.5 : 0.25);
 
   const position = tilePosition(project);
   const accent = zoneById[project.zone].accent;
 
   const footprint = project.featured ? TILE_SIZE_FEATURED : TILE_SIZE;
   const height = project.featured ? 0.8 : 0.5;
+  const metalness = project.featured ? 0.8 : 0.65;
+  const roughness = project.featured ? 0.2 : 0.4;
+  const baseEmissive = project.featured ? 0.5 : 0.25;
+  const hoverEmissive = project.featured ? 1.4 : 1.0;
 
-  useFrame((_state, delta) => {
-    // Update targets based on hover state
+  // suppress unused warning — pulseRef is used inside useFrame closure
+  void pulseRef;
+
+  useFrame((state, delta) => {
+    if (reduced) {
+      // Static values when reduced motion is on
+      if (groupRef.current) groupRef.current.position.y = 0;
+      if (matRef.current) matRef.current.emissiveIntensity = baseEmissive;
+      return;
+    }
+
     yTarget.current = hovered ? 0.4 : 0;
-    emissiveTarget.current = hovered ? 1.2 : 0.4;
+    emissiveTarget.current = hovered ? hoverEmissive : baseEmissive;
 
-    // Lerp current values toward targets
     const lerpFactor = 1 - Math.exp(-10 * delta);
     yCurrent.current += (yTarget.current - yCurrent.current) * lerpFactor;
     emissiveCurrent.current += (emissiveTarget.current - emissiveCurrent.current) * lerpFactor;
 
-    // Apply to group and material
+    // Subtle ambient pulse only when not hovered
+    if (!hovered) {
+      const pulse = Math.sin(state.clock.elapsedTime * 0.8 + position[0] * 0.3) * 0.08;
+      emissiveCurrent.current += pulse;
+    }
+
     if (groupRef.current) {
       groupRef.current.position.y = yCurrent.current;
     }
@@ -84,9 +102,9 @@ export default function ProjectTile({ project }: ProjectTileProps) {
           ref={matRef}
           color="#0d1117"
           emissive={accent}
-          emissiveIntensity={0.4}
-          metalness={0.7}
-          roughness={0.3}
+          emissiveIntensity={baseEmissive}
+          metalness={metalness}
+          roughness={roughness}
         />
       </RoundedBox>
     </group>

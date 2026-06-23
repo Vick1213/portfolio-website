@@ -36,3 +36,29 @@ body {
 body.scrollable {
   overflow: auto;
 }
+
+/* ── Focus-visible global baseline ─────────────────────────────────── */
+/* Remove default outline and rely on focus-visible (keyboard-only). */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────── */
+/* Gate non-essential animations behind prefers-reduced-motion.
+   intro-fade-in and panel-slide-in live in inline <style> tags on the
+   components; the keyframes below silence them at the CSS layer for
+   browsers that honour this query. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

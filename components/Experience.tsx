@@ -20,10 +20,10 @@ export default function Experience() {
       style={{ position: 'fixed', inset: 0, touchAction: 'none' }}
       dpr={[1, 2]}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
-      camera={{ position: overviewCamera.pos, fov: 45, near: 0.1, far: 200 }}
+      camera={{ position: overviewCamera.pos, fov: 50, near: 0.1, far: 200 }}
     >
-      <color attach="background" args={['#05060a']} />
-      <fog attach="fog" args={['#05060a', 30, 90]} />
+      <color attach="background" args={['#04050d']} />
+      <fog attach="fog" args={['#04050d', 40, 110]} />
 
       <Suspense fallback={null}>
         <Lights />
