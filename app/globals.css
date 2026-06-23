@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+:root {
+  --silicon: #5eead4;
+  --web: #818cf8;
+  --client: #f0abfc;
+  --ml: #fbbf24;
+  --bg: #05060a;
+  --fg: #e5e7eb;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-silicon: var(--silicon);
+  --color-web: var(--web);
+  --color-client: var(--client);
+  --color-ml: var(--ml);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* ResumeView / MobileFallback re-enable document scrolling by adding this
+   class to <body> (or by living inside an overflow-auto wrapper). */
+.scrollable,
+body.scrollable {
+  overflow: auto;
+}
