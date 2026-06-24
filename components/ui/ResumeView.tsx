@@ -166,6 +166,7 @@ export default function ResumeView() {
             </span>
             <a href={`mailto:${profile.email}`} className="resume-hero-link">{profile.email}</a>
             <a href={profile.booking} target="_blank" rel="noreferrer" className="resume-hero-link">Book a 30-min chat</a>
+            <a href={profile.linkedin} target="_blank" rel="noreferrer" className="resume-hero-link">LinkedIn</a>
             <a href={profile.github} target="_blank" rel="noreferrer" className="resume-hero-link">GitHub · Vick1213</a>
             <a href={profile.githubAlt} target="_blank" rel="noreferrer" className="resume-hero-link">GitHub · saatvik1213</a>
           </div>
@@ -401,6 +402,52 @@ export default function ResumeView() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Person card ──────────────────────────────────────────────── */}
+      <section style={{ padding: '1rem 0 3rem' }}>
+        <div className="resume-wrap">
+          <div
+            className="resume-card"
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: '1.6rem',
+              padding: '1.6rem 1.8rem',
+            }}
+          >
+            <img
+              src="/images/saatvik-choudhary.jpg"
+              alt="Saatvik Choudhary — chip architect and full-stack engineer"
+              width={112}
+              height={112}
+              loading="lazy"
+              style={{
+                width: '112px',
+                height: '112px',
+                borderRadius: '999px',
+                objectFit: 'cover',
+                flexShrink: 0,
+                border: '3px solid #eef2ff',
+                boxShadow: '0 6px 20px rgba(15,23,42,0.12)',
+              }}
+            />
+            <div style={{ flex: '1 1 260px' }}>
+              <h2 className="resume-section-title" style={{ margin: '0 0 0.35rem' }}>
+                {profile.name}
+              </h2>
+              <p style={{ margin: 0, color: '#475569', fontSize: '0.95rem', lineHeight: 1.55 }}>
+                {profile.headline}
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '0.9rem' }}>
+                <a href={profile.linkedin} target="_blank" rel="noreferrer" className="resume-hero-link">LinkedIn</a>
+                <a href={profile.github} target="_blank" rel="noreferrer" className="resume-hero-link">GitHub · Vick1213</a>
+                <a href={`mailto:${profile.email}`} className="resume-hero-link">{profile.email}</a>
+              </div>
+            </div>
           </div>
         </div>
       </section>

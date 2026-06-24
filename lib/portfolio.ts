@@ -5,6 +5,7 @@ export const profile: Profile = {
   headline:
     'Chip architect & full-stack engineer — from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.',
   email: 'saatvik1213@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/saatvik-choudhary/',
   github: 'https://github.com/Vick1213',
   githubAlt: 'https://github.com/saatvik1213',
   booking:

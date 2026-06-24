@@ -31,7 +31,15 @@ export default function Footer() {
       </span>
 
       {/* Right: GitHub links */}
-      <nav aria-label="GitHub profiles">
+      <nav aria-label="Profiles">
+        <a
+          href={profile.linkedin}
+          target="_blank"
+          rel="noreferrer"
+          style={{ color: '#64748b', textDecoration: 'none', marginRight: '0.75rem' }}
+        >
+          LinkedIn
+        </a>
         <a
           href={profile.github}
           target="_blank"

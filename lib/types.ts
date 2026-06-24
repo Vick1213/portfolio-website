@@ -47,6 +47,7 @@ export interface Profile {
   name: string;
   headline: string;
   email: string;
+  linkedin: string;
   github: string;
   githubAlt: string;
   booking: string;

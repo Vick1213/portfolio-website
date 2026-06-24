@@ -15,8 +15,7 @@ const mono = JetBrains_Mono({
   display: 'swap',
 });
 
-// TODO: update BASE_URL to the real production domain before deploying
-const BASE_URL = 'https://saatvik.dev';
+const BASE_URL = 'https://saatvik-choudhary.com';
 
 const TITLE = 'Saatvik Choudhary — Chip Architect & Full-Stack Engineer';
 const DESCRIPTION =
@@ -78,6 +77,36 @@ export const metadata: Metadata = {
   },
 };
 
+// Person structured data — the primary signal that ties this site to the
+// real-world "Saatvik Choudhary" entity. The `sameAs` links let Google
+// reconcile this site with the same person behind the LinkedIn/GitHub
+// profiles, which is what powers a knowledge/people panel.
+const PERSON_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Saatvik Choudhary',
+  url: BASE_URL,
+  image: `${BASE_URL}/images/saatvik-choudhary.jpg`,
+  jobTitle: 'Chip Architect & Full-Stack Engineer',
+  description: DESCRIPTION,
+  email: 'mailto:saatvik1213@gmail.com',
+  knowsAbout: [
+    'ASIC design',
+    'Verilog',
+    'RTL design',
+    'AI accelerators',
+    'Full-stack web development',
+    'Next.js',
+    'React',
+    'TypeScript',
+  ],
+  sameAs: [
+    'https://www.linkedin.com/in/saatvik-choudhary/',
+    'https://github.com/Vick1213',
+    'https://github.com/saatvik1213',
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -86,6 +115,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          // Server-rendered static object, not user input — safe to inline.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
+        />
         {children}
         <Analytics />
       </body>
