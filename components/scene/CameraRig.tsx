@@ -108,6 +108,14 @@ export default function CameraRig() {
     targetTween.current?.kill();
     let skipped = false;
     const startedAt = performance.now();
+
+    // Explode the rig for the tour. Every component lives INSIDE a closed case,
+    // so touring the assembled tower just circles an opaque box — you never see
+    // the part being narrated. Exploding lays each part out in the open; the
+    // per-stop camera poses are read LIVE (function-based tweens below), so they
+    // track each part's exploded center instead of the sealed-up rest position.
+    useUI.getState().setExplodeTarget(1);
+
     const tl = gsap.timeline({
       onComplete: () => {
         handOff();
@@ -116,28 +124,48 @@ export default function CameraRig() {
     });
     tourTl.current = tl;
 
+    // Hold while the teardown settles, so the first fly's start-of-segment pose
+    // read lands on the parts' final exploded positions, not a mid-spread frame.
+    tl.to({}, { duration: 0.7 });
+
     COMPONENT_TOUR_ORDER.forEach((id, i) => {
-      const pose = componentCamera(id);
       const isLast = i === COMPONENT_TOUR_ORDER.length - 1; // GPU finale
       const flyMs = i === 0 ? 1300 : isLast ? 1300 : 1050;
       const holdMs = isLast ? 1500 : 1050;
       const ease = i === 0 || isLast ? 'power3.inOut' : 'power2.inOut';
+      // Function-based targets: gsap resolves these when the segment STARTS, so
+      // each reads the live exploded center of the part via componentCamera().
       tl.to(
         camera.position,
-        { x: pose.pos[0], y: pose.pos[1], z: pose.pos[2], duration: flyMs / 1000, ease },
+        {
+          x: () => componentCamera(id).pos[0],
+          y: () => componentCamera(id).pos[1],
+          z: () => componentCamera(id).pos[2],
+          duration: flyMs / 1000,
+          ease,
+        },
         '>'
       );
       tl.to(
         lookAtTarget.current,
-        { x: pose.target[0], y: pose.target[1], z: pose.target[2], duration: flyMs / 1000, ease },
+        {
+          x: () => componentCamera(id).target[0],
+          y: () => componentCamera(id).target[1],
+          z: () => componentCamera(id).target[2],
+          duration: flyMs / 1000,
+          ease,
+        },
         '<'
       );
       tl.call(() => useUI.getState().setTourComponent(id));
       tl.to({}, { duration: holdMs / 1000 }); // hold
     });
 
-    // settle to overview
-    tl.call(() => useUI.getState().setTourComponent(null));
+    // settle to overview + re-assemble the rig
+    tl.call(() => {
+      useUI.getState().setTourComponent(null);
+      useUI.getState().setExplodeTarget(0);
+    });
     tl.to(
       camera.position,
       {
@@ -166,6 +194,7 @@ export default function CameraRig() {
       skipped = true;
       tl.kill();
       useUI.getState().setTourComponent(null);
+      useUI.getState().setExplodeTarget(0); // re-assemble on early exit
       // Track the settle tweens in the shared refs so a subsequent fly (e.g. a
       // component click) or unmount cancels them — no two writers fighting the camera.
       posTween.current?.kill();

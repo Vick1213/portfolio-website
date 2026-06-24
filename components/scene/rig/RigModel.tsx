@@ -46,6 +46,12 @@ export default function RigModel() {
       if (box.isEmpty()) continue;
       const restCenter = box.getCenter(new Vector3());
       const disp = restCenter.clone().sub(rigCenter).multiplyScalar(SPREAD);
+      // The rig sits on a table, so the teardown must never push a chunk DOWN
+      // through the surface (the old explode only avoided this by accident — a
+      // stray-corrupted center flung everything sideways). Clamp downward push to
+      // zero: parts above center lift up, the bottom parts (PSU/storage) just fan
+      // out horizontally instead of sinking under the floor.
+      if (disp.y < 0) disp.y = 0;
       // Keep a sane minimum so a chunk sitting dead-center still separates.
       if (disp.length() < 0.6) disp.setLength(0.6);
       out.push({ id, node, rest: node.position.clone(), restCenter, disp });

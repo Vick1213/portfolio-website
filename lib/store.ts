@@ -128,8 +128,9 @@ export const useUI = create<UIState>((set, get) => ({
   tourComponent: null,
   startTour: () => {
     if (get().reduced) return;
-    // Close any open project panel so the tour takes the full screen.
-    set({ tourActive: true, tourComponent: null, camMode: 'tour', selected: null, activeComponent: null });
+    // Boot the rig if it's still in standby — a tour of a dead, unlit case is
+    // pointless — and close any open project panel so the tour takes the screen.
+    set({ intro: false, tourActive: true, tourComponent: null, camMode: 'tour', selected: null, activeComponent: null });
   },
   setTourComponent: (id) => set({ tourComponent: id }),
   endTour: () => set({ tourActive: false, tourComponent: null, camMode: 'free' }),
