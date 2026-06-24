@@ -7,6 +7,7 @@ import { useResponsive } from '@/lib/useResponsive';
 
 import Loader from '@/components/scene/Loader';
 import Hud from '@/components/ui/Hud';
+import IntroOverlay from '@/components/ui/IntroOverlay';
 import ProjectPanel from '@/components/ui/ProjectPanel';
 import ComponentPanel from '@/components/ui/ComponentPanel';
 import Minimap from '@/components/ui/Minimap';
@@ -46,6 +47,7 @@ export default function Page() {
     <main style={{ position: 'fixed', inset: 0, background: '#eef1f6' }}>
       <Loader />
       <Experience />
+      <IntroOverlay />
       <Hud />
       <ComponentPanel />
       <ProjectPanel />

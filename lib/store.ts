@@ -29,6 +29,9 @@ interface UIState {
   // ── intro / view / motion ──
   intro: boolean; // power-on overlay visible
   setIntro: (v: boolean) => void;
+  tourAfterBoot: boolean; // armed by the welcome card's "Show me the tour": the
+  // NEXT physical power-on auto-explodes + starts the tour (after a beat).
+  setTourAfterBoot: (v: boolean) => void;
   view: '3d' | 'list';
   setView: (v: '3d' | 'list') => void;
   reduced: boolean;
@@ -73,6 +76,8 @@ export const useUI = create<UIState>((set, get) => ({
   // intro / view / motion
   intro: true,
   setIntro: (v) => set({ intro: v }),
+  tourAfterBoot: false,
+  setTourAfterBoot: (v) => set({ tourAfterBoot: v }),
   view: '3d',
   setView: (v) => set({ view: v }),
   reduced: false,

@@ -32,13 +32,26 @@ export default function PowerButton() {
   const hovered = useRef(false);
   const pos = useMemo(() => new Vector3(), []);
 
+  // The actual power-on. ALWAYS triggered by the physical button (or its
+  // keyboard equivalent) — the welcome card only arms intent, never boots. If
+  // the tour was armed ("Show me the tour"), give the lit rig a beat to read as
+  // "powered on", then auto-explode + run the guided tour.
+  const boot = () => {
+    const s = useUI.getState();
+    s.setIntro(false);
+    if (s.tourAfterBoot) {
+      s.setTourAfterBoot(false);
+      if (!s.reduced) window.setTimeout(() => useUI.getState().startTour(), 1000);
+    }
+  };
+
   // Keyboard shortcut: Enter / Space / Escape boots while in standby.
   useEffect(() => {
     if (!intro) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
         e.preventDefault();
-        useUI.getState().setIntro(false);
+        boot();
       }
     };
     window.addEventListener('keydown', onKey);
@@ -84,7 +97,7 @@ export default function PowerButton() {
     e.stopPropagation();
     hovered.current = false;
     document.body.style.cursor = '';
-    useUI.getState().setIntro(false);
+    boot();
   };
 
   return (

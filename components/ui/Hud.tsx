@@ -69,6 +69,7 @@ export default function Hud() {
         }
         @media (max-width: 560px) {
           .hud-explode { display: none; }
+          .hud-email-label { display: none; }
         }
       `}</style>
 
@@ -190,7 +191,25 @@ export default function Hud() {
             </button>
           )}
 
-          {/* 3D / List segmented toggle */}
+          {/* Email CTA — an always-present "next step" so the experience never
+              dead-ends. Filled with the active accent to read as the primary action. */}
+          <a
+            href={`mailto:${profile.email}`}
+            aria-label={`Email ${profile.name}`}
+            className="pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
+            style={{
+              border: `1px solid ${accent}`,
+              color: '#06080f',
+              background: accent,
+              outlineColor: accent,
+              fontWeight: 600,
+              textDecoration: 'none',
+            }}
+          >
+            ✉ <span className="hud-email-label">Email</span>
+          </a>
+
+          {/* 3D / Résumé segmented toggle */}
           <div
             role="group"
             aria-label="View mode"
@@ -218,7 +237,7 @@ export default function Hud() {
             type="button"
             onClick={() => setView('list')}
             aria-pressed={view === 'list'}
-            aria-label="List view"
+            aria-label="Résumé view"
             className="px-3.5 py-1.5 rounded-full transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
             style={{
               background: view === 'list' ? `${accent}1f` : 'transparent',
@@ -226,7 +245,7 @@ export default function Hud() {
               outlineColor: accent,
             }}
           >
-            List
+            Résumé
           </button>
           </div>
         </div>
