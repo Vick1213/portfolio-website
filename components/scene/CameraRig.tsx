@@ -7,7 +7,8 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 
 import { useUI, camReport, tourBus } from '@/lib/store';
-import { overviewCamera, zoneCamera, PAN_BOUNDS, ZOOM_BOUNDS, TOUR_ORDER } from '@/lib/camera';
+import { overviewCamera, componentCamera, PAN_BOUNDS, ZOOM_BOUNDS } from '@/lib/camera';
+import { COMPONENT_TOUR_ORDER } from '@/lib/rig';
 
 // ─── Module scope (zero per-frame allocation) ────────────────────────────────
 const CLAMP_V = new THREE.Vector3();
@@ -96,7 +97,7 @@ export default function CameraRig() {
     });
   }, [flyRequest, camera, handOff]);
 
-  // ─── Tour timeline ──────────────────────────────────────────────────────────
+  // ─── BUILD TOUR timeline ────────────────────────────────────────────────────
   useEffect(() => {
     if (!tourActive) return;
     if (reduced) {
@@ -115,11 +116,12 @@ export default function CameraRig() {
     });
     tourTl.current = tl;
 
-    TOUR_ORDER.forEach((zoneId, i) => {
-      const pose = zoneCamera(zoneId);
-      const flyMs = i === 0 ? 1300 : zoneId === 'silicon' ? 1300 : 1100;
-      const holdMs = zoneId === 'silicon' ? 1300 : 1100;
-      const ease = i === 0 || zoneId === 'silicon' ? 'power3.inOut' : 'power2.inOut';
+    COMPONENT_TOUR_ORDER.forEach((id, i) => {
+      const pose = componentCamera(id);
+      const isLast = i === COMPONENT_TOUR_ORDER.length - 1; // GPU finale
+      const flyMs = i === 0 ? 1300 : isLast ? 1300 : 1050;
+      const holdMs = isLast ? 1500 : 1050;
+      const ease = i === 0 || isLast ? 'power3.inOut' : 'power2.inOut';
       tl.to(
         camera.position,
         { x: pose.pos[0], y: pose.pos[1], z: pose.pos[2], duration: flyMs / 1000, ease },
@@ -130,12 +132,12 @@ export default function CameraRig() {
         { x: pose.target[0], y: pose.target[1], z: pose.target[2], duration: flyMs / 1000, ease },
         '<'
       );
-      tl.call(() => useUI.getState().setTourZone(zoneId));
+      tl.call(() => useUI.getState().setTourComponent(id));
       tl.to({}, { duration: holdMs / 1000 }); // hold
     });
 
     // settle to overview
-    tl.call(() => useUI.getState().setTourZone(null));
+    tl.call(() => useUI.getState().setTourComponent(null));
     tl.to(
       camera.position,
       {
@@ -163,9 +165,9 @@ export default function CameraRig() {
       if (skipped) return;
       skipped = true;
       tl.kill();
-      useUI.getState().setTourZone(null);
+      useUI.getState().setTourComponent(null);
       // Track the settle tweens in the shared refs so a subsequent fly (e.g. a
-      // zone click) or unmount cancels them — no two writers fighting the camera.
+      // component click) or unmount cancels them — no two writers fighting the camera.
       posTween.current?.kill();
       targetTween.current?.kill();
       posTween.current = gsap.to(camera.position, {
@@ -228,20 +230,16 @@ export default function CameraRig() {
         camReport.z = tz;
         camReport.dist = dist;
       }
-      // Phase 3 TODO: live component tracking (nearest pcComponent → setActiveZoneSilently
-      // equivalent) drives the HUD/manifest highlight. Disabled now (die-zone tracking removed).
     } else {
       camera.lookAt(lookAtTarget.current); // GSAP owns position; we own lookAt
     }
   });
 
-  // ─── Board-explorer controls (drag-pan + scroll-zoom) ───────────────────────
+  // ─── Board-explorer controls (LEFT=rotate, RIGHT=pan, scroll=zoom) ───────────
   // OrbitControls (NOT drei MapControls): drei's MapControls calls controls.update()
   // UNCONDITIONALLY every frame, which fights the GSAP fly/tour writers; drei's
   // OrbitControls guards `if (controls.enabled) controls.update()`, giving us the
-  // strict one-writer-per-frame mutex. MapControls is just OrbitControls with
-  // {LEFT:PAN, screenSpacePanning:false} defaults — which we set explicitly below,
-  // so the drag-to-pan / scroll-to-zoom board-explorer feel is identical.
+  // strict one-writer-per-frame mutex.
   return (
     <OrbitControls
       ref={controlsRef}

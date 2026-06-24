@@ -1,34 +1,34 @@
 'use client';
 
 import { useUI, tourBus } from '@/lib/store';
-import { TOUR_ORDER } from '@/lib/camera';
-import { zoneById } from '@/lib/portfolio';
-import type { Zone } from '@/lib/types';
+import { COMPONENT_TOUR_ORDER, pcComponentById, type PCComponent } from '@/lib/rig';
 
 const INK = '#e6ebf4';
 
-// Career-beat copy keyed by zone — one to two readable lines per stop.
-const BEAT: Record<Zone, string> = {
-  ml: '2022–2024. Where it started — CNNs, LSTMs, a hackathon grader. Learning to make machines think.',
-  client:
-    'Shipping for real clients — marketing sites, data platforms, deadlines and stakeholders.',
-  web: 'Production systems — multi-tenant marketplaces, real-time terminals, AI apps that stay online for months.',
-  silicon:
-    'Now — designing the chips that run the models. Custom AI-accelerator ASICs, RTL to synthesis.',
+// Career-beat copy keyed by component — the build narrative, one to two lines.
+const BEAT: Record<PCComponent, string> = {
+  mobo: '2022–2024. The board it all mounts to — CNNs, LSTMs, computer vision, a hackathon grader, even a UE5 game. Learning to make machines think.',
+  cpu: 'The general-purpose brain — multi-tenant marketplaces, real-time terminals, AI apps that stay online for months.',
+  ram: 'Fast, modular shipping — SPAs, React Native + Flutter apps, LLM tools spun up and deployed in days.',
+  storage: 'Where the data lives and moves — ETL pipelines, scrapers, DuckDB time-series, lead platforms.',
+  psu: 'Powers the build and connects it to clients — paid delivery, marketing sites, self-hosted ops.',
+  gpu: 'The finale — not a card he bought, a card he designed. Custom AI-accelerator silicon, RTL to synthesis.',
+  io: 'The expansion slots where the CS fundamentals were learned — C++, C#/ASP.NET, XML.',
 };
 
 /**
- * Lower-third guided-tour announcement. Renders only while `tourActive`.
+ * Lower-third BUILD TOUR announcement. Renders only while `tourActive`.
  * Never renders under reduced motion (startTour no-ops when reduced).
  */
 export default function TourOverlay() {
   const tourActive = useUI((s) => s.tourActive);
-  const tourZone = useUI((s) => s.tourZone);
+  const tourComponent = useUI((s) => s.tourComponent);
 
   if (!tourActive) return null;
 
-  const i = tourZone ? TOUR_ORDER.indexOf(tourZone) : -1;
-  const meta = tourZone ? zoneById[tourZone] : null;
+  const total = COMPONENT_TOUR_ORDER.length;
+  const i = tourComponent ? COMPONENT_TOUR_ORDER.indexOf(tourComponent) : -1;
+  const meta = tourComponent ? pcComponentById[tourComponent] : null;
   const accent = meta ? meta.accent : INK;
 
   return (
@@ -45,8 +45,15 @@ export default function TourOverlay() {
           zIndex: 45,
           pointerEvents: 'none',
           textAlign: 'center',
-          maxWidth: '560px',
+          maxWidth: '600px',
           width: 'calc(100% - 32px)',
+          // Dark scrim so the lower-third copy stays legible over the white set.
+          background: 'rgba(10,14,22,0.66)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 14,
+          padding: '16px 22px',
         }}
       >
         {/* Eyebrow */}
@@ -60,11 +67,11 @@ export default function TourOverlay() {
             transition: 'opacity 180ms ease',
           }}
         >
-          {tourZone ? `SELF-TEST ▸ DISTRICT ${i + 1}/4` : 'SELF-TEST ▸ INITIALIZING'}
+          {tourComponent ? `BUILD TOUR ▸ STAGE ${i + 1}/${total}` : 'BUILD TOUR ▸ POWERING UP'}
         </div>
 
-        {/* Zone title (hidden when no zone announced yet) */}
-        {tourZone && meta && (
+        {/* Component title (hidden when no stop announced yet) */}
+        {tourComponent && meta && (
           <div
             className="font-mono uppercase"
             style={{
@@ -83,7 +90,7 @@ export default function TourOverlay() {
         )}
 
         {/* Career beat */}
-        {tourZone && (
+        {tourComponent && (
           <p
             style={{
               fontSize: '14px',
@@ -91,32 +98,26 @@ export default function TourOverlay() {
               color: INK,
               opacity: 0.78,
               margin: '0 auto 14px',
-              maxWidth: '480px',
+              maxWidth: '500px',
               transition: 'opacity 180ms ease',
             }}
           >
-            {BEAT[tourZone]}
+            {BEAT[tourComponent]}
           </p>
         )}
 
-        {/* Four-segment progress strip (left→right in TOUR_ORDER). */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '6px',
-          }}
-        >
-          {TOUR_ORDER.map((zoneId, idx) => {
-            const segAccent = zoneById[zoneId].accent;
+        {/* Progress strip (left→right in COMPONENT_TOUR_ORDER). */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+          {COMPONENT_TOUR_ORDER.map((id, idx) => {
+            const segAccent = pcComponentById[id].accent;
             const filled = i >= 0 && idx <= i;
             return (
               <span
-                key={zoneId}
+                key={id}
                 aria-hidden="true"
                 style={{
                   display: 'block',
-                  width: '34px',
+                  width: '30px',
                   height: '3px',
                   borderRadius: 2,
                   background: segAccent,

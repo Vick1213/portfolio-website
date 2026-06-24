@@ -24,7 +24,7 @@ export default function Loader() {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        backgroundColor: '#06080f',
+        backgroundColor: '#eef1f6',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -32,7 +32,7 @@ export default function Loader() {
         gap: '1rem',
         pointerEvents: 'none',
         fontFamily: 'var(--font-mono), "Courier New", monospace',
-        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px)',
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 4px)',
       }}
     >
       {/* Boot log lines */}
@@ -49,7 +49,7 @@ export default function Loader() {
           <span
             key={i}
             style={{
-              color: '#4a8c7e',
+              color: '#0f766e',
               fontSize: '0.6rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
@@ -63,7 +63,7 @@ export default function Loader() {
       {/* Main label */}
       <span
         style={{
-          color: '#5eead4',
+          color: '#0d9488',
           fontSize: '0.7rem',
           letterSpacing: '0.25em',
           textTransform: 'uppercase',
@@ -75,16 +75,16 @@ export default function Loader() {
       {/* Large percentage */}
       <span
         style={{
-          color: '#e6ebf4',
+          color: '#1a2230',
           fontSize: '3rem',
           fontWeight: 700,
           letterSpacing: '0.05em',
           lineHeight: 1,
-          textShadow: '0 0 20px rgba(94,234,212,0.3)',
+          textShadow: '0 0 20px rgba(13,148,136,0.18)',
         }}
       >
         {String(Math.round(progress)).padStart(3, '0')}
-        <span style={{ fontSize: '1.2rem', color: '#5eead4', marginLeft: '0.2rem' }}>%</span>
+        <span style={{ fontSize: '1.2rem', color: '#0d9488', marginLeft: '0.2rem' }}>%</span>
       </span>
 
       {/* Progress bar */}
@@ -92,7 +92,7 @@ export default function Loader() {
         style={{
           width: '16rem',
           height: '2px',
-          backgroundColor: '#0d1622',
+          backgroundColor: '#d3d9e2',
           borderRadius: '9999px',
           overflow: 'hidden',
         }}
@@ -101,10 +101,10 @@ export default function Loader() {
           style={{
             height: '100%',
             width: `${progress}%`,
-            backgroundColor: '#5eead4',
+            backgroundColor: '#0d9488',
             borderRadius: '9999px',
             transition: 'width 0.1s linear',
-            boxShadow: '0 0 8px #5eead4, 0 0 2px #5eead4',
+            boxShadow: '0 0 8px rgba(13,148,136,0.5)',
           }}
         />
       </div>
@@ -112,7 +112,7 @@ export default function Loader() {
       {/* Bottom system label */}
       <span
         style={{
-          color: '#3a5a55',
+          color: '#7c8aa0',
           fontSize: '0.55rem',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',

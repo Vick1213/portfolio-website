@@ -2,34 +2,35 @@
 
 import { useEffect } from 'react';
 import { useUI } from '@/lib/store';
-import { profile, zoneById } from '@/lib/portfolio';
-import ZoneNav from './ZoneNav';
+import { profile } from '@/lib/portfolio';
+import { COMPONENT_ORDER, pcComponentById } from '@/lib/rig';
+import ComponentNav from './ComponentNav';
 
 const INK = '#e6ebf4';
 const SILICON = '#5eead4';
-const ZONE_LEGEND = '#5eead4, #818cf8, #f0abfc, #fbbf24';
+// 7-accent legend hairline, in board reading order.
+const COMPONENT_LEGEND = COMPONENT_ORDER.map((id) => pcComponentById[id].accent).join(', ');
 
 export default function Hud() {
   const view = useUI((s) => s.view);
   const setView = useUI((s) => s.setView);
-  const activeZone = useUI((s) => s.activeZone);
-  const camMode = useUI((s) => s.camMode);
+  const activeComponent = useUI((s) => s.activeComponent);
   const tourActive = useUI((s) => s.tourActive);
   const selected = useUI((s) => s.selected);
   const reduced = useUI((s) => s.reduced);
   const explodeTarget = useUI((s) => s.explodeTarget);
   const exploded = explodeTarget > 0.5;
 
-  // Active-zone accent drives the status dot + toggle tint; default silicon teal.
-  const accent = activeZone ? zoneById[activeZone].accent : SILICON;
+  // Active-component accent drives the status dot + toggle tint; default silicon teal.
+  const accent = activeComponent ? pcComponentById[activeComponent].accent : SILICON;
 
   // Esc → overview, gated so it never conflicts with ProjectPanel's or the tour's Esc.
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key !== 'Escape') return;
       const s = useUI.getState();
-      if (s.selected === null && s.activeZone !== null && !s.tourActive) {
-        s.setZone(null);
+      if (s.selected === null && s.activeComponent !== null && !s.tourActive) {
+        s.setComponent(null);
       }
     }
     window.addEventListener('keydown', handleKey);
@@ -39,9 +40,9 @@ export default function Hud() {
   // Mode-aware bottom-left helper text.
   const helperText = tourActive
     ? null
-    : activeZone !== null && selected === null
+    : activeComponent !== null && selected === null
       ? 'DRAG TO EXPLORE · ESC FOR OVERVIEW'
-      : 'DRAG TO PAN · SCROLL TO ZOOM · CLICK A TILE';
+      : 'LEFT-DRAG ROTATE · RIGHT-DRAG PAN · SCROLL ZOOM · CLICK A PART';
 
   return (
     <header
@@ -61,21 +62,21 @@ export default function Hud() {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(10,14,22,0.6) 0%, rgba(10,14,22,0) 100%)',
+            'linear-gradient(to bottom, rgba(10,14,22,0.82) 0%, rgba(10,14,22,0.5) 100%)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid rgba(255,255,255,0.12)',
         }}
       />
 
-      {/* Four-color zone-accent legend hairline (instant zone legend) */}
+      {/* Component-accent legend hairline */}
       <div
         aria-hidden="true"
         className="absolute left-0 right-0"
         style={{
           top: '56px',
           height: '1px',
-          background: `linear-gradient(90deg, ${ZONE_LEGEND})`,
+          background: `linear-gradient(90deg, ${COMPONENT_LEGEND})`,
           opacity: 0.5,
         }}
       />
@@ -127,9 +128,9 @@ export default function Hud() {
           </span>
         </div>
 
-        {/* Center: zone nav */}
+        {/* Center: component nav */}
         <div className="pointer-events-auto flex-1 flex justify-center overflow-hidden">
-          <ZoneNav />
+          <ComponentNav />
         </div>
 
         {/* Right cluster: EXPLODE toggle + TOUR pill + 3D / List segmented toggle */}
@@ -153,13 +154,13 @@ export default function Hud() {
             </button>
           )}
 
-          {/* TOUR pill — only in 3D view and when motion is allowed */}
+          {/* BUILD TOUR pill — only in 3D view and when motion is allowed */}
           {!reduced && view === '3d' && (
             <button
               type="button"
               onClick={() => useUI.getState().startTour()}
               disabled={tourActive}
-              aria-label={tourActive ? 'Tour in progress' : 'Start guided tour'}
+              aria-label={tourActive ? 'Tour in progress' : 'Start build tour'}
               className="pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
               style={{
                 border: `1px solid ${tourActive ? 'rgba(255,255,255,0.15)' : accent}`,
@@ -215,7 +216,9 @@ export default function Hud() {
         </div>
       </div>
 
-      {/* Bottom-left ghost helper line — lifted clear of the ~55px footer bar */}
+      {/* Bottom-left ghost helper line — lifted clear of the ~55px footer bar.
+          Sits directly over the white set, so it gets its own dark pill + dark
+          ink to stay legible. */}
       {helperText && (
         <span
           aria-hidden="true"
@@ -224,8 +227,12 @@ export default function Hud() {
             bottom: '72px',
             fontSize: '10px',
             letterSpacing: '0.18em',
-            color: INK,
-            opacity: 0.4,
+            color: 'rgba(255,255,255,0.78)',
+            background: 'rgba(10,14,22,0.55)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            borderRadius: '9999px',
+            padding: '4px 10px',
           }}
         >
           {helperText}

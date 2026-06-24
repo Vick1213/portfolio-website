@@ -1,3 +1,4 @@
+import { Vector3 } from 'three';
 import type { Project } from './types';
 import { allProjects } from './portfolio';
 
@@ -224,6 +225,76 @@ export const pcComponents: PCComponentMeta[] = [
 export const pcComponentById = Object.fromEntries(
   pcComponents.map((c) => [c.id, c])
 ) as Record<PCComponent, PCComponentMeta>;
+
+/** Compact labels for the in-scene hotspots, HUD chips, and manifest rows. */
+export const COMPONENT_SHORT: Record<PCComponent, string> = {
+  mobo: 'MOBO',
+  cpu: 'CPU',
+  gpu: 'GPU',
+  ram: 'RAM',
+  storage: 'SSD',
+  psu: 'PSU',
+  io: 'I/O',
+};
+
+/** Left-to-right HUD / manifest order (board layout reading order). */
+export const COMPONENT_ORDER: PCComponent[] = [
+  'mobo',
+  'cpu',
+  'gpu',
+  'ram',
+  'storage',
+  'psu',
+  'io',
+];
+
+/**
+ * BUILD TOUR order — the career arc told as a build: foundations → core →
+ * fast modules → data → power/delivery → the chip he designed (the finale).
+ * `io` (coursework) is folded into the Motherboard era and skipped on the tour.
+ */
+export const COMPONENT_TOUR_ORDER: PCComponent[] = [
+  'mobo',
+  'cpu',
+  'ram',
+  'storage',
+  'psu',
+  'gpu',
+];
+
+/**
+ * LIVE world-space centers of the 7 RIG_* groups, in scene units. Written every
+ * frame by `RigModel` (which knows the real GLB geometry + the current explode
+ * amount) and read by the camera-nav helpers + Hotspots. Kept OUT of zustand so
+ * the hot path never re-renders React.
+ *
+ * Seeded from each component's hand-authored `explodedPos` so any consumer that
+ * runs before RigModel's first frame still gets a sane (non-NaN) pose; `ready`
+ * flips true once RigModel has published real, geometry-derived centers.
+ */
+export const rigChannel: {
+  ready: boolean;
+  centers: Record<PCComponent, Vector3>;
+  /** Live world-space AABB of the whole rig at the ASSEMBLED rest pose. Written
+   *  once by RigModel; used to ground the table floor (Y only). NOTE: X/Z can be
+   *  polluted by mislabeled stray geometry, so do NOT anchor UI to it directly. */
+  bounds: { min: Vector3; max: Vector3; ready: boolean };
+  /** Robust on-case power-button anchor (top-front-center of the MOTHERBOARD box,
+   *  which is well-segmented and central) + a size for the glyph. Written once. */
+  power: { anchor: Vector3; size: number; ready: boolean };
+  /** Robust table-floor placement (case bottom Y + horizontal center X/Z),
+   *  derived from the well-segmented components so mislabeled stray geometry
+   *  doesn't drag the table down. Written once by RigModel. */
+  floor: { y: number; x: number; z: number; ready: boolean };
+} = {
+  ready: false,
+  centers: Object.fromEntries(
+    pcComponents.map((c) => [c.id, new Vector3(...c.explodedPos)])
+  ) as Record<PCComponent, Vector3>,
+  bounds: { min: new Vector3(-8, -10, -4), max: new Vector3(8, 10, 4), ready: false },
+  power: { anchor: new Vector3(0, 6, 4), size: 0.4, ready: false },
+  floor: { y: -8, x: 0, z: 1, ready: false },
+};
 
 /** The PC component a project belongs to (undefined if untagged). */
 export function componentOf(projectId: string): PCComponent | undefined {

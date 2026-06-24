@@ -69,14 +69,16 @@ export default function Lights() {
 
   return (
     <>
-      {/* Soft fill — Environment + ambient now carry the metal, so keep it low. */}
-      <ambientLight intensity={0.35} color="#2a3550" />
+      {/* Neutral fill — enough to read the dead/standby rig (visible but
+          un-glowing) before power-on, without blowing the white set out. */}
+      <ambientLight intensity={0.55} color="#eef2f8" />
 
-      {/* KEY — static brushed-studio key. Tight ortho shadow frustum over the die. */}
+      {/* KEY — white studio key. Tight ortho shadow frustum casts the defined
+          contact shadow onto the table. */}
       <directionalLight
-        position={[12, 20, 14]}
-        intensity={1.6}
-        color="#eef2fb"
+        position={[14, 22, 16]}
+        intensity={1.5}
+        color="#ffffff"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-left={-30}
@@ -85,18 +87,19 @@ export default function Lights() {
         shadow-camera-bottom={-12}
         shadow-camera-near={1}
         shadow-camera-far={60}
+        shadow-bias={-0.0004}
       />
 
-      {/* RIM / back — cool edge separation. No shadow. */}
-      <directionalLight position={[-16, 8, -12]} intensity={0.7} color="#3a5a82" />
+      {/* RIM / back — subtle edge separation against the studio sweep. No shadow. */}
+      <directionalLight position={[-16, 10, -12]} intensity={0.55} color="#dfe6f2" />
 
       {/* Overhead keynote wash — soft, static. */}
       <spotLight
         position={[0, 24, 8]}
-        angle={0.5}
+        angle={0.6}
         penumbra={1}
-        intensity={1.0}
-        color="#dfe6f2"
+        intensity={0.7}
+        color="#ffffff"
       />
 
       {/* Per-zone district lights — tweened 0→2.2 left-to-right on power-on. */}

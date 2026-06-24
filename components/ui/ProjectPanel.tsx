@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useUI } from '@/lib/store';
-import { zoneById } from '@/lib/portfolio';
+import { componentOf, pcComponentById } from '@/lib/rig';
 import type { ProjType } from '@/lib/types';
 
 const INK = '#e6ebf4';
@@ -39,8 +39,10 @@ export default function ProjectPanel() {
   if (selected === null) return null;
 
   const typeStyle = TYPE_COLORS[selected.type] ?? TYPE_COLORS['original'];
-  // District accent for this project's zone — header/border/link-hover coherence.
-  const zoneAccent = zoneById[selected.zone]?.accent ?? typeStyle.text;
+  // Component accent for this project's PC part — header/border/link-hover coherence.
+  const componentId = componentOf(selected.id);
+  const component = componentId ? pcComponentById[componentId] : null;
+  const zoneAccent = component?.accent ?? typeStyle.text;
 
   const linkDefs: { key: keyof typeof selected.links; label: string }[] = [
     { key: 'repo',         label: 'Code'   },
@@ -73,26 +75,46 @@ export default function ProjectPanel() {
 
       <div className="flex flex-col gap-5 p-6 pb-10">
 
-        {/* Header row: type badge + close */}
+        {/* Header row: back-to-component + type badge + close */}
         <div className="flex items-start justify-between gap-3">
-          {/* Type badge */}
-          <span
-            className="font-mono text-xs px-2.5 py-1 rounded-full flex-shrink-0"
-            style={{
-              background: typeStyle.bg,
-              color: typeStyle.text,
-              border: `1px solid ${typeStyle.text}40`,
-            }}
-          >
-            {typeStyle.label}
-          </span>
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
+            {/* Back to the component panel (keeps the active component). */}
+            {component && (
+              <button
+                type="button"
+                onClick={() => closeProject()}
+                aria-label={`Back to ${component.label}`}
+                className="font-mono text-xs px-2.5 py-1 rounded-full flex-shrink-0 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
+                style={{
+                  background: `${zoneAccent}14`,
+                  color: zoneAccent,
+                  border: `1px solid ${zoneAccent}55`,
+                  outlineColor: zoneAccent,
+                }}
+              >
+                ‹ {component.label}
+              </button>
+            )}
+
+            {/* Type badge */}
+            <span
+              className="font-mono text-xs px-2.5 py-1 rounded-full flex-shrink-0"
+              style={{
+                background: typeStyle.bg,
+                color: typeStyle.text,
+                border: `1px solid ${typeStyle.text}40`,
+              }}
+            >
+              {typeStyle.label}
+            </span>
+          </div>
 
           {/* Close button */}
           <button
             ref={closeRef}
             type="button"
-            onClick={() => closeProject()}
-            aria-label="Close project panel"
+            onClick={() => useUI.getState().setComponent(null)}
+            aria-label="Close to overview"
             className="font-mono text-base leading-none rounded p-1 flex-shrink-0 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-white"
             style={{
               color: 'rgba(255,255,255,0.4)',
