@@ -54,6 +54,22 @@ export default function Hud() {
           0%, 100% { opacity: 0.55; transform: scale(0.9); }
           50%      { opacity: 1;    transform: scale(1.1); }
         }
+        /* Component nav becomes a swipeable strip when it can't fit (mobile). */
+        .hud-nav-scroll {
+          overflow-x: auto;
+          overflow-y: hidden;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        .hud-nav-scroll::-webkit-scrollbar { display: none; }
+        /* Free up horizontal room on small screens. */
+        @media (max-width: 720px) {
+          .hud-subtitle { display: none; }
+        }
+        @media (max-width: 560px) {
+          .hud-explode { display: none; }
+        }
       `}</style>
 
       {/* Frosted-glass keynote plank */}
@@ -117,7 +133,7 @@ export default function Hud() {
             </span>
           </div>
           <span
-            className="font-mono uppercase truncate mt-1"
+            className="hud-subtitle font-mono uppercase truncate mt-1"
             style={{
               fontSize: '10px',
               letterSpacing: '0.24em',
@@ -128,8 +144,8 @@ export default function Hud() {
           </span>
         </div>
 
-        {/* Center: component nav */}
-        <div className="pointer-events-auto flex-1 flex justify-center overflow-hidden">
+        {/* Center: component nav — swipeable strip on small screens */}
+        <div className="hud-nav-scroll pointer-events-auto flex-1 flex justify-center">
           <ComponentNav />
         </div>
 
@@ -142,7 +158,7 @@ export default function Hud() {
               onClick={() => useUI.getState().toggleExplode()}
               aria-pressed={exploded}
               aria-label={exploded ? 'Assemble the rig' : 'Explode the rig'}
-              className="pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
+              className="hud-explode pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
               style={{
                 border: `1px solid ${accent}`,
                 color: accent,

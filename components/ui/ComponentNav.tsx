@@ -13,7 +13,7 @@ export default function ComponentNav() {
   const setComponent = useUI((s) => s.setComponent);
 
   return (
-    <nav aria-label="PC components" className="flex items-center gap-1 flex-nowrap justify-center">
+    <nav aria-label="PC components" className="flex items-center gap-1 flex-nowrap justify-center [&>button]:flex-shrink-0">
       {/* Overview chip */}
       <button
         type="button"

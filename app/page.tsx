@@ -21,11 +21,13 @@ const Experience = dynamic(() => import('@/components/Experience'), {
 });
 
 export default function Page() {
-  const { small, webgl } = useResponsive();
+  const { webgl } = useResponsive();
   const view = useUI((s) => s.view);
 
-  // Small screens or no WebGL → static hero + full resume (no canvas at all).
-  if (small || !webgl) {
+  // Only fall back to the static hero + resume when the device genuinely can't
+  // render WebGL. Phones DO get the full 3D experience (touch-driven orbit /
+  // pinch-zoom via OrbitControls); the HUD is responsive for small screens.
+  if (!webgl) {
     return <MobileFallback />;
   }
 

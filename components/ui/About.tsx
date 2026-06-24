@@ -9,45 +9,46 @@ export default function About() {
     <section
       aria-labelledby="about-heading"
       style={{
-        maxWidth: '720px',
+        maxWidth: '940px',
         margin: '0 auto',
-        padding: '2.5rem 2rem',
+        padding: '1.5rem 1.5rem 2.5rem',
         fontFamily: 'system-ui, -apple-system, sans-serif',
         color: '#0f172a',
       }}
     >
-      <h2
-        id="about-heading"
+      <span
         style={{
-          fontSize: '1.35rem',
-          fontWeight: 700,
-          marginBottom: '1rem',
-          color: '#1e293b',
+          fontFamily: 'var(--font-mono), ui-monospace, monospace',
+          fontSize: '0.68rem',
+          fontWeight: 600,
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          color: '#64748b',
         }}
       >
         About
-      </h2>
-
-      {/* Headline */}
-      <p
+      </span>
+      <h2
+        id="about-heading"
         style={{
-          fontSize: '1rem',
-          fontWeight: 600,
-          color: '#1e293b',
-          marginBottom: '0.75rem',
-          lineHeight: 1.5,
+          fontSize: '1.5rem',
+          fontWeight: 800,
+          letterSpacing: '-0.02em',
+          margin: '0.45rem 0 1.1rem',
+          color: '#0f172a',
         }}
       >
-        {profile.headline}
-      </p>
+        Silicon to full-stack
+      </h2>
 
       {/* Bio narrative from XML <breadth> */}
       <p
         style={{
-          fontSize: '0.9rem',
+          fontSize: '0.95rem',
           color: '#334155',
-          lineHeight: 1.7,
-          marginBottom: '0.75rem',
+          lineHeight: 1.75,
+          marginBottom: '0.9rem',
+          maxWidth: '760px',
         }}
       >
         My work spans two GitHub accounts active from 2022 to 2026. The primary account
@@ -63,10 +64,11 @@ export default function About() {
 
       <p
         style={{
-          fontSize: '0.9rem',
+          fontSize: '0.95rem',
           color: '#334155',
-          lineHeight: 1.7,
-          marginBottom: '1.25rem',
+          lineHeight: 1.75,
+          marginBottom: '1.4rem',
+          maxWidth: '760px',
         }}
       >
         Strongest and most original work: a 720 mm&#178; datacenter AI-inference

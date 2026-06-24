@@ -7,31 +7,45 @@ export default function Contact() {
     <section
       aria-labelledby="contact-heading"
       style={{
-        maxWidth: '720px',
+        maxWidth: '940px',
         margin: '0 auto',
-        padding: '2.5rem 2rem',
+        padding: '2.75rem 1.5rem',
         fontFamily: 'system-ui, -apple-system, sans-serif',
         color: '#0f172a',
       }}
     >
+      <span
+        style={{
+          fontFamily: 'var(--font-mono), ui-monospace, monospace',
+          fontSize: '0.68rem',
+          fontWeight: 600,
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          color: '#64748b',
+        }}
+      >
+        Contact
+      </span>
       <h2
         id="contact-heading"
         style={{
-          fontSize: '1.35rem',
-          fontWeight: 700,
-          marginBottom: '0.5rem',
-          color: '#1e293b',
+          fontSize: '1.5rem',
+          fontWeight: 800,
+          letterSpacing: '-0.02em',
+          margin: '0.45rem 0 0.5rem',
+          color: '#0f172a',
         }}
       >
-        Get in Touch
+        Let&rsquo;s build something
       </h2>
 
       <p
         style={{
-          fontSize: '0.9rem',
+          fontSize: '0.92rem',
           color: '#475569',
           marginBottom: '1.5rem',
           lineHeight: 1.6,
+          maxWidth: '560px',
         }}
       >
         Open to full-time roles, internships, and interesting projects. Reach out
@@ -55,13 +69,14 @@ export default function Contact() {
             fontSize: '0.875rem',
             fontWeight: 600,
             color: '#ffffff',
-            background: '#4f46e5',
-            borderRadius: '6px',
-            padding: '0.55rem 1.1rem',
+            background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)',
+            borderRadius: '8px',
+            padding: '0.6rem 1.2rem',
             textDecoration: 'none',
+            boxShadow: '0 6px 18px -6px rgba(79,70,229,0.55)',
           }}
         >
-          Email {profile.email}
+          ✦ Email me
         </a>
 
         {/* Primary GitHub */}
@@ -76,10 +91,10 @@ export default function Contact() {
             fontSize: '0.875rem',
             fontWeight: 600,
             color: '#1e293b',
-            background: '#f1f5f9',
+            background: '#ffffff',
             border: '1px solid #e2e8f0',
-            borderRadius: '6px',
-            padding: '0.55rem 1.1rem',
+            borderRadius: '8px',
+            padding: '0.6rem 1.2rem',
             textDecoration: 'none',
           }}
         >
@@ -98,10 +113,10 @@ export default function Contact() {
             fontSize: '0.875rem',
             fontWeight: 600,
             color: '#1e293b',
-            background: '#f1f5f9',
+            background: '#ffffff',
             border: '1px solid #e2e8f0',
-            borderRadius: '6px',
-            padding: '0.55rem 1.1rem',
+            borderRadius: '8px',
+            padding: '0.6rem 1.2rem',
             textDecoration: 'none',
           }}
         >
