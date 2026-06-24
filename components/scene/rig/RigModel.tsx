@@ -118,47 +118,17 @@ export default function RigModel() {
 
     // One-shot: capture the whole-rig world AABB while assembled (explode ~0).
     if (!boundsDone.current && t.current < 0.05) {
-      // Cull stray geometry: the GLB carries a few mislabeled meshes flung far
-      // from the build (floating "squiggle" curves, an off-axis slab). Hide any
-      // mesh whose center sits well outside the core cluster — robust median +
-      // distance test, so only true outliers vanish and real parts stay.
-      const mboxes: { mesh: Object3D; c: Vector3 }[] = [];
-      const b1 = new Box3();
-      root.traverse((o) => {
-        const m = o as Mesh;
-        if (!m.isMesh) return;
-        b1.setFromObject(m);
-        if (b1.isEmpty()) return;
-        mboxes.push({ mesh: m, c: b1.getCenter(new Vector3()) });
-      });
-      if (mboxes.length > 8) {
-        const med = (k: 'x' | 'y' | 'z') => {
-          const a = mboxes.map((i) => i.c[k]).sort((p, q) => p - q);
-          return a[a.length >> 1];
-        };
-        const mc = new Vector3(med('x'), med('y'), med('z'));
-        const ds = mboxes.map((i) => i.c.distanceTo(mc)).sort((a, b) => a - b);
-        const medD = ds[ds.length >> 1] || 1;
-        const thresh = medD * 4 + 4; // generous: core parts stay, far strays go
-        for (const i of mboxes) if (i.c.distanceTo(mc) > thresh) i.mesh.visible = false;
-      }
-
-      // Clean AABB from the surviving (visible) meshes only.
-      const wb = new Box3();
-      let wbFirst = true;
-      for (const i of mboxes) {
-        if (!i.mesh.visible) continue;
-        b1.setFromObject(i.mesh);
-        if (b1.isEmpty()) continue;
-        if (wbFirst) { wb.copy(b1); wbFirst = false; } else { wb.union(b1); }
-      }
+      // Whole-rig world AABB. The GLB is clean now — the export strips stray
+      // curves and RAM is re-segmented to a tight cluster, so the old runtime
+      // outlier-cull (which hid un-recentred stray meshes that corrupted the
+      // center) is gone and a plain setFromObject over the root is correct.
+      const wb = new Box3().setFromObject(root);
       rigChannel.bounds.min.copy(wb.min);
       rigChannel.bounds.max.copy(wb.max);
       rigChannel.bounds.ready = true;
 
-      // Power-button anchor from the MOTHERBOARD box (central + well-segmented,
-      // unlike the full AABB which mislabeled RAM geometry can stretch). Top-
-      // front-center of the board reads as the case's top I/O power button.
+      // Power-button anchor from the MOTHERBOARD box (central + well-segmented).
+      // Top-front-center of the board reads as the case's top I/O power button.
       // Power button = top-front edge of the case, where the I/O + power button
       // live on a real tower. The FRONT is located from the RGB-fan cluster
       // (their centroid sits on the front panel); the TOP is the case's max Y; the
@@ -183,10 +153,10 @@ export default function RigModel() {
       rigChannel.power.size = (mb.max.y - mb.min.y) * 0.045;
       rigChannel.power.ready = true;
 
-      // Robust table floor: case bottom + horizontal center from the WELL-
-      // segmented components only (ram/io carry mislabeled stray geometry that
-      // would otherwise drag the floor down and detach the contact shadow).
-      const CLEAN: PCComponent[] = ['mobo', 'cpu', 'gpu', 'psu', 'storage'];
+      // Robust table floor: case bottom + horizontal center from the compact
+      // components only (io is the case/I-O panel and spans the whole build, so
+      // it would drag the floor center and detach the contact shadow).
+      const CLEAN: PCComponent[] = ['mobo', 'cpu', 'gpu', 'psu', 'storage', 'ram'];
       const fb = new Box3();
       const cb = new Box3();
       let first = true;
