@@ -5,7 +5,7 @@ export type CamPose = { pos: [number, number, number]; target: [number, number, 
 // Frames the build from the OPEN (glass) side of the case — an elevated 3/4
 // product-shot hero that shows the interior + power button on first paint,
 // without going flat dead-on.
-export const overviewCamera: CamPose = { pos: [14, 6, 30], target: [0.5, -1, 1] };
+export const overviewCamera: CamPose = { pos: [-32, 6, 6], target: [0.5, -1, 1] };
 
 // Unit viewing direction of the hero overview (target → camera). Every component
 // is framed from THIS same open/glass-side angle so focus + the build tour never
