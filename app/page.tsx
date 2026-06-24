@@ -6,9 +6,11 @@ import { useUI } from '@/lib/store';
 import { useResponsive } from '@/lib/useResponsive';
 
 import Loader from '@/components/scene/Loader';
-import Intro from '@/components/ui/Intro';
 import Hud from '@/components/ui/Hud';
 import ProjectPanel from '@/components/ui/ProjectPanel';
+import ComponentPanel from '@/components/ui/ComponentPanel';
+import Minimap from '@/components/ui/Minimap';
+import TourOverlay from '@/components/ui/TourOverlay';
 import ResumeView from '@/components/ui/ResumeView';
 import MobileFallback from '@/components/ui/MobileFallback';
 import Footer from '@/components/ui/Footer';
@@ -37,14 +39,16 @@ export default function Page() {
     );
   }
 
-  // Default: the 3D silicon-die experience with DOM overlays on top.
+  // Default: the 3D exploded-rig experience with DOM overlays on top.
   return (
-    <main>
+    <main style={{ position: 'fixed', inset: 0, background: '#eef1f6' }}>
       <Loader />
       <Experience />
-      <Intro />
       <Hud />
+      <ComponentPanel />
       <ProjectPanel />
+      <Minimap />
+      <TourOverlay />
       <div
         style={{
           position: 'fixed',

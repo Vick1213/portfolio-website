@@ -165,10 +165,10 @@ export default function MobileFallback() {
               target="_blank"
               rel="noreferrer"
               style={{
-                color: '#818cf8',
+                color: '#f0abfc',
                 textDecoration: 'none',
-                background: 'rgba(129,140,248,0.1)',
-                border: '1px solid rgba(129,140,248,0.25)',
+                background: 'rgba(240,171,252,0.1)',
+                border: '1px solid rgba(240,171,252,0.25)',
                 borderRadius: '6px',
                 padding: '0.35rem 0.75rem',
               }}
@@ -176,6 +176,21 @@ export default function MobileFallback() {
               GitHub / saatvik1213
             </a>
           </div>
+
+          {/* Four-zone accent legend hairline — previews the scene palette */}
+          <div
+            aria-hidden="true"
+            style={{
+              marginTop: '1.75rem',
+              height: '2px',
+              width: '100%',
+              maxWidth: '560px',
+              borderRadius: '999px',
+              background:
+                'linear-gradient(90deg, #5eead4, #818cf8, #f0abfc, #fbbf24)',
+              opacity: 0.7,
+            }}
+          />
         </div>
       </div>
 

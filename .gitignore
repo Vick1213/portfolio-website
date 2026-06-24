@@ -35,3 +35,10 @@ yarn-error.log*
 # editor
 .idea
 .vscode
+
+# scratch + raw 3D model sources (the converted GLB lives in public/models;
+# the .blend/.fbx/.zip originals are huge and not needed at build time)
+/.scratch
+/custom-gaming-pc
+/custom-gaming-pc-fbx-file
+/gaming-pc-low-poly

@@ -2,7 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { useUI } from '@/lib/store';
+import { componentOf, pcComponentById } from '@/lib/rig';
 import type { ProjType } from '@/lib/types';
+
+const INK = '#e6ebf4';
 
 // Color map for all 5 ProjType values
 const TYPE_COLORS: Record<ProjType, { bg: string; text: string; label: string }> = {
@@ -15,7 +18,7 @@ const TYPE_COLORS: Record<ProjType, { bg: string; text: string; label: string }>
 
 export default function ProjectPanel() {
   const selected = useUI((s) => s.selected);
-  const select   = useUI((s) => s.select);
+  const closeProject = useUI((s) => s.closeProject);
   const closeRef = useRef<HTMLButtonElement>(null);
 
   // Escape closes the panel; focus the close button when panel opens
@@ -26,16 +29,20 @@ export default function ProjectPanel() {
 
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        select(null);
+        closeProject();
       }
     }
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [selected, select]);
+  }, [selected, closeProject]);
 
   if (selected === null) return null;
 
   const typeStyle = TYPE_COLORS[selected.type] ?? TYPE_COLORS['original'];
+  // Component accent for this project's PC part — header/border/link-hover coherence.
+  const componentId = componentOf(selected.id);
+  const component = componentId ? pcComponentById[componentId] : null;
+  const zoneAccent = component?.accent ?? typeStyle.text;
 
   const linkDefs: { key: keyof typeof selected.links; label: string }[] = [
     { key: 'repo',         label: 'Code'   },
@@ -55,6 +62,7 @@ export default function ProjectPanel() {
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderLeft: '1px solid rgba(255,255,255,0.08)',
+        borderTop: `2px solid ${zoneAccent}`,
         animation: 'panel-slide-in 0.28s cubic-bezier(0.22,1,0.36,1) both',
       }}
     >
@@ -67,26 +75,46 @@ export default function ProjectPanel() {
 
       <div className="flex flex-col gap-5 p-6 pb-10">
 
-        {/* Header row: type badge + close */}
+        {/* Header row: back-to-component + type badge + close */}
         <div className="flex items-start justify-between gap-3">
-          {/* Type badge */}
-          <span
-            className="font-mono text-xs px-2.5 py-1 rounded-full flex-shrink-0"
-            style={{
-              background: typeStyle.bg,
-              color: typeStyle.text,
-              border: `1px solid ${typeStyle.text}40`,
-            }}
-          >
-            {typeStyle.label}
-          </span>
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
+            {/* Back to the component panel (keeps the active component). */}
+            {component && (
+              <button
+                type="button"
+                onClick={() => closeProject()}
+                aria-label={`Back to ${component.label}`}
+                className="font-mono text-xs px-2.5 py-1 rounded-full flex-shrink-0 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
+                style={{
+                  background: `${zoneAccent}14`,
+                  color: zoneAccent,
+                  border: `1px solid ${zoneAccent}55`,
+                  outlineColor: zoneAccent,
+                }}
+              >
+                ‹ {component.label}
+              </button>
+            )}
+
+            {/* Type badge */}
+            <span
+              className="font-mono text-xs px-2.5 py-1 rounded-full flex-shrink-0"
+              style={{
+                background: typeStyle.bg,
+                color: typeStyle.text,
+                border: `1px solid ${typeStyle.text}40`,
+              }}
+            >
+              {typeStyle.label}
+            </span>
+          </div>
 
           {/* Close button */}
           <button
             ref={closeRef}
             type="button"
-            onClick={() => select(null)}
-            aria-label="Close project panel"
+            onClick={() => useUI.getState().setComponent(null)}
+            aria-label="Close to overview"
             className="font-mono text-base leading-none rounded p-1 flex-shrink-0 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-white"
             style={{
               color: 'rgba(255,255,255,0.4)',
@@ -106,7 +134,7 @@ export default function ProjectPanel() {
         {/* Project name */}
         <h2
           className="font-sans text-xl font-semibold leading-snug"
-          style={{ color: 'rgba(255,255,255,0.92)' }}
+          style={{ color: INK }}
         >
           {selected.name}
         </h2>
@@ -187,14 +215,14 @@ export default function ProjectPanel() {
                   rel="noreferrer"
                   className="font-mono text-xs px-3 py-1.5 rounded transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
                   style={{
-                    border: `1px solid ${typeStyle.text}60`,
-                    color: typeStyle.text,
+                    border: `1px solid ${zoneAccent}60`,
+                    color: zoneAccent,
                     background: 'transparent',
                     textDecoration: 'none',
-                    outlineColor: typeStyle.text,
+                    outlineColor: zoneAccent,
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = typeStyle.bg;
+                    (e.currentTarget as HTMLAnchorElement).style.background = `${zoneAccent}1f`;
                   }}
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
