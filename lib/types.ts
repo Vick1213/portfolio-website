@@ -49,5 +49,6 @@ export interface Profile {
   email: string;
   github: string;
   githubAlt: string;
+  booking: string;
   languages: string[];
 }

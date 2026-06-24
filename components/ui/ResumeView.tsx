@@ -165,6 +165,7 @@ export default function ResumeView() {
               OPEN TO WORK
             </span>
             <a href={`mailto:${profile.email}`} className="resume-hero-link">{profile.email}</a>
+            <a href={profile.booking} target="_blank" rel="noreferrer" className="resume-hero-link">Book a 30-min chat</a>
             <a href={profile.github} target="_blank" rel="noreferrer" className="resume-hero-link">GitHub · Vick1213</a>
             <a href={profile.githubAlt} target="_blank" rel="noreferrer" className="resume-hero-link">GitHub · saatvik1213</a>
           </div>

@@ -7,6 +7,8 @@ export const profile: Profile = {
   email: 'saatvik1213@gmail.com',
   github: 'https://github.com/Vick1213',
   githubAlt: 'https://github.com/saatvik1213',
+  booking:
+    'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2wAS0S2btEu6jxe6ptA0VAAEhBKVybDo4RgdL4dXZqMNufs7eY_K9thjV_coTIeglARHlw5vZR',
   languages: [
     'Verilog',
     'SystemVerilog',

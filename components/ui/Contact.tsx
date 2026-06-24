@@ -48,8 +48,8 @@ export default function Contact() {
           maxWidth: '560px',
         }}
       >
-        Open to full-time roles, internships, and interesting projects. Reach out
-        directly via email or browse the code on GitHub.
+        Open to full-time roles, internships, and interesting projects. Book a
+        quick 30-minute chat, reach out via email, or browse the code on GitHub.
       </p>
 
       <div
@@ -59,9 +59,11 @@ export default function Contact() {
           gap: '0.75rem',
         }}
       >
-        {/* Email CTA */}
+        {/* Book a chat CTA */}
         <a
-          href={`mailto:${profile.email}`}
+          href={profile.booking}
+          target="_blank"
+          rel="noreferrer"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -74,6 +76,26 @@ export default function Contact() {
             padding: '0.6rem 1.2rem',
             textDecoration: 'none',
             boxShadow: '0 6px 18px -6px rgba(79,70,229,0.55)',
+          }}
+        >
+          📅 Have a 30-min chat with me
+        </a>
+
+        {/* Email CTA */}
+        <a
+          href={`mailto:${profile.email}`}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            fontSize: '0.875rem',
+            fontWeight: 600,
+            color: '#1e293b',
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            padding: '0.6rem 1.2rem',
+            textDecoration: 'none',
           }}
         >
           ✦ Email me
