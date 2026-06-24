@@ -30,6 +30,9 @@ export default function Intro() {
     dismissingRef.current = true;
     bootRef.fired = true;
 
+    // Power-on lands directly in free board-exploration (drag to pan, scroll to
+    // zoom). The guided tour is OPT-IN via the HUD "▸ TOUR" button — not forced
+    // on entry — so the explorer is the default experience, not a cutscene.
     if (reduced || !cardRef.current) {
       setIntro(false);
       return;
@@ -39,7 +42,9 @@ export default function Intro() {
       scale: 1.02,
       duration: 0.6,
       ease: 'power2.out',
-      onComplete: () => setIntro(false),
+      onComplete: () => {
+        setIntro(false);
+      },
     });
   }
 

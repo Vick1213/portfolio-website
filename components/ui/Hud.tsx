@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useUI } from '@/lib/store';
 import { profile, zoneById } from '@/lib/portfolio';
 import ZoneNav from './ZoneNav';
@@ -12,9 +13,35 @@ export default function Hud() {
   const view = useUI((s) => s.view);
   const setView = useUI((s) => s.setView);
   const activeZone = useUI((s) => s.activeZone);
+  const camMode = useUI((s) => s.camMode);
+  const tourActive = useUI((s) => s.tourActive);
+  const selected = useUI((s) => s.selected);
+  const reduced = useUI((s) => s.reduced);
+  const explodeTarget = useUI((s) => s.explodeTarget);
+  const exploded = explodeTarget > 0.5;
 
   // Active-zone accent drives the status dot + toggle tint; default silicon teal.
   const accent = activeZone ? zoneById[activeZone].accent : SILICON;
+
+  // Esc → overview, gated so it never conflicts with ProjectPanel's or the tour's Esc.
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key !== 'Escape') return;
+      const s = useUI.getState();
+      if (s.selected === null && s.activeZone !== null && !s.tourActive) {
+        s.setZone(null);
+      }
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
+
+  // Mode-aware bottom-left helper text.
+  const helperText = tourActive
+    ? null
+    : activeZone !== null && selected === null
+      ? 'DRAG TO EXPLORE · ESC FOR OVERVIEW'
+      : 'DRAG TO PAN · SCROLL TO ZOOM · CLICK A TILE';
 
   return (
     <header
@@ -105,16 +132,57 @@ export default function Hud() {
           <ZoneNav />
         </div>
 
-        {/* Right: 3D / List segmented toggle */}
-        <div
-          role="group"
-          aria-label="View mode"
-          className="pointer-events-auto flex-shrink-0 flex items-center rounded-full font-mono text-xs overflow-hidden"
-          style={{
-            border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(255,255,255,0.02)',
-          }}
-        >
+        {/* Right cluster: EXPLODE toggle + TOUR pill + 3D / List segmented toggle */}
+        <div className="flex-shrink-0 flex items-center gap-2">
+          {/* EXPLODE / ASSEMBLE — only in 3D view */}
+          {view === '3d' && (
+            <button
+              type="button"
+              onClick={() => useUI.getState().toggleExplode()}
+              aria-pressed={exploded}
+              aria-label={exploded ? 'Assemble the rig' : 'Explode the rig'}
+              className="pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
+              style={{
+                border: `1px solid ${accent}`,
+                color: accent,
+                background: exploded ? `${accent}2e` : `${accent}14`,
+                outlineColor: accent,
+              }}
+            >
+              {exploded ? '▣ ASSEMBLE' : '◳ EXPLODE'}
+            </button>
+          )}
+
+          {/* TOUR pill — only in 3D view and when motion is allowed */}
+          {!reduced && view === '3d' && (
+            <button
+              type="button"
+              onClick={() => useUI.getState().startTour()}
+              disabled={tourActive}
+              aria-label={tourActive ? 'Tour in progress' : 'Start guided tour'}
+              className="pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
+              style={{
+                border: `1px solid ${tourActive ? 'rgba(255,255,255,0.15)' : accent}`,
+                color: tourActive ? 'rgba(255,255,255,0.35)' : accent,
+                background: tourActive ? 'transparent' : `${accent}1f`,
+                outlineColor: accent,
+                cursor: tourActive ? 'default' : 'pointer',
+              }}
+            >
+              {tourActive ? 'TOURING…' : '▸ TOUR'}
+            </button>
+          )}
+
+          {/* 3D / List segmented toggle */}
+          <div
+            role="group"
+            aria-label="View mode"
+            className="pointer-events-auto flex-shrink-0 flex items-center rounded-full font-mono text-xs overflow-hidden"
+            style={{
+              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(255,255,255,0.02)',
+            }}
+          >
           <button
             type="button"
             onClick={() => setView('3d')}
@@ -143,23 +211,26 @@ export default function Hud() {
           >
             List
           </button>
+          </div>
         </div>
       </div>
 
       {/* Bottom-left ghost helper line — lifted clear of the ~55px footer bar */}
-      <span
-        aria-hidden="true"
-        className="fixed left-4 font-mono uppercase pointer-events-none select-none"
-        style={{
-          bottom: '72px',
-          fontSize: '10px',
-          letterSpacing: '0.18em',
-          color: INK,
-          opacity: 0.4,
-        }}
-      >
-        Drag to orbit · Click a tile
-      </span>
+      {helperText && (
+        <span
+          aria-hidden="true"
+          className="fixed left-4 font-mono uppercase pointer-events-none select-none"
+          style={{
+            bottom: '72px',
+            fontSize: '10px',
+            letterSpacing: '0.18em',
+            color: INK,
+            opacity: 0.4,
+          }}
+        >
+          {helperText}
+        </span>
+      )}
     </header>
   );
 }

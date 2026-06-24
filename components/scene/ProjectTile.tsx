@@ -2,12 +2,12 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Billboard, Edges, RoundedBox, Text } from '@react-three/drei';
+import { Billboard, Edges, Html, RoundedBox, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import type { Project } from '@/lib/types';
 import { TILE_SIZE, TILE_SIZE_FEATURED } from '@/lib/constants';
 import { tilePosition } from '@/lib/camera';
-import { zoneById } from '@/lib/portfolio';
+import { projects, zoneById } from '@/lib/portfolio';
 import { useUI } from '@/lib/store';
 
 // All 3D labels (tiles + zone labels) intentionally omit an explicit `font`
@@ -33,6 +33,9 @@ function shortName(name: string): string {
   return name.split(/[—·]/)[0].trim();
 }
 
+// Zone → short designator prefix for the hover datasheet callout.
+const ABBR: Record<string, string> = { silicon: 'SIL', web: 'WEB', client: 'CLI', ml: 'ML' };
+
 interface ProjectTileProps {
   project: Project;
 }
@@ -47,6 +50,9 @@ export default function ProjectTile({ project }: ProjectTileProps) {
   // When a project panel is open, the DOM panel is the detail surface — hide the
   // in-3D tile labels so the zoomed-in scene isn't a wall of overlapping names.
   const selected = useUI((s) => s.selected);
+  // Hover callout only shows while the user is freely exploring (not mid-fly/tour).
+  // Subscribe to camMode (not hoveredId) so a hover on one tile doesn't re-render all tiles.
+  const camMode = useUI((s) => s.camMode);
 
   const position = tilePosition(project);
   const accent = zoneById[project.zone].accent;
@@ -67,6 +73,14 @@ export default function ProjectTile({ project }: ProjectTileProps) {
 
   const label = useMemo(() => shortName(project.name), [project.name]);
   const subLabel = `${project.primaryLanguage} · ${project.commits}c`;
+  // Datasheet-style designator: zone abbreviation + zero-padded index within its zone.
+  const designator = useMemo(() => {
+    const idx = projects
+      .filter((p) => p.zone === project.zone)
+      .findIndex((p) => p.id === project.id);
+    return `${ABBR[project.zone]}-${String(idx + 1).padStart(2, '0')}`;
+  }, [project.id, project.zone]);
+  const specStrip = `${project.primaryLanguage} · ${project.commits}c · ${project.months}mo`;
   const labelY = height / 2 + 0.5;
   const nameSize = project.featured ? 0.4 : 0.32;
 
@@ -75,8 +89,9 @@ export default function ProjectTile({ project }: ProjectTileProps) {
     SCRATCH.set(position[0], position[1], position[2]);
     const dist = state.camera.position.distanceTo(SCRATCH);
     if (labelRef.current) {
-      // Visible only in the readable band AND when no project panel is open.
-      labelRef.current.visible = dist <= CULL_DISTANCE && selected === null;
+      // Visible only in the readable band AND when no project panel is open AND
+      // not while hovered (the DOM datasheet callout replaces the 3D label).
+      labelRef.current.visible = dist <= CULL_DISTANCE && selected === null && !hovered;
       // Keep ~constant screen size so names don't balloon/overlap up close.
       const s = Math.min(LABEL_MAX_SCALE, Math.max(LABEL_MIN_SCALE, dist / LABEL_REF_DIST));
       labelRef.current.scale.setScalar(s);
@@ -112,11 +127,13 @@ export default function ProjectTile({ project }: ProjectTileProps) {
   const handlePointerOver = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     setHovered(true);
+    useUI.getState().setHovered(project.id);
     document.body.style.cursor = 'pointer';
   };
 
   const handlePointerOut = () => {
     setHovered(false);
+    useUI.getState().setHovered(null);
     document.body.style.cursor = 'auto';
   };
 
@@ -189,6 +206,128 @@ export default function ProjectTile({ project }: ProjectTileProps) {
           </Text>
         </Billboard>
       </group>
+
+      {/* Datasheet hover callout — DOM overlay, only while freely exploring this tile */}
+      {hovered && camMode === 'free' && selected === null && (
+        <Html
+          position={[0, height / 2 + 0.9, 0]}
+          center
+          distanceFactor={12}
+          occlude={false}
+          zIndexRange={[30, 0]}
+          style={{ pointerEvents: 'none' }}
+        >
+          <div
+            style={{
+              position: 'relative',
+              width: 220,
+              boxSizing: 'border-box',
+              background: 'rgba(8,11,18,0.92)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              border: `1px solid ${accent}`,
+              borderRadius: 8,
+              padding: '10px 12px',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
+              color: INK,
+              userSelect: 'none',
+              pointerEvents: 'none',
+              transition: reduced ? 'none' : 'opacity 120ms ease',
+            }}
+          >
+            {/* Accent corner pin */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 6,
+                left: 6,
+                width: 6,
+                height: 6,
+                background: accent,
+                borderRadius: 1,
+              }}
+            />
+
+            <div
+              style={{
+                fontFamily: 'var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace)',
+                fontSize: 10,
+                letterSpacing: '0.12em',
+                color: accent,
+                opacity: 0.75,
+                marginLeft: 12,
+              }}
+            >
+              {designator}
+            </div>
+
+            <div
+              style={{
+                fontFamily: 'var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace)',
+                fontSize: 14,
+                fontWeight: 700,
+                color: accent,
+                marginTop: 2,
+                lineHeight: 1.2,
+              }}
+            >
+              {label}
+            </div>
+
+            <div
+              style={{
+                fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif',
+                fontSize: 11,
+                lineHeight: 1.35,
+                color: INK,
+                opacity: 0.9,
+                marginTop: 5,
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {project.tagline}
+            </div>
+
+            <div
+              style={{
+                fontFamily: 'var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace)',
+                fontSize: 10,
+                letterSpacing: '0.04em',
+                color: INK,
+                opacity: 0.5,
+                marginTop: 7,
+              }}
+            >
+              {specStrip}
+            </div>
+
+            {/* Subtle accent leader line: L-shaped polyline from card bottom to a dot */}
+            <svg
+              width={16}
+              height={22}
+              style={{
+                position: 'absolute',
+                left: 14,
+                top: '100%',
+                overflow: 'visible',
+                pointerEvents: 'none',
+              }}
+            >
+              <polyline
+                points="0,0 0,14 8,20"
+                fill="none"
+                stroke={accent}
+                strokeWidth={1}
+                opacity={0.7}
+              />
+              <circle cx={8} cy={20} r={3} fill={accent} opacity={0.7} />
+            </svg>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }

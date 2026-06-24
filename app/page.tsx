@@ -9,6 +9,8 @@ import Loader from '@/components/scene/Loader';
 import Intro from '@/components/ui/Intro';
 import Hud from '@/components/ui/Hud';
 import ProjectPanel from '@/components/ui/ProjectPanel';
+import Minimap from '@/components/ui/Minimap';
+import TourOverlay from '@/components/ui/TourOverlay';
 import ResumeView from '@/components/ui/ResumeView';
 import MobileFallback from '@/components/ui/MobileFallback';
 import Footer from '@/components/ui/Footer';
@@ -45,6 +47,8 @@ export default function Page() {
       <Intro />
       <Hud />
       <ProjectPanel />
+      <Minimap />
+      <TourOverlay />
       <div
         style={{
           position: 'fixed',

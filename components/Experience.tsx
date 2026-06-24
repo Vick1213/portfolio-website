@@ -11,17 +11,15 @@ import {
   ContactShadows,
   MeshReflectorMaterial,
   GradientTexture,
+  GradientType,
 } from '@react-three/drei';
 
 import Lights from './scene/Lights';
-import ChipDie from './scene/ChipDie';
-import Traces from './scene/Traces';
-import ProjectTile from './scene/ProjectTile';
-import ZoneLabel from './scene/ZoneLabel';
+import RigScene from './scene/rig/RigScene';
 import CameraRig from './scene/CameraRig';
 import Effects from './scene/Effects';
 
-import { projects, zones } from '@/lib/portfolio';
+import { zones } from '@/lib/portfolio';
 import { overviewCamera } from '@/lib/camera';
 import { useUI } from '@/lib/store';
 
@@ -79,7 +77,7 @@ function StudioEnvironment() {
 function Floor({ plain }: { plain: boolean }) {
   return (
     <>
-      <mesh rotation-x={-Math.PI / 2} position={[0, -1.12, 3]} receiveShadow>
+      <mesh rotation-x={-Math.PI / 2} position={[0, -18, 1]} receiveShadow>
         <planeGeometry args={[60, 24]} />
         {plain ? (
           <meshStandardMaterial color="#070b14" metalness={0.3} roughness={0.95} />
@@ -97,11 +95,11 @@ function Floor({ plain }: { plain: boolean }) {
         )}
       </mesh>
       <ContactShadows
-        position={[0, -1.1, 3]}
-        opacity={0.5}
+        position={[0, -17.9, 1]}
+        opacity={0.45}
         blur={2.4}
-        scale={60}
-        far={8}
+        scale={70}
+        far={10}
         color="#000308"
         frames={1}
       />
@@ -139,13 +137,16 @@ export default function Experience() {
       <fog attach="fog" args={['#070a12', 55, 130]} />
 
       <Suspense fallback={null}>
-        {/* Graded backdrop sphere — depth instead of a flat void. */}
-        <mesh scale={[1, 1, 1]}>
-          <sphereGeometry args={[120, 32, 32]} />
+        {/* Studio backdrop — a radial pool of cool light behind the subject that
+            falls to near-black at the edges (product-shot vignette), so the rig
+            reads as lit IN a space instead of floating in a flat void. */}
+        <mesh position={[0, 4, -30]} scale={[1, 1, 1]}>
+          <sphereGeometry args={[120, 48, 48]} />
           <meshBasicMaterial side={BackSide}>
             <GradientTexture
-              stops={[0, 0.55, 1]}
-              colors={['#0b1018', '#060910', '#04060c']}
+              type={GradientType.Radial}
+              stops={[0, 0.35, 0.7, 1]}
+              colors={['#223349', '#131d2c', '#080d16', '#04060a']}
             />
           </meshBasicMaterial>
         </mesh>
@@ -155,28 +156,21 @@ export default function Experience() {
         {atmosphere && (
           <>
             <Sparkles
-              count={60}
-              scale={[54, 8, 16]}
-              size={1.4}
-              speed={0.15}
-              opacity={0.35}
-              color="#8fa4c4"
+              count={90}
+              scale={[54, 14, 18]}
+              size={1.6}
+              speed={0.14}
+              opacity={0.45}
+              color="#9db4d6"
             />
-            <Stars radius={90} depth={30} count={800} factor={2} fade saturation={0} />
+            <Stars radius={90} depth={40} count={1400} factor={3} fade saturation={0} />
           </>
         )}
 
         <Floor plain={lowPower} />
 
         <Lights />
-        <ChipDie />
-        <Traces />
-        {projects.map((p) => (
-          <ProjectTile key={p.id} project={p} />
-        ))}
-        {zones.map((z) => (
-          <ZoneLabel key={z.id} zone={z} />
-        ))}
+        <RigScene />
         <CameraRig />
         <Effects />
       </Suspense>

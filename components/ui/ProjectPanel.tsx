@@ -18,7 +18,7 @@ const TYPE_COLORS: Record<ProjType, { bg: string; text: string; label: string }>
 
 export default function ProjectPanel() {
   const selected = useUI((s) => s.selected);
-  const select   = useUI((s) => s.select);
+  const closeProject = useUI((s) => s.closeProject);
   const closeRef = useRef<HTMLButtonElement>(null);
 
   // Escape closes the panel; focus the close button when panel opens
@@ -29,12 +29,12 @@ export default function ProjectPanel() {
 
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        select(null);
+        closeProject();
       }
     }
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [selected, select]);
+  }, [selected, closeProject]);
 
   if (selected === null) return null;
 
@@ -91,7 +91,7 @@ export default function ProjectPanel() {
           <button
             ref={closeRef}
             type="button"
-            onClick={() => select(null)}
+            onClick={() => closeProject()}
             aria-label="Close project panel"
             className="font-mono text-base leading-none rounded p-1 flex-shrink-0 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-white"
             style={{

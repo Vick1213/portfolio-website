@@ -2,7 +2,6 @@
 
 import {
   EffectComposer,
-  SMAA,
   Bloom,
   ToneMapping,
   HueSaturation,
@@ -10,6 +9,7 @@ import {
   Vignette,
 } from '@react-three/postprocessing';
 import { ToneMappingMode } from 'postprocessing';
+import { UnsignedByteType } from 'three';
 import { useUI } from '@/lib/store';
 
 export default function Effects() {
@@ -19,18 +19,18 @@ export default function Effects() {
   if (reduced) return null;
 
   return (
-    <EffectComposer multisampling={0}>
-      {/* Anti-alias first so subsequent passes operate on clean edges. */}
-      <SMAA />
-
-      {/* Tight bloom: high threshold so only the HDR packets and bright accent
-          emissives glow — NOT the white label text (keeps text crisp, no haze). */}
-      <Bloom
-        intensity={0.55}
-        luminanceThreshold={0.9}
-        luminanceSmoothing={0.2}
-        mipmapBlur
-      />
+    // Two deliberate choices keep this stable on ANGLE/Metal (Mac), where the
+    // composer otherwise dropped random BLACK frames while orbiting:
+    //   1. frameBufferType = UnsignedByte (8-bit LDR). Bloom sampling the default
+    //      HALF-FLOAT HDR target is what caused the black frames — an 8-bit target
+    //      keeps the glow and renders rock-solid.
+    //   2. MSAA via `multisampling` instead of an <SMAA/> pass — SMAA's stencil
+    //      buffer collided with the composer's depth-stencil during the blit
+    //      resolve ("…cannot be the same image"). MSAA avoids that path.
+    <EffectComposer multisampling={4} frameBufferType={UnsignedByteType}>
+      {/* LDR bloom: lower threshold (8-bit clamps to 1.0) so the RGB fans + accent
+          emissives still bloom, but body panels and label text stay crisp. */}
+      <Bloom intensity={0.7} luminanceThreshold={0.62} luminanceSmoothing={0.25} mipmapBlur />
 
       {/* Filmic rolloff so the brighter rig never clips to white. */}
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
