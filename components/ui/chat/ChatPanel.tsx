@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { portfolioChat } from '@/lib/chatStore';
+import Markdown from './Markdown';
 
 const ACCENT = '#5eead4';
 
@@ -25,7 +26,7 @@ function textOf(message: { parts: { type: string; text?: string }[] }): string {
  * instance, so the in-scroll section and the floating launcher share history.
  * `compact` tightens it for the floating popover.
  */
-export default function ChatPanel({ compact = false }: { compact?: boolean }) {
+export default function ChatPanel({ compact = false, onNavigate }: { compact?: boolean; onNavigate?: () => void }) {
   const { messages, sendMessage, status, error } = useChat({ chat: portfolioChat });
   const [input, setInput] = useState('');
   const busy = status === 'submitted' || status === 'streaming';
@@ -111,13 +112,17 @@ export default function ChatPanel({ compact = false }: { compact?: boolean }) {
                   borderRadius: isUser ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
                   fontSize: '0.9rem',
                   lineHeight: 1.55,
-                  whiteSpace: 'pre-wrap',
+                  whiteSpace: isUser ? 'pre-wrap' : 'normal',
                   background: isUser ? `${ACCENT}1f` : 'rgba(255,255,255,0.05)',
                   border: `1px solid ${isUser ? `${ACCENT}33` : 'rgba(255,255,255,0.08)'}`,
                   color: '#e6ebf4',
                 }}
               >
-                {textOf(m) || (busy ? '…' : '')}
+                {isUser ? (
+                  textOf(m)
+                ) : (
+                  <Markdown text={textOf(m) || (busy ? '…' : '')} onNavigate={onNavigate} />
+                )}
               </div>
             </div>
           );

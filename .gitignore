@@ -42,3 +42,4 @@ yarn-error.log*
 /custom-gaming-pc
 /custom-gaming-pc-fbx-file
 /gaming-pc-low-poly
+.env*

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { Project } from './types';
 import { overviewCamera, componentCamera, type CamPose } from './camera';
 import { componentOf, type PCComponent } from './rig';
+import { allProjects } from './portfolio';
 
 export type CamMode = 'free' | 'flying' | 'tour' | 'cinematic';
 
@@ -55,6 +56,7 @@ interface UIState {
   // ── project selection ──
   selected: Project | null; // open project (drives ProjectPanel)
   select: (p: Project | null) => void; // opens panel; keeps activeComponent; does NOT fly
+  openProjectById: (id: string) => boolean; // deep-link from chat: hand off to the rig, fly to the part, open the card. returns false if id unknown.
   closeProject: () => void; // selected=null, camMode='free', stays on the component
 
   // ── camera coordination ──
@@ -143,6 +145,23 @@ export const useUI = create<UIState>((set, get) => ({
       tourActive: false,
       tourComponent: null,
     }),
+  // Deep-link a project from the "Ask Saatvik" chat. Mirrors a real hotspot
+  // click: leave the cinematic for the live rig, fly to the project's component
+  // so the card opens framed (not floating over the overview), then select it.
+  openProjectById: (id) => {
+    const project = allProjects.find((p) => p.id === id);
+    if (!project) return false;
+    if (get().phase !== 'interactive') {
+      set({ phase: 'interactive', intro: false });
+    }
+    const component = componentOf(project.id);
+    if (component) {
+      set({ activeComponent: component });
+      get().requestFly(componentCamera(component), DUR_COMPONENT);
+    }
+    set({ selected: project, tourActive: false, tourComponent: null });
+    return true;
+  },
   closeProject: () => set({ selected: null, camMode: 'free' }),
 
   // hover

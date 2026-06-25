@@ -22,7 +22,7 @@ export default function ChatLauncher() {
           style={{ width: 'min(380px, calc(100vw - 2rem))', animation: 'chat-pop 0.2s ease-out' }}
         >
           <style>{`@keyframes chat-pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }`}</style>
-          <ChatPanel compact />
+          <ChatPanel compact onNavigate={() => setOpen(false)} />
         </div>
       )}
 
