@@ -3,7 +3,7 @@ import type { Project } from './types';
 import { allProjects } from './portfolio';
 
 /**
- * THE EXPLODED RIG — PC-component taxonomy layered over the existing project data.
+ * THE EXPLODED RIG, PC-component taxonomy layered over the existing project data.
  *
  * This is a DERIVED view: it maps each project id → a PC component and ships the
  * per-component metadata (label, accent, exploded/installed transforms, skills).
@@ -33,11 +33,11 @@ export interface PCComponentMeta {
 
 // id → component. Every tile + non-tile project is covered (33 total).
 const RIG_MAP: Record<string, PCComponent> = {
-  // GPU — the custom AI-accelerator card (the showpiece)
+  // GPU, the custom AI-accelerator card (the showpiece)
   aitochip: 'gpu',
-  inference1: 'gpu', // Velocity Silicon — the company/shroud
+  inference1: 'gpu', // Velocity Silicon, the company/shroud
 
-  // MOTHERBOARD — ML + Game Dev foundations
+  // MOTHERBOARD, ML + Game Dev foundations
   powergrader: 'mobo',
   'crypto-news-sentiment': 'mobo',
   'asl-detector': 'mobo',
@@ -45,13 +45,13 @@ const RIG_MAP: Record<string, PCComponent> = {
   'final-project-data': 'mobo',
   'epic-store-fps': 'mobo',
 
-  // CPU — core production full-stack systems
+  // CPU, core production full-stack systems
   productivityai: 'cpu',
   'platforms-starter-kit': 'cpu',
   'market-terminal': 'cpu',
   'storyboardai-aws': 'cpu',
 
-  // RAM — fast SPA / mobile modules
+  // RAM, fast SPA / mobile modules
   coffeeapp: 'ram',
   'proposal-generator-ai': 'ram',
   'proposal-generator': 'ram',
@@ -61,12 +61,12 @@ const RIG_MAP: Record<string, PCComponent> = {
   'demoapp-flutter': 'ram',
   hr_chatbot: 'ram',
 
-  // STORAGE — data & pipelines
+  // STORAGE, data & pipelines
   'all-leads-foc': 'storage',
   'kensridge-data-platform': 'storage',
   socialscapescraper: 'storage',
 
-  // PSU + NIC — client delivery & ops
+  // PSU + NIC, client delivery & ops
   'kensridge-partners': 'psu',
   'kensridge-base44-app': 'psu',
   'kensridge-app': 'psu',
@@ -74,7 +74,7 @@ const RIG_MAP: Record<string, PCComponent> = {
   odyssey: 'psu',
   router: 'psu',
 
-  // EXPANSION / I-O — coursework & fundamentals
+  // EXPANSION / I-O, coursework & fundamentals
   'assignment4-services': 'io',
   cse445xml: 'io',
   'provided-code': 'io',
@@ -86,7 +86,7 @@ export const pcComponents: PCComponentMeta[] = [
     id: 'mobo',
     label: 'Motherboard',
     role: 'Foundation · ML + Game Dev',
-    blurb: 'The board everything mounts to — where it started (2022–2024).',
+    blurb: 'The board everything mounts to, where it started (2022–2024).',
     accent: '#fbbf24',
     installedPos: [0, 0, 0],
     explodedPos: [0, 0, -7],
@@ -106,7 +106,7 @@ export const pcComponents: PCComponentMeta[] = [
     id: 'cpu',
     label: 'CPU',
     role: 'Core Systems · Production full-stack',
-    blurb: 'The general-purpose brain — production apps that stay online.',
+    blurb: 'The general-purpose brain, production apps that stay online.',
     accent: '#818cf8',
     installedPos: [0, 5, 0.7],
     explodedPos: [0, 9.5, 6.5],
@@ -125,9 +125,9 @@ export const pcComponents: PCComponentMeta[] = [
   },
   {
     id: 'gpu',
-    label: 'GPU — Custom AI Accelerator',
+    label: 'GPU: Custom AI Accelerator',
     role: 'The Showpiece · Silicon he designed',
-    blurb: 'Not a card he bought — a card he designed: from-scratch AI-inference ASICs.',
+    blurb: 'Not a card he bought, a card he designed: from-scratch AI-inference ASICs.',
     accent: '#5eead4',
     installedPos: [0, -3.5, 1.4],
     explodedPos: [0, -8.5, 10],
@@ -148,7 +148,7 @@ export const pcComponents: PCComponentMeta[] = [
     id: 'ram',
     label: 'RAM',
     role: 'Rapid Modules · Fast web/mobile',
-    blurb: 'Small, fast, modular shipping — four sticks of quick builds.',
+    blurb: 'Small, fast, modular shipping, four sticks of quick builds.',
     accent: '#34d399',
     installedPos: [6.5, 5.5, 0.6],
     explodedPos: [12, 9.5, 5],
@@ -167,7 +167,7 @@ export const pcComponents: PCComponentMeta[] = [
     id: 'storage',
     label: 'Storage',
     role: 'Data & Pipelines · NVMe / SSD',
-    blurb: 'Where the data lives and moves — pipelines, scraping, time-series.',
+    blurb: 'Where the data lives and moves, pipelines, scraping, time-series.',
     accent: '#38bdf8',
     installedPos: [-6.5, -1, 0.6],
     explodedPos: [-12, -2, 6],
@@ -187,7 +187,7 @@ export const pcComponents: PCComponentMeta[] = [
     id: 'psu',
     label: 'PSU + Network',
     role: 'Client Delivery & Ops · Power + connectivity',
-    blurb: 'Powers the build and connects it to clients — delivery and self-hosting.',
+    blurb: 'Powers the build and connects it to clients, delivery and self-hosting.',
     accent: '#f0abfc',
     installedPos: [0, -9.5, 0.6],
     explodedPos: [0, -15.5, 7],
@@ -249,7 +249,7 @@ export const COMPONENT_ORDER: PCComponent[] = [
 ];
 
 /**
- * BUILD TOUR order — the career arc told as a build: foundations → core →
+ * BUILD TOUR order, the career arc told as a build: foundations → core →
  * fast modules → data → power/delivery → the chip he designed (the finale).
  * `io` (coursework) is folded into the Motherboard era and skipped on the tour.
  */
@@ -302,7 +302,7 @@ export function componentOf(projectId: string): PCComponent | undefined {
 }
 
 /**
- * Projects mounted on a given component, featured-first then by commit volume —
+ * Projects mounted on a given component, featured-first then by commit volume,
  * the order the scene lays them out as sub-parts (DIMM sticks, VRAM modules, …).
  */
 export function projectsByComponent(id: PCComponent): Project[] {

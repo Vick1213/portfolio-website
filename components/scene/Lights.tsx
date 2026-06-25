@@ -69,11 +69,11 @@ export default function Lights() {
 
   return (
     <>
-      {/* Neutral fill — enough to read the dead/standby rig (visible but
+      {/* Neutral fill, enough to read the dead/standby rig (visible but
           un-glowing) before power-on, without blowing the white set out. */}
       <ambientLight intensity={0.55} color="#eef2f8" />
 
-      {/* KEY — white studio key. Tight ortho shadow frustum casts the defined
+      {/* KEY, white studio key. Tight ortho shadow frustum casts the defined
           contact shadow onto the table. */}
       <directionalLight
         position={[14, 22, 16]}
@@ -90,10 +90,10 @@ export default function Lights() {
         shadow-bias={-0.0004}
       />
 
-      {/* RIM / back — subtle edge separation against the studio sweep. No shadow. */}
+      {/* RIM / back, subtle edge separation against the studio sweep. No shadow. */}
       <directionalLight position={[-16, 10, -12]} intensity={0.55} color="#dfe6f2" />
 
-      {/* Overhead keynote wash — soft, static. */}
+      {/* Overhead keynote wash, soft, static. */}
       <spotLight
         position={[0, 24, 8]}
         angle={0.6}
@@ -102,7 +102,7 @@ export default function Lights() {
         color="#ffffff"
       />
 
-      {/* Per-zone district lights — tweened 0→2.2 left-to-right on power-on. */}
+      {/* Per-zone district lights, tweened 0→2.2 left-to-right on power-on. */}
       {zones.map((zone, i) => (
         <pointLight
           key={zone.id}

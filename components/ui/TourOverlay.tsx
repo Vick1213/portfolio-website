@@ -5,15 +5,15 @@ import { COMPONENT_TOUR_ORDER, pcComponentById, type PCComponent } from '@/lib/r
 
 const INK = '#e6ebf4';
 
-// Career-beat copy keyed by component — the build narrative, one to two lines.
+// Career-beat copy keyed by component, the build narrative, one to two lines.
 const BEAT: Record<PCComponent, string> = {
-  mobo: '2022–2024. The board it all mounts to — CNNs, LSTMs, computer vision, a hackathon grader, even a UE5 game. Learning to make machines think.',
-  cpu: 'The general-purpose brain — multi-tenant marketplaces, real-time terminals, AI apps that stay online for months.',
-  ram: 'Fast, modular shipping — SPAs, React Native + Flutter apps, LLM tools spun up and deployed in days.',
-  storage: 'Where the data lives and moves — ETL pipelines, scrapers, DuckDB time-series, lead platforms.',
-  psu: 'Powers the build and connects it to clients — paid delivery, marketing sites, self-hosted ops.',
-  gpu: 'The finale — not a card he bought, a card he designed. Custom AI-accelerator silicon, RTL to synthesis.',
-  io: 'The expansion slots where the CS fundamentals were learned — C++, C#/ASP.NET, XML.',
+  mobo: '2022–2024. The board it all mounts to, CNNs, LSTMs, computer vision, a hackathon grader, even a UE5 game. Learning to make machines think.',
+  cpu: 'The general-purpose brain, multi-tenant marketplaces, real-time terminals, AI apps that stay online for months.',
+  ram: 'Fast, modular shipping, SPAs, React Native + Flutter apps, LLM tools spun up and deployed in days.',
+  storage: 'Where the data lives and moves, ETL pipelines, scrapers, DuckDB time-series, lead platforms.',
+  psu: 'Powers the build and connects it to clients, paid delivery, marketing sites, self-hosted ops.',
+  gpu: 'The finale, not a card he bought, a card he designed. Custom AI-accelerator silicon, RTL to synthesis.',
+  io: 'The expansion slots where the CS fundamentals were learned, C++, C#/ASP.NET, XML.',
 };
 
 /**
@@ -130,7 +130,7 @@ export default function TourOverlay() {
         </div>
       </div>
 
-      {/* SKIP pill — re-enables pointer events on itself. */}
+      {/* SKIP pill, re-enables pointer events on itself. */}
       <button
         type="button"
         aria-label="Skip tour"

@@ -1,10 +1,10 @@
-# Plan: "Silicon Die" 3D Portfolio — Concrete, Collision-Free Build Spec
+# Plan: "Silicon Die" 3D Portfolio, Concrete, Collision-Free Build Spec
 
 ## Context
 
 Saatvik wants a creative 3D Three.js personal site showcasing his projects/experience.
 All content already exists, fully written, in `resume_portfolio.xml` (33 projects + skills + profile).
-The repo is a bare Next.js scaffold: only `package.json`, `.gitignore`, and the XML exist — **no app code yet**.
+The repo is a bare Next.js scaffold: only `package.json`, `.gitignore`, and the XML exist, **no app code yet**.
 
 The concept and stack are **locked** (decided in prior Q&A):
 - **Concept:** Silicon-die / chip world. A camera flies over a glowing chip; each project is a
@@ -23,13 +23,13 @@ small-model (Sonnet/Haiku) workflow agents can each take one task and execute it
 
 ## Execution model (3 phases)
 
-- **Phase A — Foundation (1 agent, runs ALONE first).** Writes all configs + all `lib/*` contracts.
-  Nothing else may start until A is committed. After A, the contracts are **frozen** — Phase B/C import
+- **Phase A, Foundation (1 agent, runs ALONE first).** Writes all configs + all `lib/*` contracts.
+  Nothing else may start until A is committed. After A, the contracts are **frozen**, Phase B/C import
   them and must never edit them.
-- **Phase B — Features (5 agents, fully parallel).** Each agent owns a **disjoint set of files** (see the
+- **Phase B, Features (5 agents, fully parallel).** Each agent owns a **disjoint set of files** (see the
   File Ownership Matrix). An agent may only create files it owns; it imports from `lib/*` and reads this
   spec for sibling component prop shapes. **No agent edits a file owned by another agent.**
-- **Phase C — Glue + run (1 agent, after all B agents).** Writes `app/page.tsx` + `components/Experience.tsx`,
+- **Phase C, Glue + run (1 agent, after all B agents).** Writes `app/page.tsx` + `components/Experience.tsx`,
   installs deps, and fixes only build/type errors.
 
 ### File Ownership Matrix (the anti-collision contract)
@@ -45,11 +45,11 @@ small-model (Sonnet/Haiku) workflow agents can each take one task and execute it
 | **C** | `components/Experience.tsx`, `app/page.tsx` |
 
 > Rule for every B/C agent: **do not create or modify any file outside your row.** If you think you need a
-> shared helper, it already exists in `lib/*` (Phase A) — use it. Every scene/ui file starts with `'use client'`.
+> shared helper, it already exists in `lib/*` (Phase A), use it. Every scene/ui file starts with `'use client'`.
 
 ---
 
-## Coordinate system (shared mental model — implemented once in `lib/camera.ts`)
+## Coordinate system (shared mental model, implemented once in `lib/camera.ts`)
 
 - World is XZ-plane; camera looks down/forward. The die is a long slab along **+X**.
 - 4 zones sit left→right along X at origins: silicon `-18`, web `-6`, client `+6`, ml `+18` (all `y=0,z=0`).
@@ -60,7 +60,7 @@ small-model (Sonnet/Haiku) workflow agents can each take one task and execute it
 
 ---
 
-# PHASE A — FROZEN CONTRACTS (verbatim targets)
+# PHASE A, FROZEN CONTRACTS (verbatim targets)
 
 ### `lib/types.ts`
 ```ts
@@ -123,9 +123,9 @@ Exports `profile: Profile`, `zones: ZoneMeta[]`, `allProjects: Project[]`,
 `projects = allProjects.filter(p => p.tile)`, `resumeProjects = allProjects` (XML order),
 `skillCategories: SkillCategory[]`.
 
-**`profile`** — from XML `<profile_summary>`:
+**`profile`**, from XML `<profile_summary>`:
 - `name: 'Saatvik Choudhary'`
-- `headline: 'Chip architect & full-stack engineer — from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.'`
+- `headline: 'Chip architect & full-stack engineer, from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.'`
 - `email: 'saatvik1213@gmail.com'`
 - `github: 'https://github.com/Vick1213'`, `githubAlt: 'https://github.com/saatvik1213'`
 - `languages`: array from `<languages_observed>`.
@@ -138,11 +138,11 @@ Exports `profile: Profile`, `zones: ZoneMeta[]`, `allProjects: Project[]`,
 | client | "Client & Product" | `#f0abfc` | `[6,0,0]` | client / company sites & platforms |
 | ml | "ML Roots" | `#fbbf24` | `[18,0,0]` | earlier ML / data / coursework foundation |
 
-**`allProjects`** — one entry per project below. For each: copy `tagline`, `description`, `tech`,
+**`allProjects`**, one entry per project below. For each: copy `tagline`, `description`, `tech`,
 `skills` (skill text), `bullets` (resume_bullets text), and `links` **verbatim** from the matching
 `<project>` in `resume_portfolio.xml`; copy `type`, `status`, `commits`, `primary_language`, `months`,
 and `start`/`last_active` (→ `start`/`lastActive`) from its attributes. `zone`, `tile`, `featured`, `grid`
-come from this table (authoritative — do not improvise). Keep array order = XML order.
+come from this table (authoritative, do not improvise). Keep array order = XML order.
 
 | id (XML) | zone | tile | featured | grid |
 |---|---|---|---|---|
@@ -152,39 +152,39 @@ come from this table (authoritative — do not improvise). Keep array order = XM
 | market-terminal | web | ✓ | | [1,0] |
 | storyboardai | web | ✓ | | [-1,1] |
 | storyboardai-aws | web | ✓ | | [0,1] |
-| all-leads-foc | web | | | — |
+| all-leads-foc | web | | |, |
 | socialscapescraper | web | ✓ | | [1,1] |
 | proposal-generator-ai | web | ✓ | | [-1,2] |
-| proposal-generator | web | | | — |
+| proposal-generator | web | | |, |
 | coffeeapp | web | ✓ | | [0,2] |
 | personalwebsite | web | ✓ | | [1,2] |
 | inference1 | client | ✓ | ✓ | [0,0] |
 | kensridge-base44-app | client | ✓ | | [-1,0] |
 | kensridge-data-platform | client | ✓ | | [1,0] |
 | kensridge-partners | client | ✓ | | [-1,1] |
-| kensridge-app | client | | | — |
+| kensridge-app | client | | |, |
 | klusterai-website | client | ✓ | | [0,1] |
-| hr_chatbot | web | | | — |
-| quantumnreach | web | | | — |
-| odyssey | web | | | — |
-| router | web | | | — |
-| final-project-data | ml | | | — |
-| assignment4-services | ml | | | — |
-| cse445xml | ml | | | — |
-| provided-code | ml | | | — |
-| provided-code-tests | ml | | | — |
+| hr_chatbot | web | | |, |
+| quantumnreach | web | | |, |
+| odyssey | web | | |, |
+| router | web | | |, |
+| final-project-data | ml | | |, |
+| assignment4-services | ml | | |, |
+| cse445xml | ml | | |, |
+| provided-code | ml | | |, |
+| provided-code-tests | ml | | |, |
 | powergrader | ml | ✓ | ✓ | [0,0] |
 | crypto-news-sentiment | ml | ✓ | | [-1,0] |
 | asl-detector | ml | ✓ | | [1,0] |
 | cnn-classifier | ml | ✓ | | [-1,1] |
 | epic-store-fps | ml | ✓ | | [0,1] |
-| demoapp-flutter | ml | | | — |
+| demoapp-flutter | ml | | |, |
 
 > Result: 5 featured, 20 tiles, 33 total resume entries. Every `tile:true` row has a `grid`; every
-> `tile:false` row omits `grid` and `featured:false`. `accent` is **not** stored per-project — components
+> `tile:false` row omits `grid` and `featured:false`. `accent` is **not** stored per-project, components
 > derive it from the zone via a `zoneById` lookup (see ZoneLabel/Tile specs).
 
-**`skillCategories`** — transcribe the 8 `<category>` blocks from `<skills_summary>` (name + each
+**`skillCategories`**, transcribe the 8 `<category>` blocks from `<skills_summary>` (name + each
 skill's text and `level`). Used only by ResumeView.
 
 Add a tiny helper for downstream: `export const zoneById = Object.fromEntries(zones.map(z => [z.id, z])) as Record<Zone, ZoneMeta>;`
@@ -250,7 +250,7 @@ export function projectCamera(p: Project): CamPose {
   (`--silicon:#5eead4; --web:#818cf8; --client:#f0abfc; --ml:#fbbf24;`), a near-black bg
   (`--bg:#05060a`), and a mono/sans font pairing. Set `html,body{background:var(--bg);color:#e5e7eb;margin:0;height:100%;overflow:hidden;}`
   (overview locks scroll; ResumeView re-enables via a class).
-- **`app/layout.tsx`**: server component. `export const metadata` (title "Saatvik Choudhary — Chip Architect & Full-Stack Engineer", description from headline, OpenGraph). Load `next/font` (e.g. Inter + a mono like JetBrains Mono) → CSS vars. Render `<html lang="en"><body>{children}</body></html>`. Import `./globals.css`.
+- **`app/layout.tsx`**: server component. `export const metadata` (title "Saatvik Choudhary, Chip Architect & Full-Stack Engineer", description from headline, OpenGraph). Load `next/font` (e.g. Inter + a mono like JetBrains Mono) → CSS vars. Render `<html lang="en"><body>{children}</body></html>`. Import `./globals.css`.
 
 **Phase A also verifies `package.json`** has the locked deps (already present) and adds an `engines`/`packageManager` note only if missing. Do not downgrade versions.
 
@@ -258,89 +258,89 @@ export function projectCamera(p: Project): CamPose {
 
 ---
 
-# PHASE B — FEATURES (5 parallel agents)
+# PHASE B, FEATURES (5 parallel agents)
 
 Every component below is a client component (`'use client'` at top). Props interfaces are **frozen** here so
 Phase C and sibling components can rely on them. Each agent imports data from `@/lib/portfolio`, state from
 `@/lib/store`, helpers from `@/lib/camera`, constants from `@/lib/constants`.
 
-### B1 — Chip scene geometry
+### B1, Chip scene geometry
 Files: `components/scene/ChipDie.tsx`, `Traces.tsx`, `ProjectTile.tsx`, `ZoneLabel.tsx`.
 
-- **`ChipDie`** — `export default function ChipDie()`. A large beveled slab using `DIE_SIZE`/`DIE_CENTER`
+- **`ChipDie`**, `export default function ChipDie()`. A large beveled slab using `DIE_SIZE`/`DIE_CENTER`
   with a dark metallic `meshStandardMaterial`, plus a drei `<Grid>` overlaid on top (subtle emissive grid,
   fade edges) to read as etched silicon. No props.
-- **`ProjectTile`** — `export default function ProjectTile({ project }: { project: Project })`.
+- **`ProjectTile`**, `export default function ProjectTile({ project }: { project: Project })`.
   Position via `tilePosition(project)`. Beveled box; footprint = `TILE_SIZE_FEATURED` if `featured` else
   `TILE_SIZE`. Emissive accent = `zoneById[project.zone].accent`. On hover: lift `+0.4` y, intensify
-  emissive, set cursor pointer, and call `useUI().select` only on click — **hover does not select**.
+  emissive, set cursor pointer, and call `useUI().select` only on click, **hover does not select**.
   On click: `useUI.getState().select(project)`. Use `@react-three/fiber` pointer events + GSAP or
   `useFrame` lerp for the lift.
-- **`Traces`** — `export default function Traces()`. Instanced thin emissive lines connecting each zone's
+- **`Traces`**, `export default function Traces()`. Instanced thin emissive lines connecting each zone's
   featured tile to its sibling tiles (circuit traces). Animate a dash/flow offset in `useFrame`, gated:
   if `useUI().reduced` is true, render static (no animation). Derive endpoints from `projects` + `tilePosition`.
-- **`ZoneLabel`** — `export default function ZoneLabel({ zone }: { zone: ZoneMeta })`. drei `<Text>`
+- **`ZoneLabel`**, `export default function ZoneLabel({ zone }: { zone: ZoneMeta })`. drei `<Text>`
   floating above the zone origin showing `zone.label` in `zone.accent`. (Phase C maps `zones` → one
   `ZoneLabel` per zone.)
 
-### B2 — Camera + interaction rig
+### B2, Camera + interaction rig
 File: `components/scene/CameraRig.tsx`.
 - `export default function CameraRig()`. Reads `useUI().activeZone` and `useUI().selected`.
 - Compute desired pose: `selected ? projectCamera(selected) : zoneCamera(activeZone)`.
 - On change, **GSAP-tween** `camera.position` and a target vector over ~1.2s ease `power3.inOut`; apply
   target via `camera.lookAt` each frame while tweening.
-- Idle (overview, nothing selected): slow auto-orbit around `overviewCamera.target` — **disabled when
+- Idle (overview, nothing selected): slow auto-orbit around `overviewCamera.target`, **disabled when
   `useUI().reduced`**.
 - Render a drei `<OrbitControls makeDefault enableDamping />` with constrained polar/azimuth and
   `enabled={activeZone === null && selected === null}` (free look only in overview). Do **not** import
   any scene-geometry files; depend only on `@/lib/camera` + store.
 
-### B3 — Lighting, FX, loader
+### B3, Lighting, FX, loader
 Files: `components/scene/Lights.tsx`, `Effects.tsx`, `Loader.tsx`.
-- **`Lights`** — `export default function Lights()`. Dark scene: low ambient + a key directional + 4 colored
+- **`Lights`**, `export default function Lights()`. Dark scene: low ambient + a key directional + 4 colored
   rim/point lights placed at each zone origin using `zones[i].accent`. No props.
-- **`Effects`** — `export default function Effects()`. `<EffectComposer>` from
+- **`Effects`**, `export default function Effects()`. `<EffectComposer>` from
   `@react-three/postprocessing`: `Bloom` (moderate), subtle `ChromaticAberration`, `Vignette`. **Return
   `null` when `useUI().reduced` is true** (no post-processing on low-power/reduced-motion).
-- **`Loader`** — `export default function Loader()`. DOM overlay (fixed, full-screen, on top of canvas)
+- **`Loader`**, `export default function Loader()`. DOM overlay (fixed, full-screen, on top of canvas)
   using drei `useProgress`; styled as a "BOOTING SILICON…" power-on sequence with a progress bar. This is
   the `<Suspense fallback>` used by Phase C.
 
-### B4 — UI / HUD overlay (DOM on top of canvas)
+### B4, UI / HUD overlay (DOM on top of canvas)
 Files: `components/ui/Hud.tsx`, `Intro.tsx`, `ProjectPanel.tsx`, `ZoneNav.tsx`.
 All are absolutely-positioned DOM (Tailwind), pointer-events managed so the canvas stays interactive.
-- **`Intro`** — `export default function Intro()`. Full-screen power-on title card: name + headline +
+- **`Intro`**, `export default function Intro()`. Full-screen power-on title card: name + headline +
   an **"Enter"** button → `useUI().setIntro(false)`. Hidden when `intro===false`. Respects reduced (skip
   fancy animation, keep button).
-- **`Hud`** — `export default function Hud()`. Top bar: left = `profile.name`; center = `<ZoneNav/>`;
+- **`Hud`**, `export default function Hud()`. Top bar: left = `profile.name`; center = `<ZoneNav/>`;
   right = a **3D / List** toggle calling `useUI().setView`. Always visible once intro is dismissed.
-- **`ZoneNav`** — `export default function ZoneNav()`. Renders a chip per `zones` entry (accent-colored);
+- **`ZoneNav`**, `export default function ZoneNav()`. Renders a chip per `zones` entry (accent-colored);
   click → `useUI().setZone(zone.id)`; an "Overview" chip → `setZone(null)`. Highlights `activeZone`.
-- **`ProjectPanel`** — `export default function ProjectPanel()`. Reads `useUI().selected`; if null, render
+- **`ProjectPanel`**, `export default function ProjectPanel()`. Reads `useUI().selected`; if null, render
   nothing. Else slide-in right panel: type badge (color by `type`), `name`, `tagline`, `description`,
-  tech chips, bullet list, and link buttons (`links.repo/live/demo/presentation` — only those present).
+  tech chips, bullet list, and link buttons (`links.repo/live/demo/presentation`, only those present).
   Close button → `useUI().select(null)`. This is the recruiter-readable detail surface (DOM text, not in-canvas).
 
-### B5 — Resume/list view + responsive/fallback
+### B5, Resume/list view + responsive/fallback
 Files: `components/ui/ResumeView.tsx`, `components/ui/MobileFallback.tsx`, `lib/useResponsive.ts`.
-- **`useResponsive`** — `export function useResponsive(): { small: boolean; webgl: boolean }`. On mount:
+- **`useResponsive`**, `export function useResponsive(): { small: boolean; webgl: boolean }`. On mount:
   detect small screen (`matchMedia('(max-width: 768px)')`), WebGL support (try create `webgl`/`experimental-webgl`
   context), and `prefers-reduced-motion` → call `useUI().setReduced(true)` when matched. Re-evaluate on resize.
-- **`ResumeView`** — `export default function ResumeView()`. Scrollable, printable, recruiter-friendly page:
+- **`ResumeView`**, `export default function ResumeView()`. Scrollable, printable, recruiter-friendly page:
   header (name, headline, email, GitHub links), then `resumeProjects` grouped by `zone` (use `zones` order
   and labels), each item showing name, type badge, tagline, tech, and bullets; then a skills section from
   `skillCategories`. Adds an `overflow:auto` wrapper (overrides the body scroll lock). Plain DOM/Tailwind, no canvas.
-- **`MobileFallback`** — `export default function MobileFallback()`. Static hero (name + headline +
+- **`MobileFallback`**, `export default function MobileFallback()`. Static hero (name + headline +
   a CSS/SVG chip motif, no WebGL) followed by `<ResumeView/>`. Used for small screens / no-WebGL.
 
 ---
 
-# PHASE C — Glue + run
+# PHASE C, Glue + run
 Files: `components/Experience.tsx`, `app/page.tsx`.
 
 - **`Experience.tsx`** (`'use client'`): the `<Canvas>` (camera default fov ~45). Inside, mount
   `<Lights/>`, `<ChipDie/>`, `<Traces/>`, one `<ProjectTile project={p}/>` per `projects`, one
-  `<ZoneLabel zone={z}/>` per `zones`, `<CameraRig/>`, and `<Effects/>` — all wrapped in
+  `<ZoneLabel zone={z}/>` per `zones`, `<CameraRig/>`, and `<Effects/>`, all wrapped in
   `<Suspense fallback={null}>` (the DOM `<Loader/>` is rendered by page, driven by `useProgress`).
 - **`page.tsx`** (`'use client'`):
   1. `const { small, webgl } = useResponsive(); const view = useUI(s=>s.view);`
@@ -368,7 +368,7 @@ Files: `components/Experience.tsx`, `app/page.tsx`.
 
 ## Verification (end-to-end)
 - `npx tsc --noEmit` → no errors.
-- `pnpm build` → succeeds (no SSR/window errors — confirms `ssr:false` + `'use client'` are correct).
+- `pnpm build` → succeeds (no SSR/window errors, confirms `ssr:false` + `'use client'` are correct).
 - `pnpm dev`, then in a browser/Playwright:
   - Intro shows; "Enter" dismisses it.
   - Tiles render across 4 zones; hover lifts a tile; click opens `ProjectPanel` with correct text from XML.

@@ -7,7 +7,7 @@
   --ml: #fbbf24;
   --bg: #06080f;
   --fg: #e5e7eb;
-  /* Shared warm-white ink used by 3D text, HUD, and intro — keep DOM coherent
+  /* Shared warm-white ink used by 3D text, HUD, and intro, keep DOM coherent
      with the scene. */
   --ink: #e6ebf4;
   --hairline: rgba(255, 255, 255, 0.08);
@@ -43,6 +43,16 @@ body {
 .scrollable,
 body.scrollable {
   overflow: auto;
+}
+
+/* Scroll-cinematic intro: free BOTH <html> and <body> so the DOCUMENT scrolls
+   normally (the default `overflow: hidden; height: 100%` above otherwise locks
+   it). The pinned WebGL canvas stays `position: fixed`; the tall scroll
+   container drives the camera via Lenis. */
+html.cinematic-scroll,
+html.cinematic-scroll body {
+  overflow: visible;
+  height: auto;
 }
 
 /* ── Focus-visible global baseline ─────────────────────────────────── */

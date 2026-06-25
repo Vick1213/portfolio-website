@@ -145,14 +145,14 @@ export default function Hud() {
           </span>
         </div>
 
-        {/* Center: component nav — swipeable strip on small screens */}
+        {/* Center: component nav, swipeable strip on small screens */}
         <div className="hud-nav-scroll pointer-events-auto flex-1 flex justify-center">
           <ComponentNav />
         </div>
 
         {/* Right cluster: EXPLODE toggle + TOUR pill + 3D / List segmented toggle */}
         <div className="flex-shrink-0 flex items-center gap-2">
-          {/* EXPLODE / ASSEMBLE — only in 3D view */}
+          {/* EXPLODE / ASSEMBLE, only in 3D view */}
           {view === '3d' && (
             <button
               type="button"
@@ -171,7 +171,7 @@ export default function Hud() {
             </button>
           )}
 
-          {/* BUILD TOUR pill — only in 3D view and when motion is allowed */}
+          {/* BUILD TOUR pill, only in 3D view and when motion is allowed */}
           {!reduced && view === '3d' && (
             <button
               type="button"
@@ -191,7 +191,7 @@ export default function Hud() {
             </button>
           )}
 
-          {/* Email CTA — an always-present "next step" so the experience never
+          {/* Email CTA, an always-present "next step" so the experience never
               dead-ends. Filled with the active accent to read as the primary action. */}
           <a
             href={`mailto:${profile.email}`}
@@ -251,7 +251,7 @@ export default function Hud() {
         </div>
       </div>
 
-      {/* Bottom-left ghost helper line — lifted clear of the ~55px footer bar.
+      {/* Bottom-left ghost helper line, lifted clear of the ~55px footer bar.
           Sits directly over the white set, so it gets its own dark pill + dark
           ink to stay legible. */}
       {helperText && (

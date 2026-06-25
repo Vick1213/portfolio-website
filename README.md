@@ -1,4 +1,4 @@
-# Saatvik Choudhary — Portfolio
+# Saatvik Choudhary, Portfolio
 
 A 3D interactive portfolio rendered on a silicon-die canvas. The viewer navigates between four thematic "zones" (Silicon, Web, Client, ML Roots), each floating in 3D space as a cluster of project tiles. Built with Next.js 15 App Router and React Three Fiber.
 
@@ -29,13 +29,13 @@ Requires Node 20+ and pnpm.
 
 ```
 app/
-  layout.tsx            Root layout — metadata, viewport, fonts
-  page.tsx              Single-page entry — mounts the 3D canvas
+  layout.tsx            Root layout, metadata, viewport, fonts
+  page.tsx              Single-page entry, mounts the 3D canvas
   opengraph-image.tsx   OG card (1200x630) generated via next/og
   icon.tsx              Favicon (32x32) generated via next/og
-  sitemap.ts            /sitemap.xml — homepage entry
-  robots.ts             /robots.txt — allow all, link sitemap
-  manifest.ts           /manifest.webmanifest — PWA manifest
+  sitemap.ts            /sitemap.xml, homepage entry
+  robots.ts             /robots.txt, allow all, link sitemap
+  manifest.ts           /manifest.webmanifest, PWA manifest
   globals.css           CSS variables and base resets
 
 components/
@@ -53,4 +53,4 @@ All portfolio content (projects, skills, zones) is authored in `lib/portfolio.ts
 
 ## Deployment
 
-The site is deployed on Vercel. The `metadataBase` URL and sitemap base URL are set to `https://saatvik.dev` — update the `BASE_URL` constant in `app/layout.tsx`, `app/sitemap.ts`, and `app/robots.ts` if the domain changes.
+The site is deployed on Vercel. The `metadataBase` URL and sitemap base URL are set to `https://saatvik.dev`, update the `BASE_URL` constant in `app/layout.tsx`, `app/sitemap.ts`, and `app/robots.ts` if the domain changes.

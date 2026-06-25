@@ -2,7 +2,7 @@ import { rigChannel, type PCComponent } from './rig';
 
 export type CamPose = { pos: [number, number, number]; target: [number, number, number] };
 
-// Frames the build from the OPEN (glass) side of the case — an elevated 3/4
+// Frames the build from the OPEN (glass) side of the case, an elevated 3/4
 // product-shot hero that shows the interior + power button on first paint,
 // without going flat dead-on.
 export const overviewCamera: CamPose = { pos: [-32, 6, 6], target: [0.5, -1, 1] };
@@ -29,7 +29,7 @@ const FOCUS_DIST = 17;
  * A 3/4 product-shot pose centered on a component's LIVE world center (which
  * moves as the rig explodes/assembles, so the framing always tracks the part),
  * viewed from the same hero angle as the overview. Derived from
- * `rigChannel.centers` + `HERO_DIR` — never hand-tuned per-part coordinates.
+ * `rigChannel.centers` + `HERO_DIR`, never hand-tuned per-part coordinates.
  */
 export function componentCamera(id: PCComponent | null): CamPose {
   if (!id) return overviewCamera;
@@ -53,5 +53,5 @@ export const PAN_BOUNDS = {
   maxZ: 14,
 } as const;
 
-// Dolly (zoom) distance limits — max is large enough to frame the whole tower.
+// Dolly (zoom) distance limits, max is large enough to frame the whole tower.
 export const ZOOM_BOUNDS = { min: 5, max: 60 } as const;

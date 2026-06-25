@@ -39,7 +39,7 @@ export default function ProjectPanel() {
   if (selected === null) return null;
 
   const typeStyle = TYPE_COLORS[selected.type] ?? TYPE_COLORS['original'];
-  // Component accent for this project's PC part — header/border/link-hover coherence.
+  // Component accent for this project's PC part, header/border/link-hover coherence.
   const componentId = componentOf(selected.id);
   const component = componentId ? pcComponentById[componentId] : null;
   const zoneAccent = component?.accent ?? typeStyle.text;

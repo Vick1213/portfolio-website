@@ -3,7 +3,12 @@ import type { Project } from './types';
 import { overviewCamera, componentCamera, type CamPose } from './camera';
 import { componentOf, type PCComponent } from './rig';
 
-export type CamMode = 'free' | 'flying' | 'tour';
+export type CamMode = 'free' | 'flying' | 'tour' | 'cinematic';
+
+// The page opens as a scroll-choreographed cinematic (the PC stays pinned in the
+// background, the camera is driven by scroll). Reaching the end, or hitting the
+// "Enter the rig" CTA, hands off to the existing INTERACTIVE rig explorer.
+export type Phase = 'cinematic' | 'interactive';
 
 export interface FlyRequest {
   token: number; // strictly increasing; the ONLY thing CameraRig keys its fly effect on
@@ -26,6 +31,11 @@ export const camReport = { x: 0, z: 3, dist: 32 };
 export const tourBus: { skip: () => void } = { skip: () => {} };
 
 interface UIState {
+  // ── scroll-cinematic ⇄ interactive phase ──
+  phase: Phase; // 'cinematic' = scroll owns the camera; 'interactive' = the rig explorer
+  setPhase: (p: Phase) => void;
+  enterInteractive: () => void; // hand off from the scroll story to the live rig
+
   // ── intro / view / motion ──
   intro: boolean; // power-on overlay visible
   setIntro: (v: boolean) => void;
@@ -45,7 +55,7 @@ interface UIState {
   // ── project selection ──
   selected: Project | null; // open project (drives ProjectPanel)
   select: (p: Project | null) => void; // opens panel; keeps activeComponent; does NOT fly
-  closeProject: () => void; // selected=null, camMode='free' — stays on the component
+  closeProject: () => void; // selected=null, camMode='free', stays on the component
 
   // ── camera coordination ──
   camMode: CamMode; // 'free' = OrbitControls owns camera; 'flying'|'tour' = GSAP owns it
@@ -73,6 +83,21 @@ interface UIState {
 const DUR_COMPONENT = 1200;
 
 export const useUI = create<UIState>((set, get) => ({
+  // scroll-cinematic ⇄ interactive phase
+  phase: 'cinematic',
+  setPhase: (p) => set({ phase: p }),
+  // Hand off from the scroll cinematic to the interactive rig. The cinematic's
+  // final keyframe equals `overviewCamera`, so by the time we get here the camera
+  // is already at the overview pose, a short fly to overview then guarantees a
+  // clean, snap-free transfer of control to OrbitControls (reuses the fly path's
+  // handOff, which copies our lookAt into the controls' target). `intro=false`
+  // powers the rig on for good (the LEDs were already ramped up by scroll).
+  enterInteractive: () => {
+    if (get().phase === 'interactive') return;
+    set({ phase: 'interactive', intro: false });
+    get().requestFly(overviewCamera, 900);
+  },
+
   // intro / view / motion
   intro: true,
   setIntro: (v) => set({ intro: v }),
@@ -83,8 +108,9 @@ export const useUI = create<UIState>((set, get) => ({
   reduced: false,
   setReduced: (v) => set({ reduced: v }),
 
-  // camera coordination
-  camMode: 'free',
+  // camera coordination, opens in 'cinematic' (scroll owns the camera) and
+  // flips to 'free' (OrbitControls) once the scroll story hands off.
+  camMode: 'cinematic',
   setCamMode: (m) => set({ camMode: m }),
   flyRequest: null,
   requestFly: (pose, durationMs) =>
@@ -97,7 +123,7 @@ export const useUI = create<UIState>((set, get) => ({
       camMode: 'flying',
     })),
 
-  // component nav — a deliberate navigation also ABORTS any running tour.
+  // component nav, a deliberate navigation also ABORTS any running tour.
   activeComponent: null,
   setComponent: (id) => {
     set({ activeComponent: id, selected: null, tourActive: false, tourComponent: null });
@@ -107,7 +133,7 @@ export const useUI = create<UIState>((set, get) => ({
     if (get().activeComponent !== id) set({ activeComponent: id });
   },
 
-  // project selection — opens the panel without re-flying (you reached the part
+  // project selection, opens the panel without re-flying (you reached the part
   // by flying to its component or clicking its hotspot, which already framed it).
   selected: null,
   select: (p) =>
@@ -133,8 +159,8 @@ export const useUI = create<UIState>((set, get) => ({
   tourComponent: null,
   startTour: () => {
     if (get().reduced) return;
-    // Boot the rig if it's still in standby — a tour of a dead, unlit case is
-    // pointless — and close any open project panel so the tour takes the screen.
+    // Boot the rig if it's still in standby, a tour of a dead, unlit case is
+    // pointless, and close any open project panel so the tour takes the screen.
     set({ intro: false, tourActive: true, tourComponent: null, camMode: 'tour', selected: null, activeComponent: null });
   },
   setTourComponent: (id) => set({ tourComponent: id }),

@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, memo, useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { BackSide, Group } from 'three';
 import {
@@ -24,7 +24,7 @@ import { overviewCamera } from '@/lib/camera';
 import { useUI } from '@/lib/store';
 
 /**
- * Bright studio environment built ONLY from inline Lightformers — no external
+ * Bright studio environment built ONLY from inline Lightformers, no external
  * HDR (works fully offline). White product-shot lighting: a broad overhead key
  * + bright neutral side softboxes give the brushed metal clean studio
  * reflections, while four low district-accent strips tint the reflections just
@@ -33,7 +33,7 @@ import { useUI } from '@/lib/store';
 function StudioEnvironment() {
   return (
     <Environment resolution={256} frames={1}>
-      {/* Overhead key — broad neutral-white studio softbox. */}
+      {/* Overhead key, broad neutral-white studio softbox. */}
       <Lightformer
         form="rect"
         intensity={1.0}
@@ -68,7 +68,7 @@ function StudioEnvironment() {
         position={[0, 4, 30]}
         rotation-y={Math.PI}
       />
-      {/* Per-zone accent strips — subtle jewel-tone tint in the reflections. */}
+      {/* Per-zone accent strips, subtle jewel-tone tint in the reflections. */}
       {zones.map((z) => (
         <Lightformer
           key={z.id}
@@ -102,13 +102,13 @@ function Floor({ plain }: { plain: boolean }) {
     <group ref={ref} position={[0, -8, 0]}>
       {/* Matte studio "table". A reflective floor mirrors the case's dark open
           side into a black slab below it (the user's "black blob"), so the
-          surface is deliberately matte — grounding comes from the crisp contact
+          surface is deliberately matte, grounding comes from the crisp contact
           shadow below instead. */}
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
         <planeGeometry args={[160, 120]} />
         <meshStandardMaterial color="#eef1f6" metalness={0} roughness={0.96} />
       </mesh>
-      {/* Tight, defined contact shadow directly under the case — small + crisp
+      {/* Tight, defined contact shadow directly under the case, small + crisp
           so the case reads as firmly planted on the studio surface. */}
       <ContactShadows
         position={[0, 0.02, 0]}
@@ -123,10 +123,16 @@ function Floor({ plain }: { plain: boolean }) {
   );
 }
 
-export default function Experience() {
+// Memoized: the Canvas must mount exactly once. Parent state changes (e.g. the
+// scroll cinematic → interactive `phase` flip in ScrollStage) must NOT re-render
+// the R3F <Canvas>, re-rendering it from a parent throws a "circular structure
+// to JSON" error in dev and needlessly rebuilds the scene. Experience takes no
+// props, so memo makes it render once and never again from above; its own store
+// subscriptions still drive internal updates.
+function Experience() {
   const reduced = useUI((s) => s.reduced);
 
-  // Detect coarse pointer (mobile/touch) once — swaps the reflector for a
+  // Detect coarse pointer (mobile/touch) once, swaps the reflector for a
   // plain plane and disables atmosphere to keep touch devices smooth.
   const [coarsePointer, setCoarsePointer] = useState(false);
   useEffect(() => {
@@ -152,7 +158,7 @@ export default function Experience() {
       <fog attach="fog" args={['#e2e7ee', 90, 190]} />
 
       <Suspense fallback={null}>
-        {/* Seamless studio backdrop — a bright white "cyclorama" that falls off
+        {/* Seamless studio backdrop, a bright white "cyclorama" that falls off
             to a soft light-gray at the edges (gentle product-shot vignette), so
             the rig reads as lit ON a set instead of floating in a flat void. */}
         <mesh position={[0, 4, -40]}>
@@ -178,3 +184,5 @@ export default function Experience() {
     </Canvas>
   );
 }
+
+export default memo(Experience);

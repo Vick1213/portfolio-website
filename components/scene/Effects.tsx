@@ -23,7 +23,7 @@ export default function Effects() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const bloomRef = useRef<any>(null);
   const surge = useRef(0); // decays 1→0 after boot for a one-shot "power surge"
-  // Track the standby flag WITHOUT subscribing — subscribing would re-render the
+  // Track the standby flag WITHOUT subscribing, subscribing would re-render the
   // EffectComposer on boot (which is fragile). We poll getState() per frame.
   const prevIntro = useRef(true);
 
@@ -45,9 +45,9 @@ export default function Effects() {
     // Two deliberate choices keep this stable on ANGLE/Metal (Mac), where the
     // composer otherwise dropped random BLACK frames while orbiting:
     //   1. frameBufferType = UnsignedByte (8-bit LDR). Bloom sampling the default
-    //      HALF-FLOAT HDR target is what caused the black frames — an 8-bit target
+    //      HALF-FLOAT HDR target is what caused the black frames, an 8-bit target
     //      keeps the glow and renders rock-solid.
-    //   2. MSAA via `multisampling` instead of an <SMAA/> pass — SMAA's stencil
+    //   2. MSAA via `multisampling` instead of an <SMAA/> pass, SMAA's stencil
     //      buffer collided with the composer's depth-stencil during the blit
     //      resolve ("…cannot be the same image"). MSAA avoids that path.
     <EffectComposer multisampling={4} frameBufferType={UnsignedByteType}>
@@ -62,7 +62,7 @@ export default function Effects() {
       <HueSaturation saturation={0.08} />
       <BrightnessContrast brightness={0.02} contrast={0.1} />
 
-      {/* Very light vignette — just enough to seat the subject on the white set
+      {/* Very light vignette, just enough to seat the subject on the white set
           without darkening the corners into grey. */}
       <Vignette eskil={false} offset={0.55} darkness={0.16} />
     </EffectComposer>

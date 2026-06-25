@@ -9,10 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/deepseek": "^2.0.39",
+    "@ai-sdk/react": "^3.0.211",
     "@react-three/drei": "^10.0.0",
     "@react-three/fiber": "^9.0.0",
     "@react-three/postprocessing": "^3.0.4",
     "@vercel/analytics": "^2.0.1",
+    "ai": "^6.0.209",
     "gsap": "^3.12.5",
     "lenis": "^1.1.18",
     "next": "^15.3.0",

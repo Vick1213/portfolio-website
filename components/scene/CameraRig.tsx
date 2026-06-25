@@ -9,6 +9,7 @@ import gsap from 'gsap';
 import { useUI, camReport, tourBus } from '@/lib/store';
 import { overviewCamera, componentCamera, PAN_BOUNDS, ZOOM_BOUNDS } from '@/lib/camera';
 import { COMPONENT_TOUR_ORDER } from '@/lib/rig';
+import { scrollChannel, cinematicPose } from '@/lib/scroll';
 
 // ─── Module scope (zero per-frame allocation) ────────────────────────────────
 const CLAMP_V = new THREE.Vector3();
@@ -65,7 +66,7 @@ export default function CameraRig() {
     }
   }, []);
 
-  // ─── Fly effect — token-keyed, dedup by flyRequest.token ─────────────────────
+  // ─── Fly effect, token-keyed, dedup by flyRequest.token ─────────────────────
   useEffect(() => {
     if (!flyRequest || flyRequest.token === lastToken.current) return;
     lastToken.current = flyRequest.token;
@@ -110,7 +111,7 @@ export default function CameraRig() {
     const startedAt = performance.now();
 
     // Explode the rig for the tour. Every component lives INSIDE a closed case,
-    // so touring the assembled tower just circles an opaque box — you never see
+    // so touring the assembled tower just circles an opaque box, you never see
     // the part being narrated. Exploding lays each part out in the open; the
     // per-stop camera poses are read LIVE (function-based tweens below), so they
     // track each part's exploded center instead of the sealed-up rest position.
@@ -196,7 +197,7 @@ export default function CameraRig() {
       useUI.getState().setTourComponent(null);
       useUI.getState().setExplodeTarget(0); // re-assemble on early exit
       // Track the settle tweens in the shared refs so a subsequent fly (e.g. a
-      // component click) or unmount cancels them — no two writers fighting the camera.
+      // component click) or unmount cancels them, no two writers fighting the camera.
       posTween.current?.kill();
       targetTween.current?.kill();
       posTween.current = gsap.to(camera.position, {
@@ -259,6 +260,15 @@ export default function CameraRig() {
         camReport.z = tz;
         camReport.dist = dist;
       }
+    } else if (mode === 'cinematic') {
+      // Scroll owns the camera: drive position + lookAt straight from the
+      // scroll-progress channel through the keyframe path. The final keyframe
+      // equals overviewCamera, so when `enterInteractive()` later flies to
+      // overview there is nothing to snap.
+      const pose = cinematicPose(scrollChannel.progress);
+      camera.position.set(pose.pos[0], pose.pos[1], pose.pos[2]);
+      lookAtTarget.current.set(pose.target[0], pose.target[1], pose.target[2]);
+      camera.lookAt(lookAtTarget.current);
     } else {
       camera.lookAt(lookAtTarget.current); // GSAP owns position; we own lookAt
     }

@@ -119,7 +119,7 @@ export default function Loader() {
           marginTop: '0.25rem',
         }}
       >
-        VELOCITY SILICON — SYS INIT
+        VELOCITY SILICON, SYS INIT
       </span>
     </div>
   );

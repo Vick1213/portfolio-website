@@ -3,7 +3,7 @@ import type { Profile, Project, SkillCategory, Zone, ZoneMeta } from './types';
 export const profile: Profile = {
   name: 'Saatvik Choudhary',
   headline:
-    'Chip architect & full-stack engineer — from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.',
+    'Founder of Kensridge Partners and a chip architect & full-stack engineer, from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.',
   email: 'saatvik1213@gmail.com',
   linkedin: 'https://www.linkedin.com/in/saatvik-choudhary/',
   github: 'https://github.com/Vick1213',
@@ -28,13 +28,23 @@ export const profile: Profile = {
     'Shell',
     'Makefile',
   ],
+  ventures: [
+    {
+      name: 'Kensridge Partners',
+      role: 'Founder',
+      period: '2024 – Present',
+      blurb:
+        'Boutique capital-introduction and fundraising advisory I founded and have run for 2+ years, connecting companies and funds with capital and investors. I also build and operate its technology in-house (advisory site, internal app, and data platform).',
+      url: 'https://kensridge.com',
+    },
+  ],
 };
 
 export const zones: ZoneMeta[] = [
   {
     id: 'silicon',
     label: 'Silicon',
-    blurb: 'Custom AI-accelerator ASIC design — RTL, simulation, and synthesis flows.',
+    blurb: 'Custom AI-accelerator ASIC design, RTL, simulation, and synthesis flows.',
     accent: '#5eead4',
     origin: [-18, 0, 0],
   },
@@ -66,7 +76,7 @@ export const zoneById = Object.fromEntries(zones.map((z) => [z.id, z])) as Recor
 export const allProjects: Project[] = [
   {
     id: 'aitochip',
-    name: 'AiToChip — Neural MAX & Neural 1 AI Inference Accelerators',
+    name: 'AiToChip: Neural MAX & Neural 1 AI Inference Accelerators',
     tagline:
       'From-scratch design of two custom AI-inference accelerator ASICs (datacenter + edge) with full RTL, simulation, and synthesis flows.',
     description:
@@ -103,7 +113,7 @@ export const allProjects: Project[] = [
       'Generative RTL tooling (Python codegen)',
     ],
     bullets: [
-      'Architected two custom AI-inference accelerator ASICs from scratch — a 720 mm2 datacenter chip (128 heterogeneous compute slots, 12x HBM3e, 600 W TDP) and a 69.7 mm2 edge chip — modeling 600 W-envelope throughput of 5,500-6,600 tok/s on a 30B-parameter MoE LLM.',
+      'Architected two custom AI-inference accelerator ASICs from scratch, a 720 mm2 datacenter chip (128 heterogeneous compute slots, 12x HBM3e, 600 W TDP) and a 69.7 mm2 edge chip, modeling 600 W-envelope throughput of 5,500-6,600 tok/s on a 30B-parameter MoE LLM.',
       'Built a Python RTL generator that compiles a chip specification into 7+ configuration-dependent Verilog modules, enabling one physical die to be re-targeted per model via firmware (SRAM partitioning, precision mode, per-slot power gating).',
       'Established a numerics CI gate with reference decoders and a GPT-2 regression suite to validate quantized kernels against floating-point baselines; passed Yosys hierarchy checks across 113 commits.',
       'Designed a runtime-configurable mixed-precision datapath (INT8 physical MACs with INT4/FP8/MXFP4/NVFP4 codes reserved) and a chiplet bridge with a round-robin K-of-N arbiter over UCIe PHY.',
@@ -136,7 +146,7 @@ export const allProjects: Project[] = [
   },
   {
     id: 'platforms-starter-kit',
-    name: 'MarketPlace — Multi-Tenant E-commerce Platform',
+    name: 'MarketPlace: Multi-Tenant E-commerce Platform',
     tagline:
       'Production-ready multi-tenant marketplace with per-seller subdomains and role-based auth.',
     description:
@@ -179,11 +189,11 @@ export const allProjects: Project[] = [
   },
   {
     id: 'market-terminal',
-    name: 'Market Terminal — Local-First Market-Intelligence Dashboard',
+    name: 'Market Terminal: Local-First Market-Intelligence Dashboard',
     tagline:
       'Private, free-data market-intelligence terminal: Next.js dashboard + FastAPI backend + local sentiment models, all running on the user’s machine.',
     description:
-      'A local-first market-intelligence terminal (monorepo) wiring a Next.js 15 dashboard to a FastAPI backend over REST + WebSocket, with a configurable react-grid-layout panel grid and a live system panel. Backend runs an APScheduler-driven ingest layer (httpx/aiolimiter/tenacity/diskcache over free data sources) into DuckDB (time-series) and SQLite WAL (app state), with WebSocket fan-out to the UI. Sentiment is computed locally (FinBERT for bulk + a local LLM for aspect/brief). Shared OpenAPI-generated TS types tie the FastAPI schema to the frontend. Currently at "Phase 0" — a runnable end-to-end skeleton (REST + WS + scheduler + storage + ingest wired through).',
+      'A local-first market-intelligence terminal (monorepo) wiring a Next.js 15 dashboard to a FastAPI backend over REST + WebSocket, with a configurable react-grid-layout panel grid and a live system panel. Backend runs an APScheduler-driven ingest layer (httpx/aiolimiter/tenacity/diskcache over free data sources) into DuckDB (time-series) and SQLite WAL (app state), with WebSocket fan-out to the UI. Sentiment is computed locally (FinBERT for bulk + a local LLM for aspect/brief). Shared OpenAPI-generated TS types tie the FastAPI schema to the frontend. Currently at "Phase 0", a runnable end-to-end skeleton (REST + WS + scheduler + storage + ingest wired through).',
     zone: 'web',
     type: 'original',
     tile: true,
@@ -220,7 +230,7 @@ export const allProjects: Project[] = [
     ],
     bullets: [
       'Built a local-first market-intelligence terminal as a Next.js 15 + FastAPI monorepo, streaming live data to a configurable dashboard grid over REST and WebSocket with end-to-end OpenAPI-generated TypeScript types.',
-      'Designed an APScheduler-driven ingestion layer (rate-limited httpx with retry/caching) persisting to DuckDB time-series + SQLite WAL, and computed market sentiment locally with FinBERT and a local LLM — no paid data feeds or cloud APIs.',
+      'Designed an APScheduler-driven ingestion layer (rate-limited httpx with retry/caching) persisting to DuckDB time-series + SQLite WAL, and computed market sentiment locally with FinBERT and a local LLM, no paid data feeds or cloud APIs.',
     ],
     links: { repo: 'https://github.com/Vick1213/market-terminal' },
   },
@@ -260,11 +270,11 @@ export const allProjects: Project[] = [
   },
   {
     id: 'storyboardai-aws',
-    name: 'StoryboardAI — AWS-Native Rebuild',
+    name: 'StoryboardAI: AWS-Native Rebuild',
     tagline:
-      'Ground-up AWS-native rebuild of StoryboardAI: a multimodal, globally-synced creative environment where a story is a "project" co-authored by AI agents — all infrastructure defined in AWS CDK.',
+      'Ground-up AWS-native rebuild of StoryboardAI: a multimodal, globally-synced creative environment where a story is a "project" co-authored by AI agents, all infrastructure defined in AWS CDK.',
     description:
-      'A from-scratch, AWS-native re-architecture of the earlier StoryBoardAI app (see id="storyboardai"). The product model: a story is a project with a living "story bible" as the source of truth and persistent characters, co-authored by an AI that toggles between an autonomous agent and a steerable copilot across text, image, and audio. The core engineering bet is a context-assembly loop — slice the authoritative bible into context on every action and check generated output back against it for continuity/drift. Single TypeScript monorepo (Turborepo) with Next.js web + Expo mobile (later), all cloud infra in AWS CDK. HONESTY NOTE: greenfield / early-stage (7 commits) — at this point it is primarily a detailed architecture spec (docs/ARCHITECTURE.md) plus initial scaffolding, not a shipped app. Present it as cloud-architecture / system-design work, not a finished product.',
+      'A from-scratch, AWS-native re-architecture of the earlier StoryBoardAI app (see id="storyboardai"). The product model: a story is a project with a living "story bible" as the source of truth and persistent characters, co-authored by an AI that toggles between an autonomous agent and a steerable copilot across text, image, and audio. The core engineering bet is a context-assembly loop, slice the authoritative bible into context on every action and check generated output back against it for continuity/drift. Single TypeScript monorepo (Turborepo) with Next.js web + Expo mobile (later), all cloud infra in AWS CDK. HONESTY NOTE: greenfield / early-stage (7 commits), at this point it is primarily a detailed architecture spec (docs/ARCHITECTURE.md) plus initial scaffolding, not a shipped app. Present it as cloud-architecture / system-design work, not a finished product.',
     zone: 'web',
     type: 'original',
     tile: true,
@@ -299,17 +309,17 @@ export const allProjects: Project[] = [
       'System design / context-assembly for continuity',
     ],
     bullets: [
-      'Architected an AWS-native rebuild of an AI storytelling platform — AppSync GraphQL with offline sync, Lambda + Step Functions orchestration, DynamoDB + Aurora Serverless v2/pgvector, Cognito auth, and Claude via Amazon Bedrock — with all infrastructure defined in AWS CDK (TypeScript).',
+      'Architected an AWS-native rebuild of an AI storytelling platform, AppSync GraphQL with offline sync, Lambda + Step Functions orchestration, DynamoDB + Aurora Serverless v2/pgvector, Cognito auth, and Claude via Amazon Bedrock, with all infrastructure defined in AWS CDK (TypeScript).',
       'Designed a context-assembly engine that treats a persistent "story bible" as the source of truth, slicing relevant state into each AI action and verifying generated output back against it to prevent narrative drift.',
     ],
     links: { repo: 'https://github.com/Vick1213/storyboardAINew' },
   },
   {
     id: 'all-leads-foc',
-    name: 'All-Leads-from-FOC — Lead Data Pipeline',
+    name: 'All-Leads-from-FOC: Lead Data Pipeline',
     tagline: 'Python pipeline for aggregating and processing sales/lead data.',
     description:
-      'A Python + HTML data project (~12 MB) for collecting and organizing lead data. Substantial dataset/processing footprint; private. (No README — inferred from name, language mix, and size.)',
+      'A Python + HTML data project (~12 MB) for collecting and organizing lead data. Substantial dataset/processing footprint; private. (No README, inferred from name, language mix, and size.)',
     zone: 'web',
     type: 'original',
     tile: false,
@@ -403,7 +413,7 @@ export const allProjects: Project[] = [
     name: 'CoffeeApp',
     tagline: 'React + TypeScript + Vite application.',
     description:
-      'A React/TypeScript app scaffolded with Vite, deployed on Vercel. (Default README — purpose inferred from name.)',
+      'A React/TypeScript app scaffolded with Vite, deployed on Vercel. (Default README, purpose inferred from name.)',
     zone: 'web',
     type: 'original',
     tile: true,
@@ -446,7 +456,7 @@ export const allProjects: Project[] = [
   },
   {
     id: 'inference1',
-    name: 'Velocity Silicon — Company Website',
+    name: 'Velocity Silicon: Company Website',
     tagline: 'Marketing/product site for Velocity Silicon (the AI-chip venture behind AiToChip).',
     description:
       'The public web presence for Velocity Silicon (the company commercializing the AiToChip accelerators). Scaffolded with the Base44 AI app builder and customized; deployed on Vercel.',
@@ -469,9 +479,9 @@ export const allProjects: Project[] = [
   {
     id: 'kensridge-base44-app',
     name: 'Kensridge App (Base44)',
-    tagline: 'Web application for Kensridge Partners (capital-introduction advisory).',
+    tagline: 'Internal web app for Kensridge Partners, my own capital-introduction & fundraising advisory.',
     description:
-      'A Base44-scaffolded application for Kensridge Partners, actively developed (94 commits). Most-iterated of the Kensridge web properties.',
+      'A Base44-scaffolded internal application for Kensridge Partners (the advisory firm I founded in 2024 and have run for 2+ years), actively developed (94 commits). The most-iterated of the Kensridge web properties.',
     zone: 'client',
     type: 'ai-builder',
     tile: true,
@@ -484,16 +494,16 @@ export const allProjects: Project[] = [
     primaryLanguage: 'JavaScript',
     commits: 94,
     tech: ['JavaScript', 'TypeScript', 'Base44'],
-    skills: ['Web development', 'AI app builders', 'Client delivery'],
-    bullets: ['Delivered a client web application (94 commits) for a capital-introduction advisory firm.'],
+    skills: ['Web development', 'AI app builders', 'Building tools for my own business'],
+    bullets: ['Built and iterated (94 commits) the internal web app for Kensridge Partners, the capital-introduction & fundraising advisory I founded and run.'],
     links: { repo: 'https://github.com/Vick1213/kensridge-base44-app' },
   },
   {
     id: 'kensridge-data-platform',
     name: 'Kensridge Data Platform',
-    tagline: 'Data platform combining a TypeScript app with Python processing.',
+    tagline: 'Data platform for Kensridge Partners (my advisory firm), a TypeScript app with Python processing.',
     description:
-      'A data platform (TypeScript frontend/app + Python backend/processing, ~14 MB). Single commit but large footprint — likely a bulk initial push of an established codebase. Verify maturity before featuring prominently.',
+      'A data platform for Kensridge Partners (the advisory firm I founded), pairing a TypeScript frontend/app with Python backend/processing (~14 MB) to support the firm’s deal and investor data.',
     zone: 'client',
     type: 'original',
     tile: true,
@@ -507,36 +517,39 @@ export const allProjects: Project[] = [
     commits: 1,
     tech: ['TypeScript', 'Python'],
     skills: ['Data platform engineering', 'Full-stack development'],
-    bullets: ['Built a data platform pairing a TypeScript application layer with Python data processing.'],
+    bullets: ['Built a data platform for my own advisory firm, pairing a TypeScript application layer with Python data processing.'],
     links: { repo: 'https://github.com/Vick1213/KensridgeDataPlatform' },
   },
   {
     id: 'kensridge-partners',
-    name: 'Kensridge Partners — Advisory Website',
-    tagline: 'Boutique capital-introduction advisory marketing site.',
+    name: 'Kensridge Partners: My Advisory Firm',
+    tagline: 'The capital-introduction & fundraising advisory I founded and have run for 2+ years (kensridge.com).',
     description:
-      'Marketing website for Kensridge Partners, built with Next.js/TypeScript and MDX content.',
+      'Kensridge Partners is a boutique capital-introduction and fundraising advisory I founded in 2024 and have run for 2+ years, connecting companies and funds with capital and investors. I build and operate all of its technology in-house; this entry is the public marketing site (Next.js/TypeScript + MDX), live at kensridge.com.',
     zone: 'client',
     type: 'original',
     tile: true,
-    featured: false,
+    featured: true,
     grid: [-1, 1],
-    start: '2026-03',
-    lastActive: '2026-03',
-    status: 'completed',
-    months: 1,
+    start: '2024-01',
+    lastActive: '2026-06',
+    status: 'active',
+    months: 30,
     primaryLanguage: 'TypeScript',
     commits: 10,
     tech: ['Next.js', 'TypeScript', 'MDX'],
-    skills: ['Frontend development', 'Content-driven sites (MDX)'],
-    bullets: ["Built a boutique advisory firm's marketing website in Next.js/TypeScript with MDX-driven content."],
-    links: { repo: 'https://github.com/Vick1213/kensridge-partners' },
+    skills: ['Founder / running a business', 'Capital-introduction & fundraising advisory', 'Frontend development', 'Content-driven sites (MDX)'],
+    bullets: [
+      'Founded and run Kensridge Partners, a boutique capital-introduction & fundraising advisory, for 2+ years (kensridge.com).',
+      'Built and operate the firm’s marketing site in Next.js/TypeScript with MDX-driven content, plus its internal app and data platform.',
+    ],
+    links: { repo: 'https://github.com/Vick1213/kensridge-partners', live: 'https://kensridge.com' },
   },
   {
     id: 'kensridge-app',
     name: 'Kensridge App (early)',
-    tagline: 'Early JavaScript version of the Kensridge web app.',
-    description: 'An early/public iteration of the Kensridge application, later superseded by the Base44 build.',
+    tagline: 'Early version of the app for Kensridge Partners (my advisory firm).',
+    description: 'An early iteration of the app for Kensridge Partners (the advisory firm I founded), later superseded by the Base44 build.',
     zone: 'client',
     type: 'original',
     tile: false,
@@ -578,7 +591,7 @@ export const allProjects: Project[] = [
     name: 'HR Chatbot',
     tagline: 'HR-domain AI chat app built on the open-source Chatbot UI.',
     description:
-      'An HR-focused chatbot adapted from the open-source "Chatbot UI" (mckaywrigley), with a Supabase/PostgreSQL backend (PLpgSQL). Deployed on Vercel. Customization was light (2 commits) — present as a deployment/integration project, not from-scratch.',
+      'An HR-focused chatbot adapted from the open-source "Chatbot UI" (mckaywrigley), with a Supabase/PostgreSQL backend (PLpgSQL). Deployed on Vercel. Customization was light (2 commits), present as a deployment/integration project, not from-scratch.',
     zone: 'web',
     type: 'template-based',
     tile: false,
@@ -596,7 +609,7 @@ export const allProjects: Project[] = [
   },
   {
     id: 'quantumnreach',
-    name: 'QuantumnReach — Outreach Dashboard',
+    name: 'QuantumnReach: Outreach Dashboard',
     tagline: 'Outreach/CRM dashboard built on the TailAdmin Next.js template.',
     description:
       'A dashboard application started from the open-source TailAdmin (Next.js 14 + Tailwind) template and customized for outreach use, deployed on Vercel.',
@@ -617,7 +630,7 @@ export const allProjects: Project[] = [
   },
   {
     id: 'odyssey',
-    name: 'Odyssey — Astro Marketing Site',
+    name: 'Odyssey: Astro Marketing Site',
     tagline: 'Business/startup marketing site built on the Astro Odyssey theme.',
     description:
       'A marketing website built on the open-source "Odyssey" Astro theme (blog, landing pages, contact forms, theme switcher). 70 commits of customization; achieves strong Lighthouse performance via Astro. Deployed on Vercel.',
@@ -638,10 +651,10 @@ export const allProjects: Project[] = [
   },
   {
     id: 'router',
-    name: 'Router.so — Self-Hosted Form Backend',
+    name: 'Router.so: Self-Hosted Form Backend',
     tagline: 'Self-hosted deployment of the open-source router.so form/lead-routing backend.',
     description:
-      'A self-hosted instance of router.so (headless form handling and lead routing). The 269-commit count largely reflects upstream history — treat this as a deployment/operations project, NOT 269 commits of original authorship. Useful for demonstrating self-hosting of a TypeScript + Postgres + Docker stack.',
+      'A self-hosted instance of router.so (headless form handling and lead routing). The 269-commit count largely reflects upstream history, treat this as a deployment/operations project, NOT 269 commits of original authorship. Useful for demonstrating self-hosting of a TypeScript + Postgres + Docker stack.',
     zone: 'web',
     type: 'fork',
     tile: false,
@@ -703,7 +716,7 @@ export const allProjects: Project[] = [
     name: 'CSE445 XML Assignment',
     tagline: 'XML / web-services coursework (CSE445).',
     description:
-      'A small XML-focused assignment for ASU CSE445 (Distributed Software Development) — XML schemas/documents.',
+      'A small XML-focused assignment for ASU CSE445 (Distributed Software Development), XML schemas/documents.',
     zone: 'ml',
     type: 'coursework',
     tile: false,
@@ -761,10 +774,10 @@ export const allProjects: Project[] = [
   },
   {
     id: 'powergrader',
-    name: 'PowerGrader — AI Automated Grading (SODA Hackathon)',
+    name: 'PowerGrader: AI Automated Grading (SODA Hackathon)',
     tagline: 'Hackathon web app that auto-grades written student assignments, built by a 4-person team.',
     description:
-      'Built at the SODA Hackathon (track: scaling/accessibility in education) with team "SSGA" (4 members). PowerGrader is a web application that provides automated grading for written assignment submissions on online education platforms — filling a gap left by tools that only grade multiple-choice or embedded-code questions. Next.js frontend, Flask (Python) backend, and Firebase. Includes a recorded UI demo and a project presentation. Repo has an external fork.',
+      'Built at the SODA Hackathon (track: scaling/accessibility in education) with team "SSGA" (4 members). PowerGrader is a web application that provides automated grading for written assignment submissions on online education platforms, filling a gap left by tools that only grade multiple-choice or embedded-code questions. Next.js frontend, Flask (Python) backend, and Firebase. Includes a recorded UI demo and a project presentation. Repo has an external fork.',
     zone: 'ml',
     type: 'original',
     tile: true,
@@ -843,7 +856,7 @@ export const allProjects: Project[] = [
     name: 'Computer Vision Image Classifier (CNN)',
     tagline: 'Convolutional neural network for image classification.',
     description:
-      'A Python CNN built to classify images — an early hands-on deep-learning / computer-vision project.',
+      'A Python CNN built to classify images, an early hands-on deep-learning / computer-vision project.',
     zone: 'ml',
     type: 'original',
     tile: true,
@@ -862,7 +875,7 @@ export const allProjects: Project[] = [
   },
   {
     id: 'epic-store-fps',
-    name: 'Epic Store — FPS Co-Op Game (Unreal Engine)',
+    name: 'Epic Store: FPS Co-Op Game (Unreal Engine)',
     tagline: 'First-person-shooter co-op game built in Unreal Engine 5.3.',
     description:
       'A first-person-shooter cooperative game built on Unreal Engine 5.3 (C++/C#, ~27 MB). Single commit reflects a bulk push of the project. Demonstrates real-time 3D game development and engine work.',
@@ -924,7 +937,7 @@ export const externalCollections: ExternalCollection[] = [
     tagline: 'A large personal collection of Python notebooks covering many different machine-learning models.',
     url: 'https://drive.google.com/drive/u/1/folders/1b2i9qt2KYFspeNr6T9EJcP03GwqwGVwE',
     description:
-      'A Google Drive folder containing many Python/Jupyter notebooks implementing a wide range of machine-learning models and experiments. Breadth is the point here — the collection is large and intentionally not catalogued item-by-item. Treat it as supporting evidence of sustained, broad ML experimentation.',
+      'A Google Drive folder containing many Python/Jupyter notebooks implementing a wide range of machine-learning models and experiments. Breadth is the point here, the collection is large and intentionally not catalogued item-by-item. Treat it as supporting evidence of sustained, broad ML experimentation.',
     skills: ['Machine learning (broad)', 'Python / Jupyter', 'Model experimentation'],
   },
 ];

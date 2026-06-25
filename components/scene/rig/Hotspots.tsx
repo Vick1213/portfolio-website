@@ -16,11 +16,11 @@ import {
 } from '@/lib/rig';
 
 /**
- * In-scene component hotspots — one per RIG_* group, anchored to its LIVE world
+ * In-scene component hotspots, one per RIG_* group, anchored to its LIVE world
  * center (so they track the part as the rig explodes/assembles). Each is a small
  * accent LED with a generous invisible hover/click sphere. Hovering (or selecting)
- * a part raises a single constant-size datasheet callout — name, role, headline
- * skills, project count — so the labels never stack into a cluster the way 7
+ * a part raises a single constant-size datasheet callout, name, role, headline
+ * skills, project count, so the labels never stack into a cluster the way 7
  * always-on pills would. Clicking flies to the component and opens its panel.
  *
  * Interaction is 3D-raycast based (R3F pointer events) and coexists with
@@ -100,7 +100,7 @@ function Hotspot({
 
   return (
     <group ref={ref}>
-      {/* Accent LED — decorative pulse marking the part. */}
+      {/* Accent LED, decorative pulse marking the part. */}
       <mesh>
         <sphereGeometry args={[0.3, 16, 16]} />
         <meshStandardMaterial
@@ -122,7 +122,7 @@ function Hotspot({
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 
-      {/* Single datasheet callout — only the hovered / active part shows one. */}
+      {/* Single datasheet callout, only the hovered / active part shows one. */}
       {showCallout && (
         <Html center zIndexRange={[18, 8]} style={{ pointerEvents: 'none' }}>
           <div

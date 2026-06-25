@@ -7,6 +7,7 @@ import { Box3, Color, Mesh, MeshStandardMaterial, Object3D, Vector3 } from 'thre
 
 import { useUI } from '@/lib/store';
 import { rigChannel, type PCComponent } from '@/lib/rig';
+import { scrollChannel } from '@/lib/scroll';
 
 const MODEL_URL = '/models/rig.glb';
 
@@ -15,7 +16,7 @@ const MODEL_URL = '/models/rig.glb';
 const RIG_SCALE = 2.6;
 
 // How far the teardown spreads. Each chunk moves out from the build's center by
-// (its own offset from center) × this factor — the classic exploded-view law, so
+// (its own offset from center) × this factor, the classic exploded-view law, so
 // parts already near the edge travel further and the silhouette opens evenly.
 // Kept moderate: large offsets fling chunks off-screen (which black-framed the
 // composer in the original tuning), so this is the stable upper end.
@@ -47,7 +48,7 @@ export default function RigModel() {
       const restCenter = box.getCenter(new Vector3());
       const disp = restCenter.clone().sub(rigCenter).multiplyScalar(SPREAD);
       // The rig sits on a table, so the teardown must never push a chunk DOWN
-      // through the surface (the old explode only avoided this by accident — a
+      // through the surface (the old explode only avoided this by accident, a
       // stray-corrupted center flung everything sideways). Clamp downward push to
       // zero: parts above center lift up, the bottom parts (PSU/storage) just fan
       // out horizontally instead of sinking under the floor.
@@ -66,12 +67,12 @@ export default function RigModel() {
     });
   }, [root]);
 
-  // Collect the rig's LED materials — the RGB fans, the CPU-cooler ring, lit
+  // Collect the rig's LED materials, the RGB fans, the CPU-cooler ring, lit
   // logos: the parts authored to glow, identified by carrying an emissiveMap
   // (their rainbow lives in both the emissive AND the albedo texture, so killing
   // emissiveIntensity alone leaves the lit albedo glowing). For each we remember
   // the authored emissiveIntensity + base color factor. In STANDBY we drive both
-  // to ~0 so the PC reads genuinely DEAD; on power-on we ramp them back up — the
+  // to ~0 so the PC reads genuinely DEAD; on power-on we ramp them back up, the
   // "lights come on" half of the boot. Case plastic (no emissiveMap) is left lit.
   const leds = useMemo(() => {
     const out: { mat: MeshStandardMaterial; baseEI: number; baseColor: Color }[] = [];
@@ -100,7 +101,7 @@ export default function RigModel() {
   // after the primitive mounts (scale/position applied) on the next frame.
   const boundsDone = useRef(false);
 
-  // Local lerped value — never touches React state per frame.
+  // Local lerped value, never touches React state per frame.
   const t = useRef(reduced ? 1 : 0);
   const tmp = useRef(new Vector3());
   const tmpC = useRef(new Vector3());
@@ -110,10 +111,14 @@ export default function RigModel() {
   }, [reduced]);
 
   useFrame((_, delta) => {
-    // LED glow ramp — dark in standby, eased up on power-on. `reduced` boots lit.
-    const live = reduced || !useUI.getState().intro;
+    // LED glow ramp. During the scroll CINEMATIC the rig visibly "boots" as you
+    // scroll, the target glow tracks scroll progress (dark at the top → full by
+    // the end). Otherwise it's the binary standby⇄powered ramp (lit on power-on;
+    // `reduced` boots straight to lit).
+    const ui = useUI.getState();
+    const ledTarget = reduced ? 1 : ui.camMode === 'cinematic' ? scrollChannel.progress : ui.intro ? 0 : 1;
     const lk = 1 - Math.exp(-5 * Math.min(delta, 0.05));
-    ledLevel.current += ((live ? 1 : 0) - ledLevel.current) * (reduced ? 1 : lk);
+    ledLevel.current += (ledTarget - ledLevel.current) * (reduced ? 1 : lk);
     const lvl = ledLevel.current;
     // Standby floor: a hair of glow so the rings read as dormant LEDs, not holes.
     const cl = 0.04 + 0.96 * lvl;
@@ -124,7 +129,7 @@ export default function RigModel() {
 
     // One-shot: capture the whole-rig world AABB while assembled (explode ~0).
     if (!boundsDone.current && t.current < 0.05) {
-      // Whole-rig world AABB. The GLB is clean now — the export strips stray
+      // Whole-rig world AABB. The GLB is clean now, the export strips stray
       // curves and RAM is re-segmented to a tight cluster, so the old runtime
       // outlier-cull (which hid un-recentred stray meshes that corrupted the
       // center) is gone and a plain setFromObject over the root is correct.

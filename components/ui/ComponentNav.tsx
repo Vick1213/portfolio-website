@@ -4,7 +4,7 @@ import { useUI } from '@/lib/store';
 import { COMPONENT_ORDER, COMPONENT_SHORT, pcComponentById } from '@/lib/rig';
 
 /**
- * Center-HUD component nav — the 7 PC parts as compact accent chips, plus an
+ * Center-HUD component nav, the 7 PC parts as compact accent chips, plus an
  * Overview reset. Clicking a chip flies the camera to that component and opens
  * its panel; the active chip carries the part's accent.
  */

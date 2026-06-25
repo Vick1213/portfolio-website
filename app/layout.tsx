@@ -17,9 +17,9 @@ const mono = JetBrains_Mono({
 
 const BASE_URL = 'https://saatvik-choudhary.com';
 
-const TITLE = 'Saatvik Choudhary — Chip Architect & Full-Stack Engineer';
+const TITLE = 'Saatvik Choudhary, Chip Architect & Full-Stack Engineer';
 const DESCRIPTION =
-  'Chip architect & full-stack engineer — from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.';
+  'Chip architect & full-stack engineer, from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.';
 
 export const viewport: Viewport = {
   themeColor: '#05060a',
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
   },
 };
 
-// Person structured data — the primary signal that ties this site to the
+// Person structured data, the primary signal that ties this site to the
 // real-world "Saatvik Choudhary" entity. The `sameAs` links let Google
 // reconcile this site with the same person behind the LinkedIn/GitHub
 // profiles, which is what powers a knowledge/people panel.
@@ -117,7 +117,7 @@ export default function RootLayout({
       <body>
         <script
           type="application/ld+json"
-          // Server-rendered static object, not user input — safe to inline.
+          // Server-rendered static object, not user input, safe to inline.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
         />
         {children}

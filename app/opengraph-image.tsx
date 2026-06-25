@@ -5,7 +5,7 @@ export const contentType = 'image/png';
 
 const NAME = 'Saatvik Choudhary';
 const HEADLINE =
-  'Chip architect & full-stack engineer — from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.';
+  'Chip architect & full-stack engineer, from custom AI-accelerator ASICs (Verilog/RTL) to production web, mobile, and data systems.';
 
 export default async function Image() {
   return new ImageResponse(

@@ -43,6 +43,14 @@ export interface SkillCategory {
   skills: { label: string; level: string }[];
 }
 
+export interface Venture {
+  name: string;
+  role: string;
+  period: string; // e.g. "2024 – Present"
+  blurb: string;
+  url?: string;
+}
+
 export interface Profile {
   name: string;
   headline: string;
@@ -52,4 +60,5 @@ export interface Profile {
   githubAlt: string;
   booking: string;
   languages: string[];
+  ventures: Venture[]; // businesses Saatvik founded / runs (not client work)
 }

@@ -9,7 +9,7 @@ import {
 } from '@/lib/rig';
 
 /**
- * Bottom-right "BUILD MANIFEST" — the 7 PC components as a parts legend. Each row
+ * Bottom-right "BUILD MANIFEST", the 7 PC components as a parts legend. Each row
  * is clickable (flies to that component + opens its panel); the active part is
  * highlighted in its accent. Replaces the old die-floorplan minimap.
  */
@@ -18,7 +18,7 @@ export default function Minimap() {
   const reduced = useUI((s) => s.reduced);
   const tourActive = useUI((s) => s.tourActive);
 
-  // Hidden during the guided tour — the TourOverlay owns the lower-right corner.
+  // Hidden during the guided tour, the TourOverlay owns the lower-right corner.
   if (tourActive) return null;
 
   return (

@@ -6,7 +6,7 @@ import About from './About';
 import Contact from './Contact';
 import Footer from './Footer';
 
-/* Inline SVG chip-trace motif — lightweight, no canvas/three.js */
+/* Inline SVG chip-trace motif, lightweight, no canvas/three.js */
 function ChipMotif() {
   return (
     <svg
@@ -27,19 +27,19 @@ function ChipMotif() {
           <rect x="4" y="4" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="0.75" />
           {/* Die center square */}
           <rect x="14" y="14" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1" />
-          {/* Horizontal traces — top side */}
+          {/* Horizontal traces, top side */}
           <line x1="4" y1="18" x2="14" y2="18" stroke="currentColor" strokeWidth="0.75" />
           <line x1="4" y1="24" x2="14" y2="24" stroke="currentColor" strokeWidth="0.75" />
           <line x1="4" y1="30" x2="14" y2="30" stroke="currentColor" strokeWidth="0.75" />
-          {/* Horizontal traces — right side */}
+          {/* Horizontal traces, right side */}
           <line x1="34" y1="18" x2="44" y2="18" stroke="currentColor" strokeWidth="0.75" />
           <line x1="34" y1="24" x2="44" y2="24" stroke="currentColor" strokeWidth="0.75" />
           <line x1="34" y1="30" x2="44" y2="30" stroke="currentColor" strokeWidth="0.75" />
-          {/* Vertical traces — top */}
+          {/* Vertical traces, top */}
           <line x1="18" y1="4" x2="18" y2="14" stroke="currentColor" strokeWidth="0.75" />
           <line x1="24" y1="4" x2="24" y2="14" stroke="currentColor" strokeWidth="0.75" />
           <line x1="30" y1="4" x2="30" y2="14" stroke="currentColor" strokeWidth="0.75" />
-          {/* Vertical traces — bottom */}
+          {/* Vertical traces, bottom */}
           <line x1="18" y1="34" x2="18" y2="44" stroke="currentColor" strokeWidth="0.75" />
           <line x1="24" y1="34" x2="24" y2="44" stroke="currentColor" strokeWidth="0.75" />
           <line x1="30" y1="34" x2="30" y2="44" stroke="currentColor" strokeWidth="0.75" />
@@ -78,7 +78,7 @@ export default function MobileFallback() {
       >
         <ChipMotif />
 
-        {/* Text layer — above SVG */}
+        {/* Text layer, above SVG */}
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '680px', margin: '0 auto' }}>
           <div
             style={{
@@ -177,7 +177,7 @@ export default function MobileFallback() {
             </a>
           </div>
 
-          {/* Four-zone accent legend hairline — previews the scene palette */}
+          {/* Four-zone accent legend hairline, previews the scene palette */}
           <div
             aria-hidden="true"
             style={{

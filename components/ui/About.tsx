@@ -41,6 +41,31 @@ export default function About() {
         Silicon to full-stack
       </h2>
 
+      {/* Lead: the business Saatvik founded and runs (not client work). */}
+      {profile.ventures.map((v) => (
+        <p
+          key={v.name}
+          style={{
+            fontSize: '0.98rem',
+            color: '#0f172a',
+            lineHeight: 1.7,
+            marginBottom: '1.1rem',
+            maxWidth: '760px',
+            fontWeight: 600,
+          }}
+        >
+          {v.role} of{' '}
+          {v.url ? (
+            <a href={v.url} target="_blank" rel="noreferrer" style={{ color: '#a21caf', textDecoration: 'underline' }}>
+              {v.name}
+            </a>
+          ) : (
+            v.name
+          )}{' '}
+          ({v.period}), {v.blurb}
+        </p>
+      ))}
+
       {/* Bio narrative from XML <breadth> */}
       <p
         style={{
@@ -53,7 +78,7 @@ export default function About() {
       >
         My work spans two GitHub accounts active from 2022 to 2026. The primary account
         (Vick1213) concentrates on production web and chip-design work: a from-scratch
-        AI-inference accelerator ASIC program (AiToChip — Neural MAX and Neural 1),
+        AI-inference accelerator ASIC program (AiToChip, Neural MAX and Neural 1),
         an eight-month AI productivity platform (ProductivityAI), a multi-tenant
         e-commerce marketplace, and a local-first market-intelligence terminal pairing
         Next.js with FastAPI and local NLP models. The earlier account (saatvik1213)
@@ -75,7 +100,7 @@ export default function About() {
         chip (RTL through synthesis), an AI productivity SaaS maintained over 93
         commits, a wildcard-subdomain multi-tenant marketplace, and a React Native
         cross-platform storytelling app. Earlier ML portfolio includes NLP sentiment
-        analysis, sign-language video-to-text, and CNN image classification —
+        analysis, sign-language video-to-text, and CNN image classification,
         predating the recent web and chip work.
       </p>
 
@@ -100,7 +125,7 @@ export default function About() {
           >
             {mlCollection.name} (Google Drive)
           </a>
-          {' — '}
+          {', '}
           {mlCollection.tagline} Available on request.
         </aside>
       )}

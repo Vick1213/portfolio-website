@@ -132,11 +132,27 @@ export default function ResumeView() {
               color: '#475569',
               lineHeight: 1.55,
               maxWidth: '640px',
-              margin: '0 0 1.4rem',
+              margin: '0 0 0.8rem',
             }}
           >
             {profile.headline}
           </p>
+
+          {/* Founder / ventures, his own businesses (not client work) */}
+          {profile.ventures.map((v) => (
+            <p key={v.name} style={{ fontSize: '0.98rem', color: '#0f172a', margin: '0 0 1.4rem' }}>
+              <strong style={{ fontWeight: 700 }}>{v.role}</strong>
+              {', '}
+              {v.url ? (
+                <a href={v.url} target="_blank" rel="noreferrer" className="resume-hero-link" style={{ fontWeight: 700, color: '#a21caf' }}>
+                  {v.name}
+                </a>
+              ) : (
+                <span style={{ fontWeight: 700 }}>{v.name}</span>
+              )}{' '}
+              <span style={{ color: '#94a3b8', fontWeight: 500 }}>({v.period})</span>
+            </p>
+          ))}
 
           {/* Status + contact row */}
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.1rem' }}>
@@ -171,7 +187,7 @@ export default function ResumeView() {
             <a href={profile.githubAlt} target="_blank" rel="noreferrer" className="resume-hero-link">GitHub · saatvik1213</a>
           </div>
 
-          {/* Zone-legend hairline — ties this page to the 3D HUD's accent rule. */}
+          {/* Zone-legend hairline, ties this page to the 3D HUD's accent rule. */}
           <div
             aria-hidden="true"
             style={{
@@ -389,7 +405,7 @@ export default function ResumeView() {
                         background: skill.level === 'advanced' ? '#eef2ff' : '#f1f5f9',
                         borderColor: skill.level === 'advanced' ? '#dbe2fe' : '#e6eaf1',
                         color: skill.level === 'advanced' ? '#3730a3' : '#475569',
-                        // Skill labels are full phrases, not short tokens — let them
+                        // Skill labels are full phrases, not short tokens, let them
                         // wrap inside the chip so they never spill past the card edge.
                         whiteSpace: 'normal',
                         maxWidth: '100%',
@@ -421,7 +437,7 @@ export default function ResumeView() {
           >
             <img
               src="/images/saatvik-choudhary.jpg"
-              alt="Saatvik Choudhary — chip architect and full-stack engineer"
+              alt="Saatvik Choudhary, chip architect and full-stack engineer"
               width={112}
               height={112}
               loading="lazy"
