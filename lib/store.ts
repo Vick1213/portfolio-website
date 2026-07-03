@@ -105,7 +105,7 @@ export const useUI = create<UIState>((set, get) => ({
   setIntro: (v) => set({ intro: v }),
   tourAfterBoot: false,
   setTourAfterBoot: (v) => set({ tourAfterBoot: v }),
-  view: '3d',
+  view: 'list',
   setView: (v) => set({ view: v }),
   reduced: false,
   setReduced: (v) => set({ reduced: v }),

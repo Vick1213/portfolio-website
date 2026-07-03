@@ -34,12 +34,14 @@ export default function Page() {
     return <MobileFallback />;
   }
 
-  // Desktop user explicitly chose the list/resume view.
+  // Default landing view: the dark editorial résumé page. The 3D "exploded
+  // rig" experience is opt-in via the résumé's own nav/CTA (no <Hud/> here,
+  // ResumeNav carries the 3D switch instead).
   if (view === 'list') {
     return (
       <>
-        <Hud />
         <ResumeView />
+        <ChatLauncher />
       </>
     );
   }

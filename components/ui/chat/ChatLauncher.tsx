@@ -15,7 +15,7 @@ export default function ChatLauncher() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed z-50" style={{ right: '1rem', bottom: '5rem' }}>
+    <div className="chat-launcher-root fixed z-50" style={{ right: '1rem', bottom: '5rem' }}>
       {open && (
         <div
           className="mb-3"

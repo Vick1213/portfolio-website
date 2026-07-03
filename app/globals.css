@@ -55,6 +55,18 @@ html.cinematic-scroll body {
   height: auto;
 }
 
+/* ── Print ──────────────────────────────────────────────────────────── */
+/* The app locks html/body to one viewport for the 3D scene; without this,
+   printing clips the résumé to a single near-empty page. */
+@media print {
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+}
+
 /* ── Focus-visible global baseline ─────────────────────────────────── */
 /* Remove default outline and rely on focus-visible (keyboard-only). */
 :focus {
