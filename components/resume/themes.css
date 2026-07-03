@@ -1,0 +1,585 @@
+/*
+ * Résumé theme system — driven by data-theme on .rz-root (see lib/themeStore).
+ * 'spec' is the base look defined in ResumeView's inline tokens; every rule
+ * here is scoped under .rz-root[data-theme='…'] so nothing leaks into the 3D
+ * view or other surfaces. Font swaps ride the --rz-display / --rz-serif /
+ * --rz-mono / --rz-body-font tokens that all rz-* classes already consume.
+ *
+ * Theme background layers use .rz-root::before / ::after (position: fixed,
+ * z-index: 0); ResumeView gives <main> z-index: 1 so content stays above.
+ */
+
+/* ════════════════════════════════════════════════════════════════════════
+   GLASSMORPHISM — deep night, frosted translucent cards, soft color blobs
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='glass'] {
+  --rz-bg: #0e1226;
+  --rz-surface: rgba(255, 255, 255, 0.07);
+  --rz-ink: #f1f4fb;
+  --rz-secondary: #bcc3d8;
+  --rz-muted: #99a1bd;
+  --rz-hairline: rgba(255, 255, 255, 0.14);
+  --rz-hairline-strong: rgba(255, 255, 255, 0.32);
+  --rz-accent: #7dd3fc;
+  --rz-nav-bg: rgba(14, 18, 38, 0.55);
+  --rz-nav-blur: blur(18px) saturate(1.5);
+  --rz-progress: linear-gradient(90deg, #5eead4, #7dd3fc, #818cf8, #f0abfc);
+  --rz-radius: 16px;
+  --rz-card-bg: rgba(255, 255, 255, 0.06);
+  --rz-card-border: 1px solid rgba(255, 255, 255, 0.16);
+  --rz-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --rz-grid-line: rgba(255, 255, 255, 0.05);
+}
+.rz-root[data-theme='glass']::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 42% at 12% 8%, rgba(94, 234, 212, 0.2), transparent 70%),
+    radial-gradient(50% 46% at 88% 88%, rgba(129, 140, 248, 0.22), transparent 70%),
+    radial-gradient(34% 30% at 74% 22%, rgba(240, 171, 252, 0.12), transparent 70%);
+}
+.rz-root[data-theme='glass'] ::selection {
+  background: #7dd3fc;
+  color: #0e1226;
+}
+.rz-root[data-theme='glass'] .rz-work-row,
+.rz-root[data-theme='glass'] .rz-exp-item,
+.rz-root[data-theme='glass'] .rz-skills-cell,
+.rz-root[data-theme='glass'] .rz-archive-list {
+  background: var(--rz-card-bg);
+  border: var(--rz-card-border);
+  border-radius: var(--rz-radius);
+  box-shadow: var(--rz-card-shadow);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+.rz-root[data-theme='glass'] .rz-work-row {
+  padding: clamp(24px, 3.5vw, 36px) clamp(20px, 3vw, 32px);
+  margin-top: 20px;
+}
+.rz-root[data-theme='glass'] .rz-work-row:first-child {
+  margin-top: 0;
+}
+.rz-root[data-theme='glass'] .rz-exp-item {
+  padding: 22px 24px;
+}
+.rz-root[data-theme='glass'] .rz-skills-cell {
+  padding: 18px 20px;
+}
+.rz-root[data-theme='glass'] .rz-archive-list {
+  padding: 6px 22px 10px;
+}
+.rz-root[data-theme='glass'] .rz-rig-panel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   NEOCLASSICAL — ivory paper, engraved serifs, antique-gold rules
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='neo'] {
+  --rz-bg: #f3ecdd;
+  --rz-surface: #faf5e9;
+  --rz-ink: #2b2519;
+  --rz-secondary: #5c5240;
+  --rz-muted: #82734f;
+  --rz-hairline: rgba(43, 37, 25, 0.25);
+  --rz-hairline-strong: rgba(43, 37, 25, 0.5);
+  --rz-accent: #8c6a1f;
+  --rz-nav-bg: rgba(243, 236, 221, 0.88);
+  --rz-progress: #8c6a1f;
+  --rz-display: var(--font-serif), Georgia, 'Times New Roman', serif;
+  --rz-grid-line: rgba(43, 37, 25, 0.06);
+}
+.rz-root[data-theme='neo'] ::selection {
+  background: #8c6a1f;
+  color: #f3ecdd;
+}
+/* Serif headings carry the theme — normal case, calm weight. */
+.rz-root[data-theme='neo'] .rz-hero-h1,
+.rz-root[data-theme='neo'] .rz-contact-h2 {
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.02;
+}
+.rz-root[data-theme='neo'] .rz-work-title,
+.rz-root[data-theme='neo'] .rz-exp-role,
+.rz-root[data-theme='neo'] .rz-rig-h2,
+.rz-root[data-theme='neo'] .rz-contact-email {
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+.rz-root[data-theme='neo'] .rz-eyebrow {
+  letter-spacing: 0.24em;
+}
+/* Classical double rules between the acts. */
+.rz-root[data-theme='neo'] .rz-section {
+  border-top: 4px double var(--rz-hairline-strong);
+}
+.rz-root[data-theme='neo'] .rz-ticker {
+  border-top: 4px double var(--rz-hairline-strong);
+  border-bottom: 1px solid var(--rz-hairline);
+}
+.rz-root[data-theme='neo'] .rz-nav-3d {
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid #8c6a1f;
+  color: #8c6a1f;
+}
+.rz-root[data-theme='neo'] .rz-nav-3d:hover {
+  background: #8c6a1f;
+  border-color: #8c6a1f;
+  color: #f3ecdd;
+}
+.rz-root[data-theme='neo'] .rz-rig-panel {
+  background: #2b2519;
+  border-radius: 0;
+  border: 1px solid #8c6a1f;
+}
+.rz-root[data-theme='neo'] .rz-rig-panel::before {
+  background: #8c6a1f;
+}
+.rz-root[data-theme='neo'] .rz-rig-eyebrow,
+.rz-root[data-theme='neo'] .rz-rig-h2 em {
+  color: #d4af5c;
+}
+.rz-root[data-theme='neo'] .rz-rig-button {
+  border-radius: 0;
+  background: #f3ecdd;
+  border-color: #d4af5c;
+  color: #2b2519;
+}
+.rz-root[data-theme='neo'] .rz-rig-button:hover {
+  background: #d4af5c;
+  border-color: #d4af5c;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   AURORA — near-black sky, drifting polar-light gradients, soft glow
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='aurora'] {
+  --rz-bg: #060a18;
+  --rz-surface: rgba(148, 163, 184, 0.06);
+  --rz-ink: #e7ecf8;
+  --rz-secondary: #b3bed9;
+  --rz-muted: #8d99b8;
+  --rz-hairline: rgba(148, 163, 184, 0.18);
+  --rz-hairline-strong: rgba(148, 163, 184, 0.4);
+  --rz-accent: #34d399;
+  --rz-nav-bg: rgba(6, 10, 24, 0.6);
+  --rz-nav-blur: blur(16px) saturate(1.4);
+  --rz-progress: linear-gradient(90deg, #34d399, #818cf8, #f472b6);
+  --rz-radius: 12px;
+  --rz-card-bg: rgba(148, 163, 184, 0.06);
+  --rz-card-border: 1px solid rgba(148, 163, 184, 0.16);
+  --rz-card-shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
+  --rz-grid-line: rgba(255, 255, 255, 0.04);
+}
+.rz-root[data-theme='aurora']::before {
+  content: '';
+  position: fixed;
+  inset: -20% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 44% at 22% 18%, rgba(52, 211, 153, 0.16), transparent 68%),
+    radial-gradient(44% 40% at 76% 30%, rgba(129, 140, 248, 0.17), transparent 68%),
+    radial-gradient(40% 46% at 55% 80%, rgba(244, 114, 182, 0.1), transparent 70%);
+  filter: blur(48px);
+  animation: rz-aurora-drift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes rz-aurora-drift {
+  from {
+    transform: translate3d(-2%, -1.5%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(2%, 2%, 0) scale(1.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rz-root[data-theme='aurora']::before {
+    animation: none;
+  }
+}
+.rz-root[data-theme='aurora'] ::selection {
+  background: #34d399;
+  color: #060a18;
+}
+.rz-root[data-theme='aurora'] .rz-hero-h1,
+.rz-root[data-theme='aurora'] .rz-contact-h2 {
+  text-shadow: 0 0 28px rgba(52, 211, 153, 0.3);
+}
+.rz-root[data-theme='aurora'] .rz-work-row,
+.rz-root[data-theme='aurora'] .rz-exp-item,
+.rz-root[data-theme='aurora'] .rz-skills-cell,
+.rz-root[data-theme='aurora'] .rz-archive-list {
+  background: var(--rz-card-bg);
+  border: var(--rz-card-border);
+  border-radius: var(--rz-radius);
+  box-shadow: var(--rz-card-shadow);
+}
+.rz-root[data-theme='aurora'] .rz-work-row {
+  padding: clamp(24px, 3.5vw, 36px) clamp(20px, 3vw, 32px);
+  margin-top: 18px;
+}
+.rz-root[data-theme='aurora'] .rz-work-row:first-child {
+  margin-top: 0;
+}
+.rz-root[data-theme='aurora'] .rz-exp-item {
+  padding: 22px 24px;
+}
+.rz-root[data-theme='aurora'] .rz-skills-cell {
+  padding: 18px 20px;
+}
+.rz-root[data-theme='aurora'] .rz-archive-list {
+  padding: 6px 22px 10px;
+}
+.rz-root[data-theme='aurora'] .rz-rig-panel {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   BRUTALISM — raw paper, black steel borders, hard offset shadows
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='brutal'] {
+  --rz-bg: #f4f4f0;
+  --rz-surface: #ffffff;
+  --rz-ink: #000000;
+  --rz-secondary: #111111;
+  --rz-muted: #333333;
+  --rz-hairline: #000000;
+  --rz-hairline-strong: #000000;
+  --rz-accent: #ff3b00;
+  --rz-nav-bg: #f4f4f0;
+  --rz-nav-blur: none;
+  --rz-nav-border: 3px solid #000000;
+  --rz-progress: #ff3b00;
+  --rz-radius: 0px;
+  --rz-thumb-radius: 0px;
+  --rz-card-bg: #ffffff;
+  --rz-card-border: 2px solid #000000;
+  --rz-card-shadow: 6px 6px 0 #000000;
+  --rz-grid-line: rgba(0, 0, 0, 0.08);
+}
+.rz-root[data-theme='brutal'] ::selection {
+  background: #ffe600;
+  color: #000000;
+}
+.rz-root[data-theme='brutal'] .rz-hero-h1,
+.rz-root[data-theme='brutal'] .rz-contact-h2,
+.rz-root[data-theme='brutal'] .rz-work-title,
+.rz-root[data-theme='brutal'] .rz-exp-role,
+.rz-root[data-theme='brutal'] .rz-rig-h2 {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+/* No italic serif niceties in a concrete building. */
+.rz-root[data-theme='brutal'] .rz-hero-line em,
+.rz-root[data-theme='brutal'] .rz-rig-h2 em,
+.rz-root[data-theme='brutal'] .rz-contact-h2 em {
+  font-family: inherit;
+  font-style: normal;
+  font-size: 1em;
+  color: var(--rz-accent);
+}
+.rz-root[data-theme='brutal'] .rz-section {
+  border-top: 3px solid #000000;
+}
+.rz-root[data-theme='brutal'] .rz-ticker {
+  border-top: 3px solid #000000;
+  border-bottom: 3px solid #000000;
+}
+.rz-root[data-theme='brutal'] .rz-work-row,
+.rz-root[data-theme='brutal'] .rz-exp-item,
+.rz-root[data-theme='brutal'] .rz-skills-cell,
+.rz-root[data-theme='brutal'] .rz-archive-list {
+  background: var(--rz-card-bg);
+  border: var(--rz-card-border);
+  border-radius: 0;
+  box-shadow: var(--rz-card-shadow);
+}
+.rz-root[data-theme='brutal'] .rz-work-row {
+  padding: clamp(22px, 3vw, 32px) clamp(18px, 2.5vw, 28px);
+  margin-top: 26px;
+}
+.rz-root[data-theme='brutal'] .rz-work-row:first-child {
+  margin-top: 4px;
+}
+.rz-root[data-theme='brutal'] .rz-exp-item {
+  padding: 20px 22px;
+}
+.rz-root[data-theme='brutal'] .rz-exp-item + .rz-exp-item {
+  margin-top: 1.4rem;
+}
+.rz-root[data-theme='brutal'] .rz-skills-cell {
+  padding: 16px 18px;
+}
+.rz-root[data-theme='brutal'] .rz-archive-list {
+  padding: 4px 18px 8px;
+}
+.rz-root[data-theme='brutal'] .rz-work-link,
+.rz-root[data-theme='brutal'] .rz-hero-clink,
+.rz-root[data-theme='brutal'] .rz-contact-link {
+  background-image: none;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 3px;
+}
+.rz-root[data-theme='brutal'] .rz-nav-3d {
+  border-radius: 0;
+  background: #ffe600;
+  border: 2px solid #000000;
+  color: #000000;
+  box-shadow: 4px 4px 0 #000000;
+}
+.rz-root[data-theme='brutal'] .rz-nav-3d:hover {
+  background: #000000;
+  border-color: #000000;
+  color: #ffe600;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #000000;
+}
+.rz-root[data-theme='brutal'] .rz-rig-panel {
+  background: #000000;
+  border-radius: 0;
+  box-shadow: 8px 8px 0 var(--rz-accent);
+}
+.rz-root[data-theme='brutal'] .rz-rig-button {
+  border-radius: 0;
+  background: #ffe600;
+  border: 2px solid #ffe600;
+  color: #000000;
+  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.35);
+}
+.rz-root[data-theme='brutal'] .rz-rig-button:hover {
+  background: var(--rz-accent);
+  border-color: var(--rz-accent);
+  color: #ffffff;
+  transform: translate(2px, 2px);
+}
+.rz-root[data-theme='brutal'] .rz-contact-avatar {
+  border-radius: 0;
+  border: 2px solid #000000;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   PIXEL ART — 8-bit console: Press Start 2P heads, VT323 body, hard edges
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='pixel'] {
+  --rz-bg: #1a1c2c;
+  --rz-surface: #333c57;
+  --rz-ink: #f4f4f4;
+  --rz-secondary: #c8d2e8;
+  --rz-muted: #9fb4d4;
+  --rz-hairline: rgba(244, 244, 244, 0.25);
+  --rz-hairline-strong: rgba(244, 244, 244, 0.55);
+  --rz-accent: #41a6f6;
+  --rz-nav-bg: #1a1c2c;
+  --rz-nav-blur: none;
+  --rz-nav-border: 3px solid #f4f4f4;
+  --rz-progress: #38b764;
+  --rz-radius: 0px;
+  --rz-thumb-radius: 0px;
+  --rz-card-bg: #262b44;
+  --rz-card-border: 3px solid #f4f4f4;
+  --rz-card-shadow: 5px 5px 0 rgba(0, 0, 0, 0.55);
+  --rz-grid-line: rgba(255, 255, 255, 0.06);
+  --rz-display: var(--font-pixel), monospace;
+  --rz-serif: var(--font-pixel-body), monospace;
+  --rz-mono: var(--font-pixel-body), monospace;
+  --rz-body-font: var(--font-pixel-body), monospace;
+}
+.rz-root[data-theme='pixel'] ::selection {
+  background: #ffcd75;
+  color: #1a1c2c;
+}
+.rz-root[data-theme='pixel'] img {
+  image-rendering: pixelated;
+}
+/* Press Start 2P runs ~2× wide — pull every display size down hard. */
+.rz-root[data-theme='pixel'] .rz-hero-h1 {
+  font-size: clamp(24px, 4.6vw, 50px);
+  line-height: 1.3;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.rz-root[data-theme='pixel'] .rz-contact-h2 {
+  font-size: clamp(22px, 5vw, 48px);
+  line-height: 1.3;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.rz-root[data-theme='pixel'] .rz-work-title {
+  font-size: clamp(14px, 1.9vw, 20px);
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.rz-root[data-theme='pixel'] .rz-exp-role {
+  font-size: 13px;
+  line-height: 1.7;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.rz-root[data-theme='pixel'] .rz-rig-h2 {
+  font-size: clamp(15px, 2.6vw, 26px);
+  line-height: 1.55;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.rz-root[data-theme='pixel'] .rz-contact-email {
+  font-size: clamp(12px, 2vw, 18px);
+  line-height: 1.6;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+/* Italic accents inherit VT323 (no italics in the cartridge). */
+.rz-root[data-theme='pixel'] .rz-hero-line em,
+.rz-root[data-theme='pixel'] .rz-rig-h2 em,
+.rz-root[data-theme='pixel'] .rz-contact-h2 em {
+  font-style: normal;
+  font-size: 1em;
+  color: #38b764;
+}
+/* VT323 renders small at a given px — bump body copy for legibility. */
+.rz-root[data-theme='pixel'] .rz-hero-line {
+  font-size: clamp(20px, 2.3vw, 25px);
+}
+.rz-root[data-theme='pixel'] .rz-work-tagline {
+  font-size: 20px;
+}
+.rz-root[data-theme='pixel'] .rz-work-bullets li {
+  font-size: 18px;
+}
+.rz-root[data-theme='pixel'] .rz-about-p {
+  font-size: 20px;
+}
+.rz-root[data-theme='pixel'] .rz-exp-desc {
+  font-size: 19px;
+}
+.rz-root[data-theme='pixel'] .rz-skills-list {
+  font-size: 18px;
+}
+.rz-root[data-theme='pixel'] .rz-contact-line,
+.rz-root[data-theme='pixel'] .rz-rig-line {
+  font-size: 20px;
+}
+.rz-root[data-theme='pixel'] .rz-archive-name {
+  font-size: 19px;
+}
+/* Mono microcopy (eyebrows, meta, nav) also rides VT323 — scale it up. */
+.rz-root[data-theme='pixel'] .rz-eyebrow,
+.rz-root[data-theme='pixel'] .rz-skills-cat,
+.rz-root[data-theme='pixel'] .rz-work-tech,
+.rz-root[data-theme='pixel'] .rz-work-suffix,
+.rz-root[data-theme='pixel'] .rz-hero-legend-item,
+.rz-root[data-theme='pixel'] .rz-rig-eyebrow,
+.rz-root[data-theme='pixel'] .rz-rig-zone,
+.rz-root[data-theme='pixel'] .rz-archive-tech,
+.rz-root[data-theme='pixel'] .rz-footer-inner {
+  font-size: 14px;
+}
+.rz-root[data-theme='pixel'] .rz-work-meta,
+.rz-root[data-theme='pixel'] .rz-work-idx,
+.rz-root[data-theme='pixel'] .rz-archive-year,
+.rz-root[data-theme='pixel'] .rz-exp-dates,
+.rz-root[data-theme='pixel'] .rz-about-meta,
+.rz-root[data-theme='pixel'] .rz-ticker-item {
+  font-size: 15px;
+}
+.rz-root[data-theme='pixel'] .rz-hero-contact,
+.rz-root[data-theme='pixel'] .rz-contact-links,
+.rz-root[data-theme='pixel'] .rz-work-link,
+.rz-root[data-theme='pixel'] .rz-hero-trust {
+  font-size: 17px;
+}
+.rz-root[data-theme='pixel'] .rz-nav-name,
+.rz-root[data-theme='pixel'] .rz-nav-link,
+.rz-root[data-theme='pixel'] .rz-nav-3d {
+  font-size: 15px;
+}
+.rz-root[data-theme='pixel'] .rz-themer-label {
+  font-size: 12px;
+}
+.rz-root[data-theme='pixel'] .rz-section {
+  border-top: 3px solid var(--rz-hairline);
+}
+.rz-root[data-theme='pixel'] .rz-ticker {
+  border-top: 3px solid var(--rz-hairline);
+}
+.rz-root[data-theme='pixel'] .rz-work-row,
+.rz-root[data-theme='pixel'] .rz-exp-item,
+.rz-root[data-theme='pixel'] .rz-skills-cell,
+.rz-root[data-theme='pixel'] .rz-archive-list {
+  background: var(--rz-card-bg);
+  border: var(--rz-card-border);
+  border-radius: 0;
+  box-shadow: var(--rz-card-shadow);
+}
+.rz-root[data-theme='pixel'] .rz-work-row {
+  padding: clamp(20px, 3vw, 30px) clamp(16px, 2.5vw, 26px);
+  margin-top: 24px;
+}
+.rz-root[data-theme='pixel'] .rz-work-row:first-child {
+  margin-top: 4px;
+}
+.rz-root[data-theme='pixel'] .rz-exp-item {
+  padding: 18px 20px;
+}
+.rz-root[data-theme='pixel'] .rz-exp-item + .rz-exp-item {
+  margin-top: 1.4rem;
+}
+.rz-root[data-theme='pixel'] .rz-skills-cell {
+  padding: 14px 16px;
+}
+.rz-root[data-theme='pixel'] .rz-archive-list {
+  padding: 4px 16px 8px;
+}
+.rz-root[data-theme='pixel'] .rz-nav-3d {
+  border-radius: 0;
+  background: var(--rz-accent);
+  border: 3px solid #f4f4f4;
+  color: #1a1c2c;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+}
+.rz-root[data-theme='pixel'] .rz-nav-3d:hover {
+  background: #38b764;
+  border-color: #f4f4f4;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+.rz-root[data-theme='pixel'] .rz-rig-panel {
+  background: #333c57;
+  border: 3px solid #f4f4f4;
+  border-radius: 0;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55);
+}
+.rz-root[data-theme='pixel'] .rz-rig-button {
+  border-radius: 0;
+  background: #38b764;
+  border: 3px solid #f4f4f4;
+  color: #1a1c2c;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+  font-size: 15px;
+}
+.rz-root[data-theme='pixel'] .rz-rig-button:hover {
+  background: #ffcd75;
+  border-color: #f4f4f4;
+  transform: translate(2px, 2px);
+}
+.rz-root[data-theme='pixel'] .rz-contact-avatar {
+  border-radius: 0;
+  border: 3px solid #f4f4f4;
+}

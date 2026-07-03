@@ -4,6 +4,7 @@ import { profile } from '@/lib/portfolio';
 import { useUI } from '@/lib/store';
 import { useResponsive } from '@/lib/useResponsive';
 import { resumeLenis } from './lenisRef';
+import ThemeSlider from './ThemeSlider';
 
 const ANCHORS = [
   { href: '#work', label: 'Work' },
@@ -62,6 +63,7 @@ export default function ResumeNav() {
         </a>
 
         <div className="rz-nav-right">
+          <ThemeSlider />
           <div className="rz-nav-links">
             {ANCHORS.map((a) => (
               <a
@@ -109,10 +111,10 @@ export default function ResumeNav() {
           height: 60px;
           display: flex;
           align-items: center;
-          background: rgba(245,245,242,0.82);
-          backdrop-filter: blur(12px) saturate(1.4);
-          -webkit-backdrop-filter: blur(12px) saturate(1.4);
-          border-bottom: 1px solid var(--rz-hairline);
+          background: var(--rz-nav-bg);
+          backdrop-filter: var(--rz-nav-blur, blur(12px) saturate(1.4));
+          -webkit-backdrop-filter: var(--rz-nav-blur, blur(12px) saturate(1.4));
+          border-bottom: var(--rz-nav-border, 1px solid var(--rz-hairline));
         }
         .rz-nav-inner {
           width: 100%;

@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 
+import { useTheme } from '@/lib/themeStore';
 import ResumeNav from '@/components/resume/ResumeNav';
+import '@/components/resume/themes.css';
 import ResumeHero from '@/components/resume/ResumeHero';
 import Ticker from '@/components/resume/Ticker';
 import SelectedWork from '@/components/resume/SelectedWork';
@@ -24,6 +26,7 @@ import { resumeLenis } from '@/components/resume/lenisRef';
 export default function ResumeView() {
   const rootRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
+  const theme = useTheme((s) => s.theme);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -68,7 +71,7 @@ export default function ResumeView() {
   }, []);
 
   return (
-    <div className="rz-root" ref={rootRef}>
+    <div className="rz-root" data-theme={theme} ref={rootRef}>
       <div
         className="rz-progress"
         style={{ transform: `scaleX(${progress})` }}
@@ -99,15 +102,33 @@ export default function ResumeView() {
           --rz-display: var(--font-display), var(--font-sans), system-ui, sans-serif;
           --rz-serif: var(--font-serif), Georgia, serif;
           --rz-mono: var(--font-mono), ui-monospace, monospace;
+          --rz-body-font: var(--font-sans), system-ui, -apple-system, sans-serif;
           --rz-col: 1120px;
+
+          /* Theme-system hooks — 'spec' defaults; themes.css overrides per
+             [data-theme]. */
+          --rz-nav-bg: rgba(245,245,242,0.82);
+          --rz-progress: linear-gradient(90deg, #0d9488, #4f46e5, #a21caf, #b45309);
+          --rz-radius: 0px;
+          --rz-card-bg: transparent;
+          --rz-card-border: 1px solid transparent;
+          --rz-card-shadow: none;
+          --rz-grid-line: rgba(23,24,28,0.045);
 
           height: 100vh;
           overflow-y: auto;
           overflow-x: hidden;
           background: var(--rz-bg);
           color: var(--rz-ink);
-          font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+          font-family: var(--rz-body-font);
           -webkit-font-smoothing: antialiased;
+          transition: background-color 0.35s ease, color 0.35s ease;
+        }
+        /* Content rides above any theme's fixed background layers
+           (.rz-root::before/::after in themes.css sit at z-index 0). */
+        .rz-root main {
+          position: relative;
+          z-index: 1;
         }
         .rz-root ::selection {
           background: var(--rz-ink);
@@ -121,7 +142,7 @@ export default function ResumeView() {
           right: 0;
           height: 2px;
           z-index: 40;
-          background: linear-gradient(90deg, #0d9488, #4f46e5, #a21caf, #b45309);
+          background: var(--rz-progress);
           transform-origin: 0 50%;
           transform: scaleX(0);
           pointer-events: none;
@@ -177,11 +198,31 @@ export default function ResumeView() {
 
         @media print {
           @page { margin: 14mm; }
-          .rz-root {
+          /* Print is always the paper spec-sheet: undo any active theme's
+             tokens and kill its fixed background layers. */
+          .rz-root,
+          .rz-root[data-theme] {
+            --rz-display: var(--font-display), var(--font-sans), system-ui, sans-serif !important;
+            --rz-serif: var(--font-serif), Georgia, serif !important;
+            --rz-mono: var(--font-mono), ui-monospace, monospace !important;
+            --rz-body-font: var(--font-sans), system-ui, -apple-system, sans-serif !important;
+            --rz-ink: #17181c !important;
+            --rz-secondary: #4e5560 !important;
+            --rz-muted: #8a8f98 !important;
+            --rz-hairline: rgba(23,24,28,0.13) !important;
+            --rz-hairline-strong: rgba(23,24,28,0.30) !important;
+            --rz-accent: #0d9488 !important;
+            --rz-card-bg: transparent !important;
+            --rz-card-border: 1px solid transparent !important;
+            --rz-card-shadow: none !important;
             height: auto;
             overflow: visible;
             background: #ffffff !important;
             color: #111111 !important;
+          }
+          .rz-root::before,
+          .rz-root::after {
+            display: none !important;
           }
           .rz-root * {
             animation: none !important;

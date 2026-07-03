@@ -1,5 +1,12 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Space_Grotesk, Instrument_Serif } from 'next/font/google';
+import {
+  Inter,
+  JetBrains_Mono,
+  Space_Grotesk,
+  Instrument_Serif,
+  Press_Start_2P,
+  VT323,
+} from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
@@ -26,6 +33,22 @@ const serif = Instrument_Serif({
   weight: '400',
   style: ['normal', 'italic'],
   variable: '--font-serif',
+  display: 'swap',
+});
+
+// Pixel Art theme faces (résumé theme slider): Press Start 2P for headings,
+// VT323 for body/mono text.
+const pixel = Press_Start_2P({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-pixel',
+  display: 'swap',
+});
+
+const pixelBody = VT323({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-pixel-body',
   display: 'swap',
 });
 
@@ -127,7 +150,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable} ${serif.variable}`}>
+    <html
+      lang="en"
+      className={`${sans.variable} ${mono.variable} ${display.variable} ${serif.variable} ${pixel.variable} ${pixelBody.variable}`}
+    >
       <body>
         <script
           type="application/ld+json"

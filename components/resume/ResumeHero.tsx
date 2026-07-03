@@ -138,8 +138,8 @@ export default function ResumeHero() {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(to right, rgba(23,24,28,0.045) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(23,24,28,0.045) 1px, transparent 1px);
+            linear-gradient(to right, var(--rz-grid-line) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--rz-grid-line) 1px, transparent 1px);
           background-size: 56px 56px;
           -webkit-mask-image: radial-gradient(120% 90% at 70% 0%, black 20%, transparent 75%);
           mask-image: radial-gradient(120% 90% at 70% 0%, black 20%, transparent 75%);
