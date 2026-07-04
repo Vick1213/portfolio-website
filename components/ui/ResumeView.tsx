@@ -9,6 +9,7 @@ import '@/components/resume/themes.css';
 import ResumeHero from '@/components/resume/ResumeHero';
 import Ticker from '@/components/resume/Ticker';
 import SelectedWork from '@/components/resume/SelectedWork';
+import ThemeArt from '@/components/resume/ThemeArt';
 import ExperienceSection from '@/components/resume/ExperienceSection';
 import SkillsGrid from '@/components/resume/SkillsGrid';
 import ProjectArchive from '@/components/resume/ProjectArchive';
@@ -82,6 +83,7 @@ export default function ResumeView() {
         <ResumeHero />
         <Ticker />
         <SelectedWork />
+        <ThemeArt />
         <ExperienceSection />
         <SkillsGrid />
         <ProjectArchive />

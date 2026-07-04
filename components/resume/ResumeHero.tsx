@@ -4,8 +4,43 @@ import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 import { profile, zones, allProjects } from '@/lib/portfolio';
+import { useTheme, type ThemeId } from '@/lib/themeStore';
 import { ZONE_INK } from './palette';
 import Reveal from './Reveal';
+
+/**
+ * Per-theme hero plates (portrait 3:4, public/images/themes/hero-*). On the
+ * alternate themes the white-studio 3D mini-rig would clash, so the hero's
+ * right column swaps to the theme's signature artwork instead; 'spec' keeps
+ * the live rig. Bonus: unlike the WebGL rig, the art also shows on mobile.
+ */
+const HERO_ART: Partial<Record<ThemeId, { src: string; alt: string; caption: string }>> = {
+  glass: {
+    src: '/images/themes/hero-glass.jpg',
+    alt: 'Tall stack of frosted glass panes glowing teal and violet in the dark',
+    caption: 'Monolith — light through glass',
+  },
+  neo: {
+    src: '/images/themes/hero-neo.jpg',
+    alt: 'Copperplate engraving of a tall ionic column with laurel garland',
+    caption: 'Plate I — the column',
+  },
+  aurora: {
+    src: '/images/themes/hero-aurora.jpg',
+    alt: 'Vertical aurora curtain in teal, violet and magenta over a dark fjord',
+    caption: 'Aurora curtain — 66°N',
+  },
+  brutal: {
+    src: '/images/themes/hero-brutal.jpg',
+    alt: 'Brutalist concrete tower shot from below in stark black and white',
+    caption: 'Tower — béton brut',
+  },
+  pixel: {
+    src: '/images/themes/hero-pixel.png',
+    alt: 'Pixel-art gaming PC tower with rainbow RGB fans glowing at night',
+    caption: 'The rig — 8-bit build',
+  },
+};
 
 // The live 3D mini-rig is a pure flourish: client-only, deferred until idle,
 // desktop-only. Never allowed to block the recruiter-critical hero text.
@@ -14,6 +49,8 @@ const HeroRig = dynamic(() => import('./HeroRig'), { ssr: false });
 export default function ResumeHero() {
   const textRef = useRef<HTMLDivElement>(null);
   const rigRef = useRef<HTMLDivElement>(null);
+  const theme = useTheme((s) => s.theme);
+  const heroArt = HERO_ART[theme];
 
   // Subtle scroll parallax: text drifts up slightly faster than the page,
   // the rig slightly slower — just enough depth to feel alive.
@@ -107,9 +144,21 @@ export default function ResumeHero() {
             </Reveal>
           </div>
 
-          <div className="rz-hero-rig" ref={rigRef} aria-hidden="false">
-            <HeroRig />
-            <span className="rz-hero-rig-caption rz-eyebrow">Live model — click to explore</span>
+          <div
+            className={heroArt ? 'rz-hero-rig rz-hero-rig--art' : 'rz-hero-rig'}
+            ref={rigRef}
+            aria-hidden="false"
+          >
+            {heroArt ? (
+              <div className="rz-art-frame rz-hero-art">
+                <img src={heroArt.src} alt={heroArt.alt} loading="eager" decoding="async" />
+              </div>
+            ) : (
+              <HeroRig />
+            )}
+            <span className="rz-hero-rig-caption rz-eyebrow">
+              {heroArt ? heroArt.caption : 'Live model — click to explore'}
+            </span>
           </div>
         </div>
 
@@ -253,6 +302,17 @@ export default function ResumeHero() {
           height: clamp(380px, 44vw, 520px);
           will-change: transform;
         }
+        /* Themed art plate fills the rig slot; caption sits just below it. */
+        .rz-hero-art {
+          position: absolute;
+          inset: 0 0 28px;
+        }
+        .rz-hero-art img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
         .rz-hero-rig-caption {
           position: absolute;
           bottom: 0;
@@ -284,7 +344,14 @@ export default function ResumeHero() {
 
         @media (max-width: 899px) {
           .rz-hero-grid { grid-template-columns: 1fr; }
+          /* The WebGL rig stays desktop-only, but a static art plate is cheap
+             enough to show on phones. */
           .rz-hero-rig { display: none; }
+          .rz-hero-rig--art {
+            display: block;
+            height: 320px;
+            max-width: 340px;
+          }
           .rz-specbar-mid { display: none; }
         }
       `}</style>

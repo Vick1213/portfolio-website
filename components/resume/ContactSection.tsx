@@ -1,10 +1,58 @@
 'use client';
 
 import { profile } from '@/lib/portfolio';
+import { useTheme, type ThemeId } from '@/lib/themeStore';
 import Reveal from './Reveal';
+
+/**
+ * Themed contact avatars — the real headshot restyled per theme (generated
+ * from the same photo, likeness preserved). Themes without one use the real
+ * photo; print always falls back to the real photo via CSS.
+ */
+const THEMED_AVATAR: Partial<Record<ThemeId, { src: string; sticker?: boolean }>> = {
+  pixel: { src: '/images/themes/avatar-pixel-cutout.png', sticker: true },
+  neo: { src: '/images/themes/avatar-neo.jpg' },
+  brutal: { src: '/images/themes/avatar-brutal.jpg' },
+};
+
+/**
+ * Theme-aware outro plate closing the page above the footer — a quieter,
+ * horizon-shaped echo of the mid-page interlude. Spec stays lean (no entry)
+ * and print hides it entirely.
+ */
+const OUTRO_ART: Partial<Record<ThemeId, { src: string; alt: string; caption: string }>> = {
+  glass: {
+    src: '/images/themes/outro-glass.jpg',
+    alt: 'Row of frosted glass panes glowing teal and violet on a dark mirror floor',
+    caption: 'Outro — panes at rest',
+  },
+  neo: {
+    src: '/images/themes/outro-neo.jpg',
+    alt: 'Engraved neoclassical frieze of laurel swags and acanthus scrolls on ivory paper',
+    caption: 'Outro — plate IX, the frieze',
+  },
+  aurora: {
+    src: '/images/themes/outro-aurora.jpg',
+    alt: 'Aurora in teal, violet and pink mirrored in a still arctic lake',
+    caption: 'Outro — still water, 66°N',
+  },
+  brutal: {
+    src: '/images/themes/outro-brutal.jpg',
+    alt: 'Raking shadow across a long raw concrete wall in black and white',
+    caption: 'Outro — wall, late sun',
+  },
+  pixel: {
+    src: '/images/themes/outro-pixel.png',
+    alt: 'Pixel-art night rooftops with antennas and one glowing window',
+    caption: 'Outro — one window still on',
+  },
+};
 
 export default function ContactSection() {
   const year = new Date().getFullYear();
+  const theme = useTheme((s) => s.theme);
+  const themedAvatar = THEMED_AVATAR[theme];
+  const outroArt = OUTRO_ART[theme];
 
   return (
     <section id="contact" aria-labelledby="contact-heading" className="rz-section rz-contact-section">
@@ -42,8 +90,22 @@ export default function ContactSection() {
               width={60}
               height={60}
               loading="lazy"
-              className="rz-contact-avatar"
+              className={themedAvatar ? 'rz-contact-avatar rz-avatar-real--hidden' : 'rz-contact-avatar'}
             />
+            {themedAvatar && (
+              <img
+                src={themedAvatar.src}
+                alt="Saatvik Choudhary, stylized for the current theme"
+                width={60}
+                height={60}
+                loading="lazy"
+                className={
+                  themedAvatar.sticker
+                    ? 'rz-contact-avatar rz-avatar-themed rz-avatar-sticker'
+                    : 'rz-contact-avatar rz-avatar-themed'
+                }
+              />
+            )}
             <div className="rz-contact-links">
               <a href={profile.booking} target="_blank" rel="noreferrer" className="rz-contact-link">
                 Book a 30-min chat
@@ -63,6 +125,24 @@ export default function ContactSection() {
             </div>
           </div>
         </Reveal>
+
+        {outroArt && (
+          <Reveal delay={300}>
+            <figure className="rz-outro">
+              <div className="rz-outro-frame">
+                <img
+                  src={outroArt.src}
+                  alt={outroArt.alt}
+                  width={1600}
+                  height={689}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <figcaption className="rz-eyebrow rz-outro-caption">{outroArt.caption}</figcaption>
+            </figure>
+          </Reveal>
+        )}
       </div>
 
       <footer className="rz-footer">
@@ -152,6 +232,47 @@ export default function ContactSection() {
           background-size: 100% 1px;
         }
         .rz-contact-sep { color: var(--rz-hairline-strong); }
+
+        /* Themed avatar swap: on screen the stylized portrait replaces the
+           photo; print always shows the real headshot. */
+        .rz-avatar-real--hidden { display: none; }
+        @media print {
+          .rz-avatar-real--hidden { display: block; }
+          .rz-avatar-themed { display: none !important; }
+        }
+        /* Sticker variant — transparent cutout floats free of the circular
+           frame with a hard offset shadow. */
+        .rz-avatar-sticker {
+          border: none;
+          border-radius: 0;
+          object-fit: contain;
+          transform: rotate(-5deg);
+          filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.35));
+        }
+
+        .rz-outro {
+          margin: clamp(3rem, 6vw, 5rem) 0 0;
+        }
+        .rz-outro-frame {
+          border: var(--rz-card-border);
+          border-radius: var(--rz-radius);
+          box-shadow: var(--rz-card-shadow);
+          overflow: hidden;
+          line-height: 0;
+        }
+        .rz-outro-frame img {
+          width: 100%;
+          height: clamp(160px, 24vw, 300px);
+          object-fit: cover;
+          display: block;
+        }
+        .rz-outro-caption {
+          margin-top: 10px;
+          text-align: right;
+        }
+        @media print {
+          .rz-outro { display: none !important; }
+        }
 
         .rz-footer {
           margin-top: clamp(4rem, 8vw, 7rem);

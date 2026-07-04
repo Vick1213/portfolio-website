@@ -26,6 +26,14 @@ export default function RigCta() {
       <div className="rz-col">
         <Reveal>
           <div className="rz-rig-panel">
+            <img
+              src="/images/themes/rig-panel.jpg"
+              alt=""
+              aria-hidden="true"
+              className="rz-rig-bg"
+              loading="lazy"
+              decoding="async"
+            />
             <div className="rz-rig-top">
               <span className="rz-rig-eyebrow">Interactive version</span>
               <span className="rz-rig-zones" aria-hidden="true">
@@ -80,6 +88,25 @@ export default function RigCta() {
           height: 240px;
           background: radial-gradient(closest-side, rgba(129,140,248,0.18), transparent);
           pointer-events: none;
+        }
+
+        /* Photographic backdrop — a real tempered-glass side panel with faint
+           fan glow. Themes that restyle the panel (glass/neo/brutal/pixel)
+           hide it via themes.css. */
+        .rz-rig-bg {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.6;
+          pointer-events: none;
+        }
+        .rz-rig-top,
+        .rz-rig-h2,
+        .rz-rig-line,
+        .rz-rig-button {
+          position: relative;
         }
 
         .rz-rig-top {

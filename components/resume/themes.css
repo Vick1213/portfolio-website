@@ -160,6 +160,17 @@
   background: #d4af5c;
   border-color: #d4af5c;
 }
+/* The engraving plates get a classical double-rule frame. */
+.rz-root[data-theme='neo'] .rz-art-frame {
+  border: 4px double rgba(43, 37, 25, 0.5);
+  padding: 10px;
+  background: #faf5e9;
+}
+/* Engraved portrait reads as a mounted plate, not a photo bubble. */
+.rz-root[data-theme='neo'] .rz-contact-avatar {
+  border-radius: 0;
+  border: 1px solid rgba(43, 37, 25, 0.45);
+}
 
 /* ════════════════════════════════════════════════════════════════════════
    AURORA — near-black sky, drifting polar-light gradients, soft glow
@@ -582,4 +593,21 @@
 .rz-root[data-theme='pixel'] .rz-contact-avatar {
   border-radius: 0;
   border: 3px solid #f4f4f4;
+}
+/* The pixel avatar is a transparent cutout sticker — no frame. */
+.rz-root[data-theme='pixel'] .rz-avatar-sticker {
+  border: none;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   RIG CTA BACKDROP — the photographic tempered-glass panel only suits the
+   photographic dark panels (spec, aurora); themes that restyle the panel
+   into their own material hide it.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='glass'] .rz-rig-bg,
+.rz-root[data-theme='neo'] .rz-rig-bg,
+.rz-root[data-theme='brutal'] .rz-rig-bg,
+.rz-root[data-theme='pixel'] .rz-rig-bg {
+  display: none;
 }
