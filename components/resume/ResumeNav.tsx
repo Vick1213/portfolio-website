@@ -144,7 +144,12 @@ export default function ResumeNav() {
         .rz-nav-links {
           display: flex;
           align-items: center;
+          justify-content: flex-end;
           gap: 1.4rem;
+          /* Reserve the widest (default-font) width so the Pixel Art theme's
+             narrower VT323 labels don't shrink this block and shove the whole
+             right cluster — theme slider included — sideways. */
+          min-width: 363px;
         }
         .rz-nav-link {
           font-family: var(--rz-mono);
@@ -181,6 +186,9 @@ export default function ResumeNav() {
           border: 1px solid var(--rz-ink);
           border-radius: 999px;
           padding: 8px 16px;
+          /* Same reasoning as .rz-nav-links: hold a stable width across themes
+             so the pixel font doesn't shrink the button and shift the cluster. */
+          min-width: 204px;
           cursor: pointer;
           white-space: nowrap;
           transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
@@ -198,7 +206,7 @@ export default function ResumeNav() {
           .rz-nav-inner { padding: 0 20px; gap: 0.5rem; }
           .rz-nav-right { gap: 0.8rem; }
           .rz-nav-icons { gap: 0.6rem; }
-          .rz-nav-3d { padding: 7px 12px; }
+          .rz-nav-3d { padding: 7px 12px; min-width: 0; }
           .rz-nav-3d-full { display: none; }
           .rz-nav-3d-short { display: inline; }
         }

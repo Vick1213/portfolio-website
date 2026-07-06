@@ -71,6 +71,28 @@ export default function ResumeView() {
     };
   }, []);
 
+  // Themes swap the body/mono fonts (the Pixel Art theme's VT323 / Press Start
+  // faces are much taller), so the content reflows and grows on theme change.
+  // Lenis caches its scroll limit at mount and — because .rz-root is a fixed
+  // 100vh box whose own size never changes — its ResizeObserver never fires, so
+  // it keeps clamping wheel-scroll to the old, shorter height and you can't
+  // reach the bottom. Force a recompute on every theme change, and again once
+  // the async webfont swap has settled (which reflows a second time).
+  useEffect(() => {
+    const lenis = resumeLenis.current;
+    if (!lenis) return;
+    lenis.resize();
+    const raf = requestAnimationFrame(() => lenis.resize());
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) lenis.resize();
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
+  }, [theme]);
+
   return (
     <div className="rz-root" data-theme={theme} ref={rootRef}>
       <div
