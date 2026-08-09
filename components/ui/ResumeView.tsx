@@ -58,6 +58,8 @@ export default function ResumeView() {
       requestAnimationFrame(() => {
         const max = root.scrollHeight - root.clientHeight;
         setProgress(max > 0 ? root.scrollTop / max : 0);
+        // Drives the nav's scroll-edge material (see ResumeNav).
+        root.classList.toggle('rz-scrolled', root.scrollTop > 8);
         ticking = false;
       });
     };
@@ -78,6 +80,21 @@ export default function ResumeView() {
   // it keeps clamping wheel-scroll to the old, shorter height and you can't
   // reach the bottom. Force a recompute on every theme change, and again once
   // the async webfont swap has settled (which reflows a second time).
+  // Theme swaps flip the palette anywhere from ivory paper to near-black sky.
+  // An instant swap of every element's colors reads as a flash-bang; briefly
+  // arm a transition class so background/color/border/shadow cross-fade while
+  // the new tokens land, then drop it so normal interactions stay snappy.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    root.classList.add('rz-theming');
+    const t = window.setTimeout(() => root.classList.remove('rz-theming'), 420);
+    return () => {
+      window.clearTimeout(t);
+      root.classList.remove('rz-theming');
+    };
+  }, [theme]);
+
   useEffect(() => {
     const lenis = resumeLenis.current;
     if (!lenis) return;
@@ -147,6 +164,20 @@ export default function ResumeView() {
           font-family: var(--rz-body-font);
           -webkit-font-smoothing: antialiased;
           transition: background-color 0.35s ease, color 0.35s ease;
+        }
+        /* Cross-fade window while a theme swap settles (see the theme effect).
+           Only color-ish properties ease — fonts and layout still snap. */
+        .rz-root.rz-theming,
+        .rz-root.rz-theming *,
+        .rz-root.rz-theming *::before,
+        .rz-root.rz-theming *::after {
+          transition:
+            background-color 380ms ease,
+            color 380ms ease,
+            border-color 380ms ease,
+            box-shadow 380ms ease,
+            fill 380ms ease,
+            stroke 380ms ease !important;
         }
         /* Content rides above any theme's fixed background layers
            (.rz-root::before/::after in themes.css sit at z-index 0). */

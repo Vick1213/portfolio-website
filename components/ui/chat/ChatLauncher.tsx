@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { usePresence } from '@/lib/usePresence';
 import ChatPanel from './ChatPanel';
 
 const ACCENT = '#5eead4';
+const EXIT_MS = 180;
 
 /**
  * Floating bottom-right launcher for the "Ask Saatvik" agent in the INTERACTIVE
@@ -13,15 +15,31 @@ const ACCENT = '#5eead4';
  */
 export default function ChatLauncher() {
   const [open, setOpen] = useState(false);
+  const { mounted, closing } = usePresence(open, EXIT_MS);
 
   return (
     <div className="chat-launcher-root fixed z-50" style={{ right: '1rem', bottom: '5rem' }}>
-      {open && (
+      {mounted && (
         <div
           className="mb-3"
-          style={{ width: 'min(380px, calc(100vw - 2rem))', animation: 'chat-pop 0.2s ease-out' }}
+          style={{
+            width: 'min(380px, calc(100vw - 2rem))',
+            // The popover materializes from its launcher button, so it scales
+            // around the bottom-right corner and leaves back the same way.
+            transformOrigin: '100% 100%',
+            animation: closing
+              ? `chat-pop-out ${EXIT_MS}ms cubic-bezier(0.64, 0, 0.78, 0) both`
+              : 'chat-pop 0.22s cubic-bezier(0.22, 1, 0.36, 1) both',
+          }}
         >
-          <style>{`@keyframes chat-pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }`}</style>
+          <style>{`
+            @keyframes chat-pop {
+              from { opacity: 0; transform: translateY(10px) scale(0.97); }
+            }
+            @keyframes chat-pop-out {
+              to { opacity: 0; transform: translateY(10px) scale(0.97); }
+            }
+          `}</style>
           <ChatPanel compact onNavigate={() => setOpen(false)} />
         </div>
       )}
@@ -45,6 +63,7 @@ export default function ChatLauncher() {
           boxShadow: '0 12px 34px -12px rgba(94,234,212,0.6)',
           cursor: 'pointer',
           float: 'right',
+          transition: 'background 0.18s ease, color 0.18s ease',
         }}
       >
         {open ? '✕ Close' : '💬 Ask about Saatvik'}

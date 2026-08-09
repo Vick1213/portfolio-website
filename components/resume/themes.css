@@ -295,6 +295,12 @@
   text-transform: uppercase;
   letter-spacing: -0.02em;
 }
+/* 800-weight uppercase runs ~25% wider than the spec display face — pull the
+   hero title down so CHOUDHARY stays inside its column instead of running
+   under the photo frame. */
+.rz-root[data-theme='brutal'] .rz-hero-h1 {
+  font-size: clamp(2.9rem, 7vw, 5.8rem);
+}
 /* No italic serif niceties in a concrete building. */
 .rz-root[data-theme='brutal'] .rz-hero-line em,
 .rz-root[data-theme='brutal'] .rz-rig-h2 em,
@@ -361,6 +367,11 @@
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 #000000;
 }
+/* Pressed = fully seated into its shadow. */
+.rz-root[data-theme='brutal'] .rz-nav-3d:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #000000;
+}
 .rz-root[data-theme='brutal'] .rz-rig-panel {
   background: #000000;
   border-radius: 0;
@@ -378,6 +389,10 @@
   border-color: var(--rz-accent);
   color: #ffffff;
   transform: translate(2px, 2px);
+}
+.rz-root[data-theme='brutal'] .rz-rig-button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 rgba(255, 255, 255, 0.35);
 }
 .rz-root[data-theme='brutal'] .rz-contact-avatar {
   border-radius: 0;
@@ -522,7 +537,12 @@
   font-size: 15px;
 }
 .rz-root[data-theme='pixel'] .rz-themer-label {
-  font-size: 12px;
+  font-size: 11px;
+}
+/* VT323's tall line box makes the slider column brush the viewport top edge
+   in the 60px nav — tighten it so the thumb keeps headroom when grabbed. */
+.rz-root[data-theme='pixel'] .rz-themer {
+  gap: 2px;
 }
 .rz-root[data-theme='pixel'] .rz-section {
   border-top: 3px solid var(--rz-hairline);
@@ -571,6 +591,11 @@
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
 }
+/* Pressed = fully seated into its shadow. */
+.rz-root[data-theme='pixel'] .rz-nav-3d:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.55);
+}
 .rz-root[data-theme='pixel'] .rz-rig-panel {
   background: #333c57;
   border: 3px solid #f4f4f4;
@@ -589,6 +614,10 @@
   background: #ffcd75;
   border-color: #f4f4f4;
   transform: translate(2px, 2px);
+}
+.rz-root[data-theme='pixel'] .rz-rig-button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.55);
 }
 .rz-root[data-theme='pixel'] .rz-contact-avatar {
   border-radius: 0;
@@ -610,4 +639,37 @@
 .rz-root[data-theme='brutal'] .rz-rig-bg,
 .rz-root[data-theme='pixel'] .rz-rig-bg {
   display: none;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   NAV AT REST — the scroll-edge effect (transparent nav until content scrolls
+   beneath) suits the translucent themes; Brutalism and Pixel Art use opaque
+   slabs with structural borders, so their nav keeps its material at the top.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='brutal']:not(.rz-scrolled) .rz-nav,
+.rz-root[data-theme='pixel']:not(.rz-scrolled) .rz-nav {
+  background: var(--rz-nav-bg);
+  border-bottom: var(--rz-nav-border);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SKILL CONSTELLATION PALETTE — dark themes swap the deep spec accents for
+   the brighter zone colors so nodes and edges don't sink into the sky.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rz-root[data-theme='glass'] .rz-constellation,
+.rz-root[data-theme='aurora'] .rz-constellation,
+.rz-root[data-theme='pixel'] .rz-constellation {
+  --rz-const-0: #5eead4;
+  --rz-const-1: #818cf8;
+  --rz-const-2: #f0abfc;
+  --rz-const-3: #fbbf24;
+}
+/* Brutalism: monochrome plate with the signal-red accent doing the talking. */
+.rz-root[data-theme='brutal'] .rz-constellation {
+  --rz-const-0: #ff3b00;
+  --rz-const-1: #000000;
+  --rz-const-2: #ff3b00;
+  --rz-const-3: #000000;
 }

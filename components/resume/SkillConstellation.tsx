@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { skillCategories } from '@/lib/portfolio';
 
@@ -45,11 +45,13 @@ const PAD = 8; // canvas padding for label bounding boxes
 const NODE_MARGIN = 14; // keep skill nodes this far inside the canvas
 const D2R = Math.PI / 180;
 
-const PALETTE = ['#0d9488', '#4f46e5', '#a21caf', '#b45309'];
-const INK = '#16181d';
-const LABEL_FILL = '#4c5560';
-const INT_FILL = '#9aa0aa';
-const MONO = "'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace";
+// Category colors ride CSS vars so themes.css can re-tune them per theme
+// (dark themes swap in brighter variants; see .rz-constellation overrides).
+const PALETTE = ['var(--rz-const-0)', 'var(--rz-const-1)', 'var(--rz-const-2)', 'var(--rz-const-3)'];
+const INK = 'var(--rz-ink)';
+const LABEL_FILL = 'var(--rz-secondary)';
+const INT_FILL = 'var(--rz-muted)';
+const MONO = 'var(--rz-mono)';
 
 type Anchor = 'start' | 'middle' | 'end';
 
@@ -196,28 +198,81 @@ function buildLayout(): CatNode[] {
   });
 }
 
-// Add alpha to a #rrggbb hex.
-function withAlpha(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
 export default function SkillConstellation() {
   const cats = useMemo(buildLayout, []);
   const [active, setActive] = useState<string | null>(null);
+  const [hoverSkill, setHoverSkill] = useState<string | null>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const reducedRef = useRef(false);
+
+  useEffect(() => {
+    reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
+
+  // Pointer-follow tilt: the whole graph leans toward the cursor (perspective on
+  // the wrapper, rotate on the svg), giving the flat SVG a physical, 3D read.
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (reducedRef.current) return;
+    const el = wrapRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width - 0.5;
+    const ny = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty('--rz-tilt-x', `${(-ny * 7).toFixed(2)}deg`);
+    el.style.setProperty('--rz-tilt-y', `${(nx * 7).toFixed(2)}deg`);
+  };
+  const onPointerLeave = () => {
+    const el = wrapRef.current;
+    if (el) {
+      el.style.setProperty('--rz-tilt-x', '0deg');
+      el.style.setProperty('--rz-tilt-y', '0deg');
+    }
+    setActive(null);
+    setHoverSkill(null);
+  };
 
   return (
-    <div className="rz-constellation" aria-hidden="true">
+    <div
+      className="rz-constellation"
+      aria-hidden="true"
+      ref={wrapRef}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+    >
       <style>{`
-        .rz-constellation { width: 100%; }
-        .rz-constellation svg { width: 100%; height: auto; display: block; overflow: visible; }
+        .rz-constellation {
+          width: 100%;
+          /* Default (spec) category palette; dark themes override in themes.css. */
+          --rz-const-0: #0d9488;
+          --rz-const-1: #4f46e5;
+          --rz-const-2: #a21caf;
+          --rz-const-3: #b45309;
+          /* Sits on the theme's card material with a faint blueprint dot-grid,
+             so the graph reads as a mounted plate instead of loose marks that
+             blend into the page background. */
+          background:
+            radial-gradient(var(--rz-grid-line) 1px, transparent 1px) 0 0 / 26px 26px,
+            var(--rz-card-bg);
+          border: var(--rz-card-border);
+          border-radius: var(--rz-radius);
+          box-shadow: var(--rz-card-shadow);
+          padding: clamp(16px, 2.5vw, 30px);
+          perspective: 1100px;
+        }
+        .rz-constellation svg {
+          width: 100%;
+          height: auto;
+          display: block;
+          overflow: visible;
+          transform: rotateX(var(--rz-tilt-x, 0deg)) rotateY(var(--rz-tilt-y, 0deg));
+          transition: transform 0.2s ease-out;
+        }
         .rz-branch { transition: opacity 200ms ease; }
         .rz-branch text { transition: fill 200ms ease, font-weight 200ms ease; }
-        .rz-branch line, .rz-branch circle { transition: stroke 200ms ease, fill 200ms ease, opacity 200ms ease; }
+        .rz-branch line, .rz-branch circle { transition: stroke 200ms ease, fill 200ms ease, opacity 200ms ease, r 150ms ease; }
         .rz-cat-hit { cursor: pointer; outline: none; }
         .rz-cat-hit:focus-visible .rz-cat-label { text-decoration: underline; }
+        .rz-skill-hit { cursor: default; }
         @keyframes rz-drift {
           from { transform: translate(0px, 0px); }
           to   { transform: translate(3px, -4px); }
@@ -240,8 +295,10 @@ export default function SkillConstellation() {
             ['--rz-delay' as string]: `${-(i * 0.8)}s`,
           };
 
-          const hubEdgeStroke = isActive ? cat.color : 'rgba(22, 24, 29, 0.25)';
-          const skillEdgeStroke = isActive ? withAlpha(cat.color, 0.55) : 'rgba(22, 24, 29, 0.14)';
+          const hubEdgeStroke = isActive ? cat.color : 'var(--rz-hairline-strong)';
+          const skillEdgeStroke = isActive
+            ? `color-mix(in srgb, ${cat.color} 55%, transparent)`
+            : 'var(--rz-hairline)';
 
           // Place the category label on the hub-facing (inward) side, always clear
           // of the outward-fanning skills. On the pure side sectors the label runs
@@ -255,7 +312,13 @@ export default function SkillConstellation() {
           const catLabelY = sideLabel ? cat.y : cat.y - Math.sign(dyHub) * 16;
 
           return (
-            <g key={cat.name} className="rz-branch" style={branchStyle}>
+            <g
+              key={cat.name}
+              className="rz-branch"
+              style={branchStyle}
+              onMouseEnter={() => setActive(cat.name)}
+              onMouseLeave={() => setActive((cur) => (cur === cat.name ? null : cur))}
+            >
               {/* hub → category */}
               <line x1={HUBX} y1={HUBY} x2={cat.x} y2={cat.y} stroke={hubEdgeStroke} strokeWidth={1} />
 
@@ -272,11 +335,21 @@ export default function SkillConstellation() {
                 />
               ))}
 
-              {/* skill nodes */}
-              {cat.skills.map((s, j) =>
-                s.advanced ? (
-                  <g key={`s-${j}`}>
-                    <circle cx={s.x} cy={s.y} r={4} fill={cat.color} />
+              {/* skill nodes — each individually hoverable: advanced nodes grow
+                  and sharpen their label; intermediate dots grow and reveal
+                  their (otherwise tooltip-only) label in place. */}
+              {cat.skills.map((s, j) => {
+                const key = `${cat.name}:${s.label}`;
+                const isHover = hoverSkill === key;
+                return s.advanced ? (
+                  <g
+                    key={`s-${j}`}
+                    className="rz-skill-hit"
+                    onMouseEnter={() => setHoverSkill(key)}
+                    onMouseLeave={() => setHoverSkill((cur) => (cur === key ? null : cur))}
+                  >
+                    <circle cx={s.x} cy={s.y} r={12} fill="transparent" />
+                    <circle cx={s.x} cy={s.y} r={isHover ? 6 : 4} fill={cat.color} />
                     <text
                       x={s.lx}
                       y={s.ly}
@@ -284,18 +357,45 @@ export default function SkillConstellation() {
                       dominantBaseline="middle"
                       fontFamily={MONO}
                       fontSize={11}
-                      fontWeight={isActive ? 600 : 400}
-                      fill={isActive ? INK : LABEL_FILL}
+                      fontWeight={isHover ? 700 : isActive ? 600 : 400}
+                      fill={isHover || isActive ? INK : LABEL_FILL}
                     >
                       {s.label}
                     </text>
                   </g>
                 ) : (
-                  <circle key={`s-${j}`} cx={s.x} cy={s.y} r={2.5} fill={isActive ? cat.color : INT_FILL}>
-                    <title>{s.label}</title>
-                  </circle>
-                )
-              )}
+                  <g
+                    key={`s-${j}`}
+                    className="rz-skill-hit"
+                    onMouseEnter={() => setHoverSkill(key)}
+                    onMouseLeave={() => setHoverSkill((cur) => (cur === key ? null : cur))}
+                  >
+                    <circle cx={s.x} cy={s.y} r={10} fill="transparent" />
+                    <circle
+                      cx={s.x}
+                      cy={s.y}
+                      r={isHover ? 4.5 : 2.5}
+                      fill={isHover || isActive ? cat.color : INT_FILL}
+                    >
+                      <title>{s.label}</title>
+                    </circle>
+                    {isHover && (
+                      <text
+                        x={s.lx}
+                        y={s.ly}
+                        textAnchor={s.anchor}
+                        dominantBaseline="middle"
+                        fontFamily={MONO}
+                        fontSize={11}
+                        fontWeight={600}
+                        fill={INK}
+                      >
+                        {s.label}
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
 
               {/* category node + focusable label */}
               <g

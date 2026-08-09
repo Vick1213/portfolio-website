@@ -46,6 +46,7 @@ const RIG_MAP: Record<string, PCComponent> = {
   'epic-store-fps': 'mobo',
 
   // CPU, core production full-stack systems
+  efficientai: 'cpu',
   productivityai: 'cpu',
   'platforms-starter-kit': 'cpu',
   'market-terminal': 'cpu',

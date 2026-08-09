@@ -58,9 +58,13 @@ export default function Hud() {
         .hud-nav-scroll {
           overflow-x: auto;
           overflow-y: hidden;
+          overscroll-behavior-x: contain;
           scrollbar-width: none;
           -ms-overflow-style: none;
           -webkit-overflow-scrolling: touch;
+        }
+        .hud-mail:active {
+          transform: scale(0.96);
         }
         .hud-nav-scroll::-webkit-scrollbar { display: none; }
         /* Free up horizontal room on small screens. */
@@ -196,7 +200,7 @@ export default function Hud() {
           <a
             href={`mailto:${profile.email}`}
             aria-label={`Email ${profile.name}`}
-            className="pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
+            className="hud-mail pointer-events-auto flex-shrink-0 rounded-full font-mono text-xs px-3.5 py-1.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1"
             style={{
               border: `1px solid ${accent}`,
               color: '#06080f',

@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+
 import { profile } from '@/lib/portfolio';
 import { useUI } from '@/lib/store';
 import { useResponsive } from '@/lib/useResponsive';
@@ -43,9 +45,31 @@ function scrollToSelector(selector: string) {
 export default function ResumeNav() {
   const setView = useUI((s) => s.setView);
   const { webgl } = useResponsive();
+  const navRef = useRef<HTMLElement>(null);
+  const [active, setActive] = useState('');
+
+  // Wayfinding: highlight the nav link whose section currently sits under the
+  // reading band. Root is the .rz-root scroll container (not the viewport).
+  useEffect(() => {
+    const root = (navRef.current?.closest('.rz-root') as HTMLElement | null) ?? null;
+    const targets = ANCHORS.map((a) => document.querySelector<HTMLElement>(a.href)).filter(
+      (el): el is HTMLElement => el !== null
+    );
+    if (targets.length === 0) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+        }
+      },
+      { root, rootMargin: '-15% 0px -75% 0px' }
+    );
+    targets.forEach((t) => obs.observe(t));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <nav className="rz-nav" aria-label="Résumé navigation">
+    <nav className="rz-nav" aria-label="Résumé navigation" ref={navRef}>
       <div className="rz-nav-inner">
         <a
           href="#top"
@@ -69,7 +93,8 @@ export default function ResumeNav() {
               <a
                 key={a.href}
                 href={a.href}
-                className="rz-nav-link"
+                className={a.href === active ? 'rz-nav-link rz-nav-link--on' : 'rz-nav-link'}
+                aria-current={a.href === active ? 'true' : undefined}
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToSelector(a.href);
@@ -115,6 +140,16 @@ export default function ResumeNav() {
           backdrop-filter: var(--rz-nav-blur, blur(12px) saturate(1.4));
           -webkit-backdrop-filter: var(--rz-nav-blur, blur(12px) saturate(1.4));
           border-bottom: var(--rz-nav-border, 1px solid var(--rz-hairline));
+          transition: background 0.25s ease, border-bottom-color 0.25s ease;
+        }
+        /* Scroll edge effect: the nav sits flush with the hero at rest; its
+           material (tint + hairline) only appears once content actually
+           scrolls beneath it (.rz-scrolled is toggled by ResumeView). */
+        .rz-root:not(.rz-scrolled) .rz-nav {
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          border-bottom-color: transparent;
         }
         .rz-nav-inner {
           width: 100%;
@@ -158,9 +193,18 @@ export default function ResumeNav() {
           text-transform: uppercase;
           color: var(--rz-muted);
           text-decoration: none;
-          transition: color 0.15s ease;
+          padding-bottom: 3px;
+          background-image: linear-gradient(var(--rz-accent), var(--rz-accent));
+          background-repeat: no-repeat;
+          background-position: 0 100%;
+          background-size: 0% 2px;
+          transition: color 0.15s ease, background-size 0.2s ease;
         }
         .rz-nav-link:hover { color: var(--rz-ink); }
+        .rz-nav-link--on {
+          color: var(--rz-ink);
+          background-size: 100% 2px;
+        }
         .rz-nav-icons {
           display: flex;
           align-items: center;
@@ -174,6 +218,9 @@ export default function ResumeNav() {
         .rz-nav-icon:hover {
           color: var(--rz-ink);
           transform: translateY(-1px);
+        }
+        .rz-nav-icon:active {
+          transform: translateY(0) scale(0.92);
         }
         .rz-nav-3d {
           font-family: var(--rz-mono);
@@ -197,6 +244,9 @@ export default function ResumeNav() {
           background: var(--rz-accent);
           border-color: var(--rz-accent);
           transform: translateY(-1px);
+        }
+        .rz-nav-3d:active {
+          transform: translateY(0) scale(0.98);
         }
         .rz-nav-3d-short { display: none; }
         @media (max-width: 900px) {

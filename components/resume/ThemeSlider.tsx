@@ -119,6 +119,14 @@ export default function ThemeSlider() {
           transform: scale(1.25);
           box-shadow: 0 0 0 1.5px var(--rz-ink), 0 0 12px var(--rz-accent);
         }
+        /* Grabbed: the thumb grows under the pointer the instant it's held.
+           Capped at 1.3 so it never pokes past the top of the 60px nav. */
+        .rz-themer-range:active::-webkit-slider-thumb {
+          transform: scale(1.3);
+        }
+        .rz-themer-range:active::-moz-range-thumb {
+          transform: scale(1.3);
+        }
         .rz-themer-range:focus-visible {
           outline: 2px solid var(--rz-accent);
           outline-offset: 4px;

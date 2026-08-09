@@ -184,6 +184,9 @@ export default function RigCta() {
           border-color: #5eead4;
           transform: translateY(-2px);
         }
+        .rz-rig-button:active {
+          transform: translateY(0) scale(0.98);
+        }
 
         @media (max-width: 720px) {
           .rz-rig-zones { display: none; }

@@ -2,57 +2,30 @@
 
 import { useEffect, useRef } from 'react';
 import { useUI } from '@/lib/store';
-import { pcComponentById, projectsByComponent } from '@/lib/rig';
+import { pcComponentById, projectsByComponent, type PCComponent } from '@/lib/rig';
 
 const INK = '#e6ebf4';
 
 /**
- * Right-side drawer for the ACTIVE component (when no individual project is
- * open). Shows the part's role + blurb + headline skills, then its projects as
- * clickable rows that open the existing ProjectPanel. Mutually exclusive with
- * ProjectPanel: this renders only while a component is active AND nothing is
- * selected, so the two drawers never stack.
+ * Component card content — hosted inside <RightDrawer/>, which owns the aside.
+ * Shows the part's role + blurb + headline skills, then its projects as
+ * clickable rows that swap the drawer to the ProjectPanel card.
  */
-export default function ComponentPanel() {
-  const activeComponent = useUI((s) => s.activeComponent);
-  const selected = useUI((s) => s.selected);
+export default function ComponentPanel({ componentId }: { componentId: PCComponent }) {
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  const open = activeComponent !== null && selected === null;
-
-  // Focus the close button when the panel opens.
+  // Focus the close button when the card shows.
   useEffect(() => {
-    if (open) closeRef.current?.focus();
-  }, [open, activeComponent]);
+    closeRef.current?.focus();
+  }, [componentId]);
 
-  if (!open || !activeComponent) return null;
-
-  const meta = pcComponentById[activeComponent];
+  const meta = pcComponentById[componentId];
   const accent = meta.accent;
-  const projects = projectsByComponent(activeComponent);
+  const projects = projectsByComponent(componentId);
 
   return (
-    <aside
-      role="complementary"
-      aria-label={`Component details: ${meta.label}`}
-      className="fixed top-0 right-0 bottom-0 z-40 pointer-events-auto overflow-y-auto"
-      style={{
-        width: 'min(460px, 100vw)',
-        background: 'rgba(8, 8, 16, 0.88)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderLeft: '1px solid rgba(255,255,255,0.08)',
-        borderTop: `2px solid ${accent}`,
-        animation: 'panel-slide-in 0.28s cubic-bezier(0.22,1,0.36,1) both',
-      }}
-    >
-      <style>{`
-        @keyframes panel-slide-in {
-          from { transform: translateX(100%); opacity: 0; }
-          to   { transform: translateX(0);    opacity: 1; }
-        }
-      `}</style>
-
+    <div>
+      <div aria-hidden="true" style={{ height: '2px', background: accent }} />
       <div className="flex flex-col gap-5 p-6 pb-10">
         {/* Header row: component tag + close */}
         <div className="flex items-start justify-between gap-3">
@@ -186,6 +159,6 @@ export default function ComponentPanel() {
           </ul>
         </div>
       </div>
-    </aside>
+    </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useUI } from '@/lib/store';
 import { componentOf, pcComponentById } from '@/lib/rig';
-import type { ProjType } from '@/lib/types';
+import type { Project, ProjType } from '@/lib/types';
 
 const INK = '#e6ebf4';
 
@@ -16,15 +16,13 @@ const TYPE_COLORS: Record<ProjType, { bg: string; text: string; label: string }>
   coursework:     { bg: 'rgba(100,116,139,0.15)', text: '#94a3b8', label: 'Coursework'     },
 };
 
-export default function ProjectPanel() {
-  const selected = useUI((s) => s.selected);
+/** Project card content — hosted inside <RightDrawer/>, which owns the aside. */
+export default function ProjectPanel({ project }: { project: Project }) {
   const closeProject = useUI((s) => s.closeProject);
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  // Escape closes the panel; focus the close button when panel opens
+  // Escape closes the panel; focus the close button when the card shows
   useEffect(() => {
-    if (selected === null) return;
-    // Move focus to close button when panel opens
     closeRef.current?.focus();
 
     function handleKey(e: KeyboardEvent) {
@@ -34,17 +32,15 @@ export default function ProjectPanel() {
     }
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [selected, closeProject]);
+  }, [project, closeProject]);
 
-  if (selected === null) return null;
-
-  const typeStyle = TYPE_COLORS[selected.type] ?? TYPE_COLORS['original'];
+  const typeStyle = TYPE_COLORS[project.type] ?? TYPE_COLORS['original'];
   // Component accent for this project's PC part, header/border/link-hover coherence.
-  const componentId = componentOf(selected.id);
+  const componentId = componentOf(project.id);
   const component = componentId ? pcComponentById[componentId] : null;
   const zoneAccent = component?.accent ?? typeStyle.text;
 
-  const linkDefs: { key: keyof typeof selected.links; label: string }[] = [
+  const linkDefs: { key: keyof typeof project.links; label: string }[] = [
     { key: 'repo',         label: 'Code'   },
     { key: 'live',         label: 'Live'   },
     { key: 'demo',         label: 'Demo'   },
@@ -52,27 +48,8 @@ export default function ProjectPanel() {
   ];
 
   return (
-    <aside
-      role="complementary"
-      aria-label={`Project details: ${selected.name}`}
-      className="fixed top-0 right-0 bottom-0 z-40 pointer-events-auto overflow-y-auto"
-      style={{
-        width: 'min(480px, 100vw)',
-        background: 'rgba(8, 8, 16, 0.88)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderLeft: '1px solid rgba(255,255,255,0.08)',
-        borderTop: `2px solid ${zoneAccent}`,
-        animation: 'panel-slide-in 0.28s cubic-bezier(0.22,1,0.36,1) both',
-      }}
-    >
-      <style>{`
-        @keyframes panel-slide-in {
-          from { transform: translateX(100%); opacity: 0; }
-          to   { transform: translateX(0);    opacity: 1; }
-        }
-      `}</style>
-
+    <div>
+      <div aria-hidden="true" style={{ height: '2px', background: zoneAccent }} />
       <div className="flex flex-col gap-5 p-6 pb-10">
 
         {/* Header row: back-to-component + type badge + close */}
@@ -136,7 +113,7 @@ export default function ProjectPanel() {
           className="font-sans text-xl font-semibold leading-snug"
           style={{ color: INK }}
         >
-          {selected.name}
+          {project.name}
         </h2>
 
         {/* Tagline */}
@@ -144,7 +121,7 @@ export default function ProjectPanel() {
           className="font-sans text-sm leading-relaxed italic"
           style={{ color: 'rgba(255,255,255,0.5)' }}
         >
-          {selected.tagline}
+          {project.tagline}
         </p>
 
         {/* Divider */}
@@ -159,13 +136,13 @@ export default function ProjectPanel() {
           className="font-sans text-sm leading-relaxed"
           style={{ color: 'rgba(255,255,255,0.7)' }}
         >
-          {selected.description}
+          {project.description}
         </p>
 
         {/* Tech chips */}
-        {selected.tech.length > 0 && (
+        {project.tech.length > 0 && (
           <ul aria-label="Technologies" className="flex flex-wrap gap-1.5 list-none p-0 m-0">
-            {selected.tech.map((t) => (
+            {project.tech.map((t) => (
               <li
                 key={t}
                 className="font-mono text-xs px-2 py-0.5 rounded"
@@ -182,9 +159,9 @@ export default function ProjectPanel() {
         )}
 
         {/* Bullets */}
-        {selected.bullets.length > 0 && (
+        {project.bullets.length > 0 && (
           <ul className="flex flex-col gap-2 list-none p-0 m-0" aria-label="Highlights">
-            {selected.bullets.map((b, i) => (
+            {project.bullets.map((b, i) => (
               <li
                 key={i}
                 className="flex gap-2.5 font-sans text-sm leading-relaxed"
@@ -202,10 +179,10 @@ export default function ProjectPanel() {
         )}
 
         {/* Link buttons */}
-        {linkDefs.some(({ key }) => !!selected.links[key]) && (
+        {linkDefs.some(({ key }) => !!project.links[key]) && (
           <nav aria-label="Project links" className="flex flex-wrap gap-2 pt-1">
             {linkDefs.map(({ key, label }) => {
-              const href = selected.links[key];
+              const href = project.links[key];
               if (!href) return null;
               return (
                 <a
@@ -235,6 +212,6 @@ export default function ProjectPanel() {
           </nav>
         )}
       </div>
-    </aside>
+    </div>
   );
 }

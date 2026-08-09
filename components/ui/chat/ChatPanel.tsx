@@ -59,6 +59,44 @@ export default function ChatPanel({ compact = false, onNavigate }: { compact?: b
     >
       <div aria-hidden style={{ height: '3px', background: 'linear-gradient(90deg, #5eead4, #818cf8, #f0abfc, #fbbf24)' }} />
 
+      <style>{`
+        .chat-chip {
+          font-size: 0.68rem;
+          padding: 0.4rem 0.7rem;
+          border-radius: 999px;
+          border: 1px solid rgba(94, 234, 212, 0.25);
+          color: ${ACCENT};
+          background: rgba(94, 234, 212, 0.07);
+          cursor: pointer;
+          transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .chat-chip:hover {
+          background: rgba(94, 234, 212, 0.16);
+          border-color: rgba(94, 234, 212, 0.5);
+        }
+        .chat-chip:active { transform: scale(0.96); }
+
+        .chat-input {
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 10px;
+          padding: 0.6rem 0.8rem;
+          font-size: 0.9rem;
+          color: #e6ebf4;
+          outline: none;
+          transition: border-color 0.15s ease, background 0.15s ease;
+        }
+        .chat-input:focus {
+          border-color: rgba(94, 234, 212, 0.45);
+          background: rgba(255, 255, 255, 0.06);
+        }
+
+        @keyframes chat-msg-in {
+          from { opacity: 0; transform: translateY(6px); }
+        }
+        .chat-msg { animation: chat-msg-in 0.24s ease-out both; }
+      `}</style>
+
       {/* Header */}
       <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <span className="inline-block rounded-full" style={{ width: 7, height: 7, background: ACCENT, boxShadow: `0 0 8px ${ACCENT}` }} />
@@ -71,7 +109,11 @@ export default function ChatPanel({ compact = false, onNavigate }: { compact?: b
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3"
+        style={{ overscrollBehavior: 'contain' }}
+      >
         {messages.length === 0 && (
           <div className="m-auto text-center" style={{ maxWidth: 320 }}>
             <p style={{ fontSize: '0.95rem', lineHeight: 1.5, color: 'rgba(230,235,244,0.85)' }}>
@@ -79,21 +121,7 @@ export default function ChatPanel({ compact = false, onNavigate }: { compact?: b
             </p>
             <div className="flex flex-wrap justify-center gap-2 mt-4">
               {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => submit(s)}
-                  className="font-mono transition-colors"
-                  style={{
-                    fontSize: '0.68rem',
-                    padding: '0.4rem 0.7rem',
-                    borderRadius: '999px',
-                    border: `1px solid ${ACCENT}40`,
-                    color: ACCENT,
-                    background: `${ACCENT}12`,
-                    cursor: 'pointer',
-                  }}
-                >
+                <button key={s} type="button" onClick={() => submit(s)} className="chat-chip font-mono">
                   {s}
                 </button>
               ))}
@@ -104,7 +132,7 @@ export default function ChatPanel({ compact = false, onNavigate }: { compact?: b
         {messages.map((m) => {
           const isUser = m.role === 'user';
           return (
-            <div key={m.id} className="flex" style={{ justifyContent: isUser ? 'flex-end' : 'flex-start' }}>
+            <div key={m.id} className="chat-msg flex" style={{ justifyContent: isUser ? 'flex-end' : 'flex-start' }}>
               <div
                 style={{
                   maxWidth: '85%',
@@ -157,16 +185,7 @@ export default function ChatPanel({ compact = false, onNavigate }: { compact?: b
           onChange={(e) => setInput(e.currentTarget.value)}
           placeholder="Ask about Saatvik…"
           maxLength={2000}
-          className="flex-1 font-sans"
-          style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            borderRadius: '10px',
-            padding: '0.6rem 0.8rem',
-            fontSize: '0.9rem',
-            color: '#e6ebf4',
-            outline: 'none',
-          }}
+          className="chat-input flex-1 font-sans"
         />
         <button
           type="submit"

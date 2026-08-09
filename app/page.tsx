@@ -7,8 +7,7 @@ import { useResponsive } from '@/lib/useResponsive';
 
 import Loader from '@/components/scene/Loader';
 import Hud from '@/components/ui/Hud';
-import ProjectPanel from '@/components/ui/ProjectPanel';
-import ComponentPanel from '@/components/ui/ComponentPanel';
+import RightDrawer from '@/components/ui/RightDrawer';
 import Minimap from '@/components/ui/Minimap';
 import TourOverlay from '@/components/ui/TourOverlay';
 import ResumeView from '@/components/ui/ResumeView';
@@ -57,8 +56,7 @@ export default function Page() {
       {phase === 'interactive' && (
         <>
           <Hud />
-          <ComponentPanel />
-          <ProjectPanel />
+          <RightDrawer />
           <Minimap />
           <TourOverlay />
           <ChatLauncher />

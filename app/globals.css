@@ -77,6 +77,14 @@ html.cinematic-scroll body {
   outline-offset: 2px;
 }
 
+/* ── Press feedback ─────────────────────────────────────────────────── */
+/* Respond on pointer-down, not on release: every enabled button compresses
+   the instant it's pressed. Controls whose hover state owns `transform`
+   (.rz-nav-3d, .rz-rig-button, theme variants) declare their own :active. */
+button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
 /* ── Reduced motion ─────────────────────────────────────────────────── */
 /* Gate non-essential animations behind prefers-reduced-motion.
    intro-fade-in and panel-slide-in live in inline <style> tags on the

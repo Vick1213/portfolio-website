@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { profile } from '@/lib/portfolio';
 import { useTheme, type ThemeId } from '@/lib/themeStore';
 import Reveal from './Reveal';
@@ -52,6 +54,7 @@ export default function ContactSection() {
   const year = new Date().getFullYear();
   const theme = useTheme((s) => s.theme);
   const themedAvatar = THEMED_AVATAR[theme];
+  const [copied, setCopied] = useState(false);
   const outroArt = OUTRO_ART[theme];
 
   return (
@@ -76,10 +79,25 @@ export default function ContactSection() {
         </Reveal>
 
         <Reveal delay={180}>
-          <a href={`mailto:${profile.email}`} className="rz-contact-email">
-            {profile.email}
-            <span aria-hidden="true"> ↗</span>
-          </a>
+          <div className="rz-contact-mailrow">
+            <a href={`mailto:${profile.email}`} className="rz-contact-email">
+              {profile.email}
+              <span aria-hidden="true"> ↗</span>
+            </a>
+            <button
+              type="button"
+              className={copied ? 'rz-contact-copy rz-contact-copy--ok' : 'rz-contact-copy'}
+              aria-live="polite"
+              onClick={() => {
+                navigator.clipboard?.writeText(profile.email).then(() => {
+                  setCopied(true);
+                  window.setTimeout(() => setCopied(false), 1600);
+                });
+              }}
+            >
+              {copied ? '✓ Copied' : 'Copy'}
+            </button>
+          </div>
         </Reveal>
 
         <Reveal delay={250}>
@@ -178,6 +196,13 @@ export default function ContactSection() {
           max-width: 58ch;
           line-height: 1.6;
         }
+        .rz-contact-mailrow {
+          display: flex;
+          align-items: baseline;
+          flex-wrap: wrap;
+          gap: 16px;
+          margin-bottom: 2.75rem;
+        }
         .rz-contact-email {
           display: inline-block;
           font-family: var(--rz-display);
@@ -192,9 +217,30 @@ export default function ContactSection() {
           background-size: 100% 2px;
           padding-bottom: 4px;
           transition: color 0.2s ease;
-          margin-bottom: 2.75rem;
         }
         .rz-contact-email:hover { color: var(--rz-accent); }
+        .rz-contact-copy {
+          font-family: var(--rz-mono);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--rz-muted);
+          background: transparent;
+          border: 1px solid var(--rz-hairline-strong);
+          border-radius: var(--rz-thumb-radius, 999px);
+          padding: 6px 14px;
+          cursor: pointer;
+          transition: color 0.15s ease, border-color 0.15s ease;
+        }
+        .rz-contact-copy:hover {
+          color: var(--rz-ink);
+          border-color: var(--rz-ink);
+        }
+        .rz-contact-copy--ok {
+          color: var(--rz-accent);
+          border-color: var(--rz-accent);
+        }
 
         .rz-contact-block {
           display: flex;

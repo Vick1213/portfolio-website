@@ -60,5 +60,5 @@ export interface Profile {
   githubAlt: string;
   booking: string;
   languages: string[];
-  ventures: Venture[]; // businesses Saatvik founded / runs (not client work)
+  ventures: Venture[]; // experience entries: founded ventures, lead roles, internships
 }

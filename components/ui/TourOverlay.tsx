@@ -33,6 +33,18 @@ export default function TourOverlay() {
 
   return (
     <>
+      <style>{`
+        @keyframes tour-lower-in {
+          from { opacity: 0; transform: translate(-50%, 10px); }
+        }
+        @keyframes tour-stop-in {
+          from { opacity: 0; transform: translateY(5px); }
+        }
+        @keyframes tour-fade-in {
+          from { opacity: 0; }
+        }
+      `}</style>
+
       {/* Lower-third announcement (pointer-events disabled so it never blocks the canvas). */}
       <div
         role="status"
@@ -54,57 +66,61 @@ export default function TourOverlay() {
           border: '1px solid rgba(255,255,255,0.1)',
           borderRadius: 14,
           padding: '16px 22px',
+          animation: 'tour-lower-in 0.3s ease-out both',
         }}
       >
-        {/* Eyebrow */}
+        {/* Stop copy fades in as a unit each time the tour announces a stage. */}
         <div
-          className="font-mono uppercase"
-          style={{
-            fontSize: '10px',
-            letterSpacing: '0.28em',
-            color: 'rgba(255,255,255,0.55)',
-            marginBottom: '8px',
-            transition: 'opacity 180ms ease',
-          }}
+          key={tourComponent ?? 'boot'}
+          style={{ animation: 'tour-stop-in 0.25s ease-out both' }}
         >
-          {tourComponent ? `BUILD TOUR ▸ STAGE ${i + 1}/${total}` : 'BUILD TOUR ▸ POWERING UP'}
-        </div>
-
-        {/* Component title (hidden when no stop announced yet) */}
-        {tourComponent && meta && (
+          {/* Eyebrow */}
           <div
             className="font-mono uppercase"
             style={{
-              fontSize: '30px',
-              lineHeight: 1.05,
-              letterSpacing: '0.06em',
-              fontWeight: 700,
-              color: accent,
-              textShadow: `0 0 24px ${accent}55`,
-              marginBottom: '10px',
-              transition: 'opacity 180ms ease',
+              fontSize: '10px',
+              letterSpacing: '0.28em',
+              color: 'rgba(255,255,255,0.55)',
+              marginBottom: '8px',
             }}
           >
-            {meta.label}
+            {tourComponent ? `BUILD TOUR ▸ STAGE ${i + 1}/${total}` : 'BUILD TOUR ▸ POWERING UP'}
           </div>
-        )}
 
-        {/* Career beat */}
-        {tourComponent && (
-          <p
-            style={{
-              fontSize: '14px',
-              lineHeight: 1.5,
-              color: INK,
-              opacity: 0.78,
-              margin: '0 auto 14px',
-              maxWidth: '500px',
-              transition: 'opacity 180ms ease',
-            }}
-          >
-            {BEAT[tourComponent]}
-          </p>
-        )}
+          {/* Component title (hidden when no stop announced yet) */}
+          {tourComponent && meta && (
+            <div
+              className="font-mono uppercase"
+              style={{
+                fontSize: '30px',
+                lineHeight: 1.05,
+                letterSpacing: '0.06em',
+                fontWeight: 700,
+                color: accent,
+                textShadow: `0 0 24px ${accent}55`,
+                marginBottom: '10px',
+              }}
+            >
+              {meta.label}
+            </div>
+          )}
+
+          {/* Career beat */}
+          {tourComponent && (
+            <p
+              style={{
+                fontSize: '14px',
+                lineHeight: 1.5,
+                color: INK,
+                opacity: 0.78,
+                margin: '0 auto 14px',
+                maxWidth: '500px',
+              }}
+            >
+              {BEAT[tourComponent]}
+            </p>
+          )}
+        </div>
 
         {/* Progress strip (left→right in COMPONENT_TOUR_ORDER). */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
@@ -152,6 +168,7 @@ export default function TourOverlay() {
           fontSize: '11px',
           letterSpacing: '0.14em',
           cursor: 'pointer',
+          animation: 'tour-fade-in 0.3s ease-out both',
         }}
       >
         SKIP ▸
